@@ -33,8 +33,8 @@ public class UserController {
 
   @PostMapping("/signup")
   public ResponseEntity<String> signup(@Validated @RequestBody SignupRequestDto signupRequestDto) {
-    userService.signup(signupRequestDto);
-    return new ResponseEntity<>("회원가입이 완료되었습니다.", HttpStatus.CREATED);
+    String signup = userService.signup(signupRequestDto);
+    return new ResponseEntity<>(signup, HttpStatus.CREATED);
 
   }
 

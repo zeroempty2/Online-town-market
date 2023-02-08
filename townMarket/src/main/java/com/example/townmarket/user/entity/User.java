@@ -93,4 +93,12 @@ public class User {
     this.password = updateDto.getPassword();
   }
 
+  public boolean checkSameUserByUsername(String username) {
+    return this.username.equals(username);
+  }
+
+  public boolean checkSameUserByPhoneNumber(String phoneNumber) {
+    return this.phoneNumber.equals(phoneNumber);
+  }
+
 }
