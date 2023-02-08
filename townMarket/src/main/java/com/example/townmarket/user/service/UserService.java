@@ -17,4 +17,6 @@ public interface UserService {
   void updateUser(String username, UserUpateRequestDto updateDto);
 
   void deleteUser(Long userId, String username);
+
+  List<User> findAllUser();
 }
