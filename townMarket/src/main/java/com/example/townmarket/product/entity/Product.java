@@ -1,11 +1,15 @@
 package com.example.townmarket.product.entity;
 
+import com.example.townmarket.product.dto.ProductDto;
 import com.example.townmarket.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,13 +34,18 @@ public class Product {
   @Column(name = "id", nullable = false)
   private Long id;
 
-  @ManyToOne
+  private String productName;
 
-  private User user;
+  private Long productPrice;
 
-  private String ProductName;
+  @Enumerated(EnumType.STRING)
+  private ProductEnum productEnum;
 
-  private Long ProductPrice;
+  @Enumerated(EnumType.STRING)
+  private ProductStatus productStatus;
+
+  @Enumerated(EnumType.STRING)
+  private ProductCategory productCategory;
 
   public enum ProductEnum {
     나눔, 나눔_완료, 판매_중, 예약, 판매완료
@@ -54,14 +63,22 @@ public class Product {
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
    */
   @Builder
-  public Product(String ProductName, Long ProductPrice) {
-    this.ProductName = ProductName;
-    this.ProductPrice = ProductPrice;
+  public Product(String productName, Long productPrice, ProductStatus productStatus,
+      ProductCategory productCategory, ProductEnum productEnum, User user) {
+    this.productName = productName;
+    this.productPrice = productPrice;
+    this.productStatus = productStatus;
+    this.productEnum = productEnum;
+    this.productCategory = productCategory;
+    this.user = user;
   }
 
   /**
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
+  @ManyToOne
+  @JoinColumn(name = "users_id")
+  private User user;
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -71,4 +88,11 @@ public class Product {
    * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
    */
 
+  public void update(ProductDto productDto) {
+    this.productName = productDto.getProductName();
+    this.productPrice = productDto.getProductPrice();
+    this.productStatus = productDto.getProductStatus();
+    this.productEnum = productDto.getProductEnum();
+    this.productCategory = productDto.getProductCategory();
+  }
 }
