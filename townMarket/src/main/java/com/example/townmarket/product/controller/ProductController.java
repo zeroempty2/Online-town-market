@@ -3,10 +3,12 @@ package com.example.townmarket.product.controller;
 import com.example.townmarket.commons.dto.PageDto;
 import com.example.townmarket.commons.dto.StatusResponseDto;
 import com.example.townmarket.commons.security.UserDetailsImpl;
+import com.example.townmarket.product.dto.PagingProductResponse;
 import com.example.townmarket.product.dto.ProductDto;
 import com.example.townmarket.product.service.ProductService;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,7 +45,7 @@ public class ProductController {
 
   // 전체 상품 조회
   @GetMapping("/products")
-  public ResponseEntity getProducts(@RequestBody PageDto pageDto) {
+  public ResponseEntity<Page<PagingProductResponse>> getProducts(@RequestBody PageDto pageDto) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
     return ResponseEntity.status(HttpStatus.OK).headers(headers)
