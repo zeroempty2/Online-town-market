@@ -1,5 +1,6 @@
 package com.example.townmarket.admin.entity;
 
+import com.example.townmarket.commons.entity.TimeStamped;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 
 //jpa
 @Entity
-public class Admin {
+public class Admin extends TimeStamped {
 
   /**
    * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.

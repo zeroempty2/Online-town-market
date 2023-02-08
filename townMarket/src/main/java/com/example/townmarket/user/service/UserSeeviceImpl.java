@@ -93,4 +93,9 @@ public class UserSeeviceImpl implements UserService { // UserServiceImpl로 수�
     }
     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "본인 계정만 삭제할 수 있습니다.");
   }
+
+  @Override
+  public List<User> findAllUser() {
+    return userRepository.findAll();
+  }
 }
