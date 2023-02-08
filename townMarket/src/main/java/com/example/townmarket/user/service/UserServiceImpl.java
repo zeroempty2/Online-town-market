@@ -11,6 +11,7 @@ import com.example.townmarket.user.entity.User;
 import com.example.townmarket.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import java.nio.channels.OverlappingFileLockException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -27,19 +28,19 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   private final PasswordEncoder passwordEncoder;
 
   @Override
-  public void signup(SignupRequestDto request) {
+  public String signup(SignupRequestDto request) {
     String username = request.getUsername();
     String phoneNum = request.getPhoneNumber();
     String password = passwordEncoder.encode(request.getPassword());
 
     // 회원 중복 확인
-    Optional<User> foundUser = userRepository.findByUsername(username);
-    if (foundUser.isPresent()) {
+//    User foundUser = userRepository.findByUsername(username).orElseThrow(()->new OverlappingFileLockException(""));
+    if (userRepository.existsByUsername(username)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중복된 아이디 입니다.");
     }
     // 휴대폰 번호 중복 확인
-    Optional<User> foundPhone = userRepository.findByPhoneNumber(phoneNum);
-    if (foundPhone.isPresent()) {
+//    Optional<User> foundPhone = userRepository.findByPhoneNumber(phoneNum);
+    if (userRepository.existsByPhoneNumber(phoneNum)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 휴대폰 번호입니다.");
     }
 
@@ -49,7 +50,9 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
         .phoneNumber(phoneNum)
         .region(request.getRegion())
         .build();
+
     userRepository.save(user);
+    return "회원가입 성공";
   }
 
   @Override

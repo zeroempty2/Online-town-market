@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface UserService {
-  void signup(SignupRequestDto request);
+  String signup(SignupRequestDto request);
 
   String login(HttpServletResponse response, LoginRequestDto request);
 
