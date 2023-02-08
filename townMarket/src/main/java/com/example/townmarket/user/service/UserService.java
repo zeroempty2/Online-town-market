@@ -1,8 +1,10 @@
 package com.example.townmarket.user.service;
 
 import com.example.townmarket.user.dto.LoginRequestDto;
+import com.example.townmarket.user.dto.ProfileRequestDto;
+import com.example.townmarket.user.dto.ProfileResponseDto;
 import com.example.townmarket.user.dto.SignupRequestDto;
-import com.example.townmarket.user.dto.UserUpateRequestDto;
+import com.example.townmarket.user.dto.UserUpdateRequestDto;
 import com.example.townmarket.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -14,9 +16,14 @@ public interface UserService {
 
   void logout(User user);
 
-  void updateUser(String username, UserUpateRequestDto updateDto);
+  void updateUser(String username, UserUpdateRequestDto updateDto);
 
   void deleteUser(Long userId, String username);
 
+  String updateProfile(Long profileId, ProfileRequestDto request);
+
+  ProfileResponseDto showProfile(Long profileId);
+
   List<User> findAllUser();
+
 }

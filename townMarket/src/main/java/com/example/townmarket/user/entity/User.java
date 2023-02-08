@@ -1,7 +1,7 @@
 package com.example.townmarket.user.entity;
 
 import com.example.townmarket.product.entity.Product;
-import com.example.townmarket.user.dto.UserUpateRequestDto;
+import com.example.townmarket.user.dto.UserUpdateRequestDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -89,7 +89,7 @@ public class User {
     return Objects.equals(this.id, user.getId());
   }
 
-  public void update(UserUpateRequestDto updateDto) {
+  public void update(UserUpdateRequestDto updateDto) {
     this.password = updateDto.getPassword();
   }
 

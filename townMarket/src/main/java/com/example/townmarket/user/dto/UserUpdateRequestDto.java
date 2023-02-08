@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserUpateRequestDto { // Update로 수정 부탁드립니다.
+public class UserUpdateRequestDto { // Update로 수정 부탁드립니다.
 
   private String password;
 

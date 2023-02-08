@@ -2,11 +2,15 @@ package com.example.townmarket.user.service;
 
 import com.example.townmarket.commons.jwtUtil.JwtUtil;
 import com.example.townmarket.user.dto.LoginRequestDto;
+import com.example.townmarket.user.dto.ProfileRequestDto;
+import com.example.townmarket.user.dto.ProfileResponseDto;
 import com.example.townmarket.user.dto.SignupRequestDto;
-import com.example.townmarket.user.dto.UserUpateRequestDto;
+import com.example.townmarket.user.dto.UserUpdateRequestDto;
+import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.entity.User;
 import com.example.townmarket.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
-public class UserSeeviceImpl implements UserService { // UserServiceImpl로 수정 부탁드립니다.
+public class UserServiceImpl implements UserService { // UserServiceImpl로 수정 부탁드립니다.
   private final UserRepository userRepository;
   private final JwtUtil jwtUtil;
   private final PasswordEncoder passwordEncoder;
@@ -69,7 +73,7 @@ public class UserSeeviceImpl implements UserService { // UserServiceImpl로 수�
 
 
   @Override
-  public void updateUser(String username, UserUpateRequestDto updateDto) {
+  public void updateUser(String username, UserUpdateRequestDto updateDto) {
     User user = userRepository.findByUsername(username).orElseThrow(
         () -> new RuntimeException("회원을 찾을 수 없습니다.")
     );
@@ -92,6 +96,21 @@ public class UserSeeviceImpl implements UserService { // UserServiceImpl로 수�
       return;
     }
     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "본인 계정만 삭제할 수 있습니다.");
+  }
+
+  @Override
+  public String updateProfile(Long userId, ProfileRequestDto request) {
+    Profile profileSaved = userRepository.findById(userId)
+        .orElseThrow(() -> new IllegalArgumentException("회원 없음")).getProfile();
+    profileSaved.update(request.getNickname(), request.getImg_url());
+    return "해당 프로필이 업데이트 완료되었습니다";
+  }
+
+  @Override
+  public ProfileResponseDto showProfile(Long userId) {
+    Profile profile = userRepository.findById(userId)
+        .orElseThrow(() -> new IllegalArgumentException("회원 없음")).getProfile();
+    return new ProfileResponseDto(profile);
   }
 
   @Override
