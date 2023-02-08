@@ -1,10 +1,11 @@
 package com.example.townmarket.user.service;
 
 import com.example.townmarket.user.dto.ProfileRequestDto;
+import com.example.townmarket.user.dto.ProfileResponseDto;
 
 public interface ProfileService {
 
-  void updateProfile(Long profileId, ProfileRequestDto request);
+  String updateProfile(Long profileId, ProfileRequestDto request);
 
-  void showProfile(Long profileId);
+  ProfileResponseDto showProfile(Long profileId);
 }
