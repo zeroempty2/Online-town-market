@@ -2,18 +2,16 @@ package com.example.townmarket.user.service;
 
 import com.example.townmarket.commons.jwtUtil.JwtUtil;
 import com.example.townmarket.user.dto.LoginRequestDto;
+import com.example.townmarket.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.user.dto.ProfileRequestDto;
 import com.example.townmarket.user.dto.ProfileResponseDto;
+import com.example.townmarket.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.user.dto.SignupRequestDto;
-import com.example.townmarket.user.dto.UserUpdateRequestDto;
 import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.entity.User;
 import com.example.townmarket.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
-import java.nio.channels.OverlappingFileLockException;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService { // UserServiceImpl로 수정 부탁드립니다.
+
   private final UserRepository userRepository;
   private final JwtUtil jwtUtil;
   private final PasswordEncoder passwordEncoder;
@@ -31,6 +30,7 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   public String signup(SignupRequestDto request) {
     String username = request.getUsername();
     String phoneNum = request.getPhoneNumber();
+    String email = request.getEmail();
     String password = passwordEncoder.encode(request.getPassword());
 
     // 회원 중복 확인
@@ -43,16 +43,22 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
     if (userRepository.existsByPhoneNumber(phoneNum)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 휴대폰 번호입니다.");
     }
+    // 이메일 중복 확인
+    if (userRepository.existsByEmail(email)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
+    }
 
     User user = User.builder()
         .username(username)
         .password(password)
         .phoneNumber(phoneNum)
+        .email(email)
         .region(request.getRegion())
         .build();
 
     userRepository.save(user);
     return "회원가입 성공";
+
   }
 
   @Override
@@ -74,21 +80,34 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   }
 
   @Override
-  public void logout(User user) {}
+  public void logout(User user) {
+  }
 
 
   @Override
-  public void updateUser(String username, UserUpdateRequestDto updateDto) {
+  public void updateUser(String username, PasswordUpdateRequestDto updateDto) {
     User user = userRepository.findByUsername(username).orElseThrow(
         () -> new RuntimeException("회원을 찾을 수 없습니다.")
     );
     if (user.checkAuthorization(user)) {
-      user.update(updateDto);
+      user.updatePassword(updateDto);
       this.userRepository.save(user);
       return;
     }
-    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "본인 계정만 수정할 수 있습니다.");
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+  }
 
+  @Override
+  public void updateRegion(String username, RegionUpdateRequestDto updateRequestDto) {
+    User user = userRepository.findByUsername(username).orElseThrow(
+        () -> new RuntimeException("회원을 찾을 수 없습니다.")
+    );
+    if (user.checkAuthorization(user)) {
+      user.updateRegion(updateRequestDto);
+      this.userRepository.save(user);
+      return;
+    }
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
   }
 
   @Override

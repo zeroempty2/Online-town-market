@@ -1,7 +1,9 @@
 package com.example.townmarket.user.entity;
 
+import com.example.townmarket.commons.entity.TimeStamped;
 import com.example.townmarket.product.entity.Product;
-import com.example.townmarket.user.dto.UserUpdateRequestDto;
+import com.example.townmarket.user.dto.PasswordUpdateRequestDto;
+import com.example.townmarket.user.dto.RegionUpdateRequestDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -11,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import lombok.AccessLevel;
@@ -28,7 +31,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "users")
 //@DynamicInsert
-public class User {
+public class User extends TimeStamped {
+
   /**
    * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
    */
@@ -37,14 +41,17 @@ public class User {
   @Column(name = "id", nullable = false)
   private Long id;
 
-  @Column(length = 25, nullable = false, unique = true)
+  @Column(nullable = false, unique = true)
   private String username;
 
-  @Column(length = 25, nullable = false, unique = true)
+  @Column(nullable = false)
   private String password;
 
   @Column(nullable = false)
   private String phoneNumber;
+
+  @Column(nullable = false)
+  private String email;
 
   @Column(nullable = false)
   private String region;
@@ -57,10 +64,11 @@ public class User {
    */
 
   @Builder
-  public User(String username, String password, String phoneNumber, String region) {
+  public User(String username, String password, String phoneNumber, String email, String region) {
     this.username = username;
     this.password = password;
     this.phoneNumber = phoneNumber;
+    this.email = email;
     this.region = region;
   }
 
@@ -74,8 +82,8 @@ public class User {
   /**
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-  private Set<Product> products;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Product> products = new LinkedHashSet<>();
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -89,8 +97,12 @@ public class User {
     return Objects.equals(this.id, user.getId());
   }
 
-  public void update(UserUpdateRequestDto updateDto) {
+  public void updatePassword(PasswordUpdateRequestDto updateDto) {
     this.password = updateDto.getPassword();
+  }
+
+  public void updateRegion(RegionUpdateRequestDto updateDto) {
+    this.password = updateDto.getRegion();
   }
 
 }
