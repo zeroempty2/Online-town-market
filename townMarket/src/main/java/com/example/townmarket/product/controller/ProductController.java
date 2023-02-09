@@ -4,7 +4,7 @@ import com.example.townmarket.commons.dto.PageDto;
 import com.example.townmarket.commons.dto.StatusResponseDto;
 import com.example.townmarket.commons.security.UserDetailsImpl;
 import com.example.townmarket.product.dto.PagingProductResponse;
-import com.example.townmarket.product.dto.ProductDto;
+import com.example.townmarket.product.dto.ProductRequestDto;
 import com.example.townmarket.product.service.ProductService;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class ProductController {
   private final ProductService productService;
 
   @PostMapping("/products")
-  public ResponseEntity addProduct(@RequestBody ProductDto productRequestDto,
+  public ResponseEntity addProduct(@RequestBody ProductRequestDto productRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(new StatusResponseDto(HttpStatus.CREATED.value(),
@@ -49,24 +49,26 @@ public class ProductController {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
     return ResponseEntity.status(HttpStatus.OK).headers(headers)
-        .body(productService.viewAllProducts(pageDto));
+        .body(productService.viewAllProduct(pageDto));
   }
 
   // 단일 상품 업데이트
   @PutMapping("/products/update")
   public ResponseEntity update(@RequestParam Long productId,
-      @RequestBody ProductDto productRequestDto) {
+      @RequestBody ProductRequestDto productRequestDto,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
     return ResponseEntity.status(HttpStatus.OK)
         .body(new StatusResponseDto(HttpStatus.OK.value(),
-            productService.updateProduct(productId, productRequestDto)));
+            productService.updateProduct(productId, productRequestDto, userDetails.getUser())));
   }
 
   // 단일 상품 삭제
   @DeleteMapping("/products/{productId}")
-  public ResponseEntity delete(@PathVariable Long productId) {
+  public ResponseEntity delete(@PathVariable Long productId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-    productService.deleteProduct(productId);
+    productService.deleteProduct(productId, userDetails.getUser());
     return ResponseEntity.status(HttpStatus.OK).headers(headers)
         .body(new StatusResponseDto(HttpStatus.OK.value(), "삭제가 완료되었습니다"));
   }

@@ -1,6 +1,6 @@
 package com.example.townmarket.product.entity;
 
-import com.example.townmarket.product.dto.ProductDto;
+import com.example.townmarket.product.dto.ProductRequestDto;
 import com.example.townmarket.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,11 +32,13 @@ public class Product {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  private Long id;
+  private long id;
+
+  private long userId;
 
   private String productName;
 
-  private Long productPrice;
+  private long productPrice;
 
   @Enumerated(EnumType.STRING)
   private ProductEnum productEnum;
@@ -64,13 +66,13 @@ public class Product {
    */
   @Builder
   public Product(String productName, Long productPrice, ProductStatus productStatus,
-      ProductCategory productCategory, ProductEnum productEnum, User user) {
+      ProductCategory productCategory, ProductEnum productEnum, long userId) {
     this.productName = productName;
     this.productPrice = productPrice;
     this.productStatus = productStatus;
     this.productEnum = productEnum;
     this.productCategory = productCategory;
-    this.user = user;
+    this.userId = userId;
   }
 
   /**
@@ -88,11 +90,11 @@ public class Product {
    * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
    */
 
-  public void update(ProductDto productDto) {
-    this.productName = productDto.getProductName();
-    this.productPrice = productDto.getProductPrice();
-    this.productStatus = productDto.getProductStatus();
-    this.productEnum = productDto.getProductEnum();
-    this.productCategory = productDto.getProductCategory();
+  public void update(ProductRequestDto productRequestDto) {
+    this.productName = productRequestDto.getProductName();
+    this.productPrice = productRequestDto.getProductPrice();
+    this.productStatus = productRequestDto.getProductStatus();
+    this.productEnum = productRequestDto.getProductEnum();
+    this.productCategory = productRequestDto.getProductCategory();
   }
 }
