@@ -57,13 +57,15 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
 
   @Override
   public String login(HttpServletResponse response, LoginRequestDto request) {
+    String username = request.getUsername();
+    String password = passwordEncoder.encode(request.getPassword());
     // 사용자 확인
-    User user = userRepository.findByUsername(request.getUsername()).orElseThrow(
+    User user = userRepository.findByUsername(username).orElseThrow(
         () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다.")
     );
 
     // 비밀번호 확인
-    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+    if (!passwordEncoder.matches(password, user.getPassword())) {
       throw new IllegalArgumentException("비밀번호가 틀립니다.");
     }
     String token = jwtUtil.createToken(user.getUsername(), user.getProfile().getNickName());
