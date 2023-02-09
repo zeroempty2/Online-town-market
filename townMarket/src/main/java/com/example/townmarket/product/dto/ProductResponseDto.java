@@ -4,15 +4,19 @@ import com.example.townmarket.product.entity.Product.ProductCategory;
 import com.example.townmarket.product.entity.Product.ProductEnum;
 import com.example.townmarket.product.entity.Product.ProductStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ProductDto {
+@Builder
+public class ProductResponseDto {
 
-  private String ProductName;
+  private long id;
 
-  private Long ProductPrice;
+  private String productName;
+
+  private long productPrice;
 
   private ProductStatus productStatus;
 
