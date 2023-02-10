@@ -1,4 +1,4 @@
-package com.example.townmarket.commons.entity;
+package com.example.townmarket.commons;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

@@ -10,10 +10,7 @@ import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.entity.User;
 import com.example.townmarket.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
-import java.nio.channels.OverlappingFileLockException;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService { // UserServiceImpl로 수정 부탁드립니다.
+
   private final UserRepository userRepository;
   private final JwtUtil jwtUtil;
   private final PasswordEncoder passwordEncoder;
@@ -74,7 +72,8 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   }
 
   @Override
-  public void logout(User user) {}
+  public void logout(User user) {
+  }
 
 
   @Override
@@ -119,7 +118,24 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   }
 
   @Override
+  public void SetUserGrade(User reviewee, int grade, int count) {
+    reviewee.getGrade().setUserGrade(grade, count);
+  }
+
+  @Override
   public List<User> findAllUser() {
     return userRepository.findAll();
+  }
+
+  @Override
+  public User findUserById(Long userId) {
+    return userRepository.findById(userId).orElseThrow(
+        () -> new RuntimeException("회원을 찾을 수 없습니다.")
+    );
+  }
+
+  @Override
+  public void updateUserGrade(User reviewee, int grade) {
+    reviewee.getGrade().updateUserGrade(grade);
   }
 }

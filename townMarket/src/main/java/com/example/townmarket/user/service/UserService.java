@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface UserService {
+
   String signup(SignupRequestDto request);
 
   String login(HttpServletResponse response, LoginRequestDto request);
@@ -25,5 +26,11 @@ public interface UserService {
   ProfileResponseDto showProfile(Long profileId);
 
   List<User> findAllUser();
+
+  void SetUserGrade(User reviewee, int grade, int count);
+
+  User findUserById(Long userId);
+
+  void updateUserGrade(User reviewee, int grade);
 
 }
