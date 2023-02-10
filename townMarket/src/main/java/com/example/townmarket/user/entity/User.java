@@ -1,5 +1,6 @@
 package com.example.townmarket.user.entity;
 
+import com.example.townmarket.chat.entity.ChatRoom;
 import com.example.townmarket.commons.entity.TimeStamped;
 import com.example.townmarket.product.entity.Product;
 import com.example.townmarket.user.dto.PasswordUpdateRequestDto;
@@ -64,12 +65,14 @@ public class User extends TimeStamped {
    */
 
   @Builder
-  public User(String username, String password, String phoneNumber, String email, String region) {
+  public User(String username, String password, String phoneNumber, String email, String region,
+      Profile profile) {
     this.username = username;
     this.password = password;
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.region = region;
+    this.profile = profile;
   }
 
   @Builder
@@ -84,6 +87,9 @@ public class User extends TimeStamped {
    */
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Product> products = new LinkedHashSet<>();
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<ChatRoom> chatRooms = new LinkedHashSet<>();
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.

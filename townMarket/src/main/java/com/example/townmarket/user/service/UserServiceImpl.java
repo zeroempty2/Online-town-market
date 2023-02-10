@@ -47,13 +47,14 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
     if (userRepository.existsByEmail(email)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
     }
-
+    Profile profile = new Profile(request.getNickname());
     User user = User.builder()
         .username(username)
         .password(password)
         .phoneNumber(phoneNum)
         .email(email)
         .region(request.getRegion())
+        .profile(profile)
         .build();
 
     userRepository.save(user);
@@ -64,14 +65,13 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   @Override
   public String login(HttpServletResponse response, LoginRequestDto request) {
     String username = request.getUsername();
-    String password = passwordEncoder.encode(request.getPassword());
     // 사용자 확인
     User user = userRepository.findByUsername(username).orElseThrow(
         () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다.")
     );
 
     // 비밀번호 확인
-    if (!passwordEncoder.matches(password, user.getPassword())) {
+    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
       throw new IllegalArgumentException("비밀번호가 틀립니다.");
     }
     String token = jwtUtil.createToken(user.getUsername(), user.getProfile().getNickName());
