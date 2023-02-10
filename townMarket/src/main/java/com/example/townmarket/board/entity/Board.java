@@ -1,14 +1,20 @@
 package com.example.townmarket.board.entity;
 
+import com.example.townmarket.comment.entity.Comment;
+import com.example.townmarket.commons.entity.TimeStamped;
 import com.example.townmarket.user.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import javax.security.auth.Subject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,14 +22,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Board {
+public class Board extends TimeStamped {
 
   /**
    * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long postId;
+  private Long id;
 
   private String title;
 
@@ -38,7 +44,6 @@ public class Board {
     공지사항, 동네사항
   }
 
-
   /**
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
    */
@@ -49,13 +54,16 @@ public class Board {
     this.userId = user.getId();
   }
 
-
   /**
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
-  @ManyToOne
-  @JoinColumn(name = "users_id")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
   private User user;
+
+  @OneToMany
+//  @OrderBy("commentId asc") // 댓글 정렬
+  private List<Comment> comment = new ArrayList<>();
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -69,5 +77,6 @@ public class Board {
     this.content = content;
     this.subject = subject;
   }
+
 
 }
