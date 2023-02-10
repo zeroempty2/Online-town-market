@@ -24,7 +24,14 @@ public class SignupRequestDto {
   @NotEmpty(message = "휴대폰 번호를 입력해주세요.")
   private String phoneNumber;
 
+  @Size(min = 4, max = 10)
+  @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$")
+  private String email;
+
   @NotEmpty(message = "거래할 지역의 읍,면,동 까지 적어주세요.")
   private String region;
+
+  private String nickname;
+
 
 }
