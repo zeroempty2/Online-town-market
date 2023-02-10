@@ -12,25 +12,17 @@ import com.example.townmarket.user.entity.User;
 import com.example.townmarket.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-
-import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
 
-
 public class UserServiceImpl implements UserService { // UserServiceImpl로 수정 부탁드립니다.
-
 
 
   private final UserRepository userRepository;
@@ -42,7 +34,7 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
     String username = request.getUsername();
     String phoneNum = request.getPhoneNumber();
     String email = request.getEmail();
-    String nickname = request.getNickname();
+    String nickname = request.getNickname() + UUID.randomUUID().toString();
     String password = passwordEncoder.encode(request.getPassword());
 
     // 회원 중복 확인
@@ -57,12 +49,10 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
     if (userRepository.existsByEmail(email)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
     }
-
-
     // 닉네임 중복 확인
-    if (userRepository.existsByNickname(nickname)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다.");
-    }
+//    if (userRepository.existsByNickname(nickname)) {
+//      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다.");
+//    }
     Profile profile = new Profile(request.getNickname());
 
     User user = User.builder()

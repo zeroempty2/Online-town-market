@@ -35,7 +35,7 @@ public class Profile {
     this.nickName = nickName;
   }
 
-  @Builder
+
   public void update(String nickname, String img_url) {
     this.nickName = nickName;
     this.img_url = img_url;

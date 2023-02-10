@@ -41,7 +41,7 @@ public class CommentController {
 //  }
 
   // 댓글 수정
-  @PutMapping("/{commentId}/board/{boardsId}}")
+  @PutMapping("/{commentId}/board/{boardsId}")
   public ResponseEntity<StatusResponseDto> updateComment(@PathVariable Long commentId,
       @PathVariable Long boardsId,
       @RequestBody CommentRequestDto commentRequestDto,

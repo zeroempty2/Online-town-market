@@ -121,8 +121,8 @@ class UserServiceImplTest {
         .password("pass")
         .build();
     String password = passwordEncoder.encode(requestDto.getPassword());
-    User newUser = new User(request.getUsername(), password, request.getPhoneNumber(),
-        request.getEmail(), null);
+    User newUser = User.builder().username(request.getUsername()).password(password)
+        .phoneNumber(request.getPhoneNumber()).email(request.getEmail()).build();
 
     given(userRepository.findByUsername(newUser.getUsername()))
         .willReturn(Optional.of(newUser));
@@ -149,9 +149,8 @@ class UserServiceImplTest {
         .region("방화동")
         .build();
     String region = requestDto.getRegion();
-    User newUser = new User(request.getUsername(), request.getPassword(), request.getPhoneNumber(),
-        request.getEmail(),
-        region);
+    User newUser = User.builder().username(request.getUsername()).password(request.getPassword())
+        .phoneNumber(request.getPhoneNumber()).email(request.getEmail()).region(region).build();
 
     given(userRepository.findByUsername(newUser.getUsername()))
         .willReturn(Optional.of(newUser));
@@ -175,9 +174,9 @@ class UserServiceImplTest {
         .region("양평동")
         .build();
 
-    User newUser = new User(request.getUsername(), request.getPassword(), request.getPhoneNumber(),
-        request.getEmail(),
-        request.getRegion());
+    User newUser = User.builder().username(request.getUsername()).password(request.getPassword())
+        .phoneNumber(request.getPhoneNumber()).email(request.getEmail()).region(request.getRegion())
+        .build();
 
     given(userRepository.findByUsername(newUser.getUsername()))
         .willReturn(Optional.of(newUser));

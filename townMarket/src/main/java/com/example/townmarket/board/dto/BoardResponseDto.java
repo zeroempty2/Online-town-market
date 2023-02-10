@@ -1,7 +1,7 @@
 package com.example.townmarket.board.dto;
 
 import com.example.townmarket.board.entity.Board;
-import javax.security.auth.Subject;
+import com.example.townmarket.board.entity.Board.BoardSubject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +13,7 @@ public class BoardResponseDto {
 
   private String content;
 
-  private Subject subject;
+  private BoardSubject subject;
 
 //  private enum subject {
 //    공지사항, 동네사항

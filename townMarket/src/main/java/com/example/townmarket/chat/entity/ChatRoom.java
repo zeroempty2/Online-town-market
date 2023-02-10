@@ -44,9 +44,6 @@ public class ChatRoom {
   @Column(nullable = false, name = "visitor_id")
   private Long buyer;
 
-  @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<ChatMessage> message = new LinkedHashSet<>();
-
 
   /**
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
@@ -65,6 +62,10 @@ public class ChatRoom {
    */
   @ManyToOne
   private User user;
+
+  @Builder.Default
+  @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<ChatMessage> message = new LinkedHashSet<>();
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
