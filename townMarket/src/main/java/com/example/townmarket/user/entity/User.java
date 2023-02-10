@@ -1,15 +1,11 @@
 package com.example.townmarket.user.entity;
 
 import com.example.townmarket.chat.entity.ChatRoom;
-import com.example.townmarket.commons.entity.TimeStamped;
+import com.example.townmarket.commons.TimeStamped;
 import com.example.townmarket.product.entity.Product;
-
+import com.example.townmarket.review.domain.Review;
 import com.example.townmarket.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.user.dto.RegionUpdateRequestDto;
-
-import com.example.townmarket.review.domain.Review;
-import com.example.townmarket.user.dto.UserUpdateRequestDto;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -27,7 +23,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicInsert;
 
 //lombok
 @Getter
@@ -57,7 +52,7 @@ public class User extends TimeStamped {
   @Column(length = 25, nullable = false, unique = true)
   private String username;
 
-  @Column( nullable = false, unique = true)
+  @Column(nullable = false, unique = true)
   private String password;
 
   @Column(nullable = false)
@@ -70,7 +65,6 @@ public class User extends TimeStamped {
   private String region;
   @Embedded
   private Grade grade;
-
 
   @Embedded
   private Profile profile;
@@ -98,20 +92,17 @@ public class User extends TimeStamped {
   }
 
 
-
   /**
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Product> products = new LinkedHashSet<>();
-
+  private Set<Product> products;
+  
+  @Builder.Default
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<ChatRoom> chatRooms = new LinkedHashSet<>();
 
-
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-  private Set<Product> products;
   @OneToMany(mappedBy = "reviewer", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Review> sendReviews;
   @OneToMany(mappedBy = "reviewee")

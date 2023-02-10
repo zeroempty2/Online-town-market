@@ -35,7 +35,5 @@ public class SignupRequestDto {
   @NotEmpty(message = "거래할 지역의 읍,면,동 까지 적어주세요.")
   private String region;
 
-  private String nickname;
-
 
 }

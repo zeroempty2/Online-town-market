@@ -1,7 +1,7 @@
 package com.example.townmarket.board.entity;
 
 import com.example.townmarket.comment.entity.Comment;
-import com.example.townmarket.commons.entity.TimeStamped;
+import com.example.townmarket.commons.TimeStamped;
 import com.example.townmarket.user.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,12 +10,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
-import javax.security.auth.Subject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,16 +36,16 @@ public class Board extends TimeStamped {
   private long userId;
 
   @Enumerated(EnumType.STRING)
-  private Subject subject;
+  private BoardSubject subject;
 
-  private enum subject {
+  public enum BoardSubject {
     공지사항, 동네사항
   }
 
   /**
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
    */
-  public Board(String title, String content, Subject subject, User user) {
+  public Board(String title, String content, BoardSubject subject, User user) {
     this.title = title;
     this.content = content;
     this.subject = subject;
@@ -58,7 +56,6 @@ public class Board extends TimeStamped {
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
   private User user;
 
   @OneToMany
@@ -72,7 +69,7 @@ public class Board extends TimeStamped {
   /**
    * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
    */
-  public void update(String title, String content, Subject subject) {
+  public void update(String title, String content, BoardSubject subject) {
     this.title = title;
     this.content = content;
     this.subject = subject;

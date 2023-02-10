@@ -44,39 +44,40 @@ public class CommentServiceImpl implements CommentService {
   // 댓글 수정
   @Override
   @Transactional
-  public String updateComment(Long commentId, Long boardsId, CommentRequestDto commentRequestDto,
+  public String updateComment(Long commentId, Long boardId, CommentRequestDto commentRequestDto,
       User user) {
-    Comment commentSaved = commentRepository.findById(commentId).orElseThrow(() ->
+    Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
         new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
 
-    boardRepository.findById(boardsId).orElseThrow(
+    boardRepository.findById(boardId).orElseThrow(
         () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
     );
 
-    if (user.getId().equals(commentSaved.getUserId())) {
-      commentSaved.update(commentRequestDto.getCommentContents());
+    if (user.equals(comment.getUser())) {
+      comment.update(commentRequestDto.getCommentContents());
       return "댓글이 수정되었습니다.";
-    } else
+    } else {
       throw new IllegalArgumentException("수정이 완료되지 않았습니다.");
+    }
   }
 
 
   // 댓글 삭제
   @Override
   @Transactional
-  public String deleteComment(Long commentId, Long boardsId, User user) {
-    Comment commentDelete = commentRepository.findById(commentId).orElseThrow(() ->
+  public String deleteComment(Long commentId, Long boardId, User user) {
+    Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
         new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
 
-    boardRepository.findById(boardsId).orElseThrow(
+    boardRepository.findById(boardId).orElseThrow(
         () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
     );
 
-    if (user.getId().equals(commentDelete.getUserId())) {
-      commentRepository.deleteById(commentDelete.getId());
+    if (user.equals(comment.getUser())) {
+      commentRepository.deleteById(comment.getId());
       return "댓글 삭제가 완료 되었습니다.";
-    } else
+    } else {
       throw new IllegalArgumentException("댓글 삭제가 불가능합니다.");
-
+    }
   }
 }
