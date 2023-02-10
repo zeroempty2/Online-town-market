@@ -1,6 +1,6 @@
 package com.example.townmarket.admin.entity;
 
-import com.example.townmarket.commons.entity.TimeStamped;
+import com.example.townmarket.commons.TimeStamped;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
