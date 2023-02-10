@@ -25,6 +25,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 
 //jpa
 @Entity
@@ -40,19 +41,25 @@ public class User {
   @Column(name = "user_id", nullable = false)
   private Long id;
 
+  @Column
+  private Long kakaoId;
+
   @Column(length = 25, nullable = false, unique = true)
   private String username;
 
-  @Column(length = 25, nullable = false, unique = true)
+  @Column( nullable = false, unique = true)
   private String password;
 
   @Column(nullable = false)
   private String phoneNumber;
 
   @Column(nullable = false)
+  private String email;
+  @Column(nullable = false)
   private String region;
   @Embedded
   private Grade grade;
+
 
   @Embedded
   private Profile profile;
@@ -75,6 +82,8 @@ public class User {
     this.password = password;
     this.profile = profile;
   }
+
+
 
   /**
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
@@ -101,4 +110,8 @@ public class User {
     this.password = updateDto.getPassword();
   }
 
+  public User kakaoIdUpdate(Long kakaoId) {
+    this.kakaoId = kakaoId;
+    return this;
+  }
 }
