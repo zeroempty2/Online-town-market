@@ -3,10 +3,11 @@ package com.example.townmarket.user.controller;
 import com.example.townmarket.commons.jwtUtil.JwtUtil;
 import com.example.townmarket.commons.security.UserDetailsImpl;
 import com.example.townmarket.user.dto.LoginRequestDto;
+import com.example.townmarket.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.user.dto.ProfileRequestDto;
 import com.example.townmarket.user.dto.ProfileResponseDto;
+import com.example.townmarket.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.user.dto.SignupRequestDto;
-import com.example.townmarket.user.dto.UserUpdateRequestDto;
 import com.example.townmarket.user.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -52,13 +53,22 @@ public class UserController {
     return new ResponseEntity<>("로그아웃이 완료되었습니다.", HttpStatus.OK);
   }
 
-  @PutMapping("/update")
+  @PutMapping("/update/pw")
   public ResponseEntity<String> updateUser(
-      @Validated @RequestBody UserUpdateRequestDto updateRequestDto,
+      @Validated @RequestBody PasswordUpdateRequestDto updateRequestDto,
       @AuthenticationPrincipal
       UserDetailsImpl userDetails) {
     userService.updateUser(userDetails.getUsername(), updateRequestDto);
-    return new ResponseEntity<>("계정 수정이 완료되었습니다.", HttpStatus.OK);
+    return new ResponseEntity<>("비밀번호 수정이 완료되었습니다.", HttpStatus.OK);
+  }
+
+  @PutMapping("/update/region")
+  public ResponseEntity<String> updateRegion(
+      @RequestBody RegionUpdateRequestDto updateRequestDto,
+      @AuthenticationPrincipal
+      UserDetailsImpl userDetails) {
+    userService.updateRegion(userDetails.getUsername(), updateRequestDto);
+    return new ResponseEntity<>(" 거래 가능 지역 수정이 완료되었습니다.", HttpStatus.OK);
   }
 
   @DeleteMapping("/{userId}")

@@ -15,8 +15,8 @@ public class SignupRequestDto {
   @NotEmpty(message = "아이디를 입력해주세요.")
   private String username;
 
-  @Size(min= 8, max= 15)
-  @Pattern(regexp = "^[a-zA-Z0-9]$", message = "소문자와 대문자 그리고 숫자를 포함하여 8자 이상 15자 이하로 적어주세요.")
+  @Size(min = 8, max = 15)
+  @Pattern(regexp = "^[a-zA-Z0-9]{8,15}$", message = "소문자와 대문자 그리고 숫자를 포함하여 8자 이상 15자 이하로 적어주세요.")
   @NotEmpty(message = "비밀번호를 입력해주세요.")
   private String password;
 
@@ -24,9 +24,13 @@ public class SignupRequestDto {
   @NotEmpty(message = "휴대폰 번호를 입력해주세요.")
   private String phoneNumber;
 
-  @Size(min = 4, max = 10)
-  @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$")
+
+  @Pattern(regexp = "^(?:\\w+\\.?)*\\w+@(?:\\w+\\.)+\\w+$", message = "이메일 형식이 올바르지 않습니다.")
+  @NotEmpty(message = "본인 인증 가능한 이메일을 입력해주세요.")
   private String email;
+
+  private String nickname;
+
 
   @NotEmpty(message = "거래할 지역의 읍,면,동 까지 적어주세요.")
   private String region;

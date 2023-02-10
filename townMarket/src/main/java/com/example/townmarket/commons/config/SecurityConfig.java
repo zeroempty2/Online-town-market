@@ -57,6 +57,7 @@ public class SecurityConfig {
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     http.authorizeHttpRequests()
+        .requestMatchers("/**").permitAll()
         .requestMatchers(permitAllArray).permitAll()
         .requestMatchers("/admin/users").hasAnyRole("TOP_MANAGER", "MIDDLE_MANAGER")
         .anyRequest().authenticated()

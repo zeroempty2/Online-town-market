@@ -1,25 +1,22 @@
 package com.example.townmarket.user.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.hamcrest.core.Is.isA;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.example.townmarket.commons.jwtUtil.JwtUtil;
 import com.example.townmarket.user.dto.LoginRequestDto;
+import com.example.townmarket.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.user.dto.ProfileRequestDto;
+import com.example.townmarket.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.user.dto.SignupRequestDto;
-import com.example.townmarket.user.dto.UserUpdateRequestDto;
 import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.entity.User;
 import com.example.townmarket.user.repository.UserRepository;
 import java.util.Optional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,16 +50,20 @@ class UserServiceImplTest {
         .username("username1")
         .password("password")
         .phoneNumber("010-xxxx-xxxx")
+        .email("asd@naver.com")
+        .region("양평동")
         .build();
 
     String username = requestDto.getUsername();
     String phoneNumber = requestDto.getPhoneNumber();
+    String email = requestDto.getEmail();
 
     User user = mock(User.class);
 
     given(userRepository.existsByUsername(username)).willReturn(
         false);
     given(userRepository.existsByPhoneNumber(phoneNumber)).willReturn(false);
+    given(userRepository.existsByEmail(email)).willReturn(false);
 
     //when
     String signup = userService.signup(requestDto);
@@ -107,13 +108,24 @@ class UserServiceImplTest {
   }
 
   @Test
-  @DisplayName("계정 업데이트 - 비밀번호 수정")
+  @DisplayName("비밀번호 수정")
   void updateUser() {
-    UserUpdateRequestDto requestDto = UserUpdateRequestDto.builder()
+    SignupRequestDto request = SignupRequestDto.builder()
+        .username("username1")
+        .password("password")
+        .phoneNumber("010-xxxx-xxxx")
+        .email("asdf@naver.com")
+        .build();
+
+    PasswordUpdateRequestDto requestDto = PasswordUpdateRequestDto.builder()
         .password("pass")
         .build();
     String password = passwordEncoder.encode(requestDto.getPassword());
-    User newUser = new User("user1", password, null, null);
+    User newUser = new User(request.getUsername(), password, request.getPhoneNumber(),
+        request.getEmail(), null);
+
+    given(userRepository.findByUsername(newUser.getUsername()))
+        .willReturn(Optional.of(newUser));
 
     // when
     userService.updateUser(newUser.getUsername(), requestDto);
@@ -123,12 +135,57 @@ class UserServiceImplTest {
   }
 
   @Test
+  @DisplayName("거래 지역 수정")
+  void updateRegion() {
+    SignupRequestDto request = SignupRequestDto.builder()
+        .username("username1")
+        .password("password")
+        .phoneNumber("010-xxxx-xxxx")
+        .email("asdas@naver.com")
+        .region("양평동")
+        .build();
+
+    RegionUpdateRequestDto requestDto = RegionUpdateRequestDto.builder()
+        .region("방화동")
+        .build();
+    String region = requestDto.getRegion();
+    User newUser = new User(request.getUsername(), request.getPassword(), request.getPhoneNumber(),
+        request.getEmail(),
+        region);
+
+    given(userRepository.findByUsername(newUser.getUsername()))
+        .willReturn(Optional.of(newUser));
+
+    // when
+    userService.updateRegion(newUser.getUsername(), requestDto);
+
+    // then
+    verify(userRepository, times(1)).save(any(User.class));
+  }
+
+  @Test
   @DisplayName("계정 삭제")
   void deleteUser() {
     // given
+    SignupRequestDto request = SignupRequestDto.builder()
+        .username("username1")
+        .password("password")
+        .phoneNumber("010-xxxx-xxxx")
+        .email("asd@naver.com")
+        .region("양평동")
+        .build();
+
+    User newUser = new User(request.getUsername(), request.getPassword(), request.getPhoneNumber(),
+        request.getEmail(),
+        request.getRegion());
+
+    given(userRepository.findByUsername(newUser.getUsername()))
+        .willReturn(Optional.of(newUser));
 
     // when
+    userService.deleteUser(newUser.getId(), newUser.getUsername());
 
     // then
+    verify(userRepository, times(1)).deleteById(newUser.getId());
   }
 }
