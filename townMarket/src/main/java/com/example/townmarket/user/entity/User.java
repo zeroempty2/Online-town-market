@@ -27,12 +27,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 
 //jpa
 @Entity
 @Table(name = "users")
 //@DynamicInsert
 public class User extends TimeStamped {
+
 
   /**
    * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
@@ -42,10 +44,14 @@ public class User extends TimeStamped {
   @Column(name = "id", nullable = false)
   private Long id;
 
-  @Column(nullable = false, unique = true)
-  private String username;
 
   @Column(nullable = false)
+  private Long kakaoId;
+
+  @Column(length = 25, nullable = false, unique = true)
+  private String username;
+
+  @Column( nullable = false, unique = true)
   private String password;
 
   @Column(nullable = false)
@@ -56,6 +62,7 @@ public class User extends TimeStamped {
 
   @Column(nullable = false)
   private String region;
+
 
   @Embedded
   private Profile profile;
@@ -82,6 +89,8 @@ public class User extends TimeStamped {
     this.profile = profile;
   }
 
+
+
   /**
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
@@ -107,8 +116,14 @@ public class User extends TimeStamped {
     this.password = updateDto.getPassword();
   }
 
+
   public void updateRegion(RegionUpdateRequestDto updateDto) {
     this.password = updateDto.getRegion();
+  }
+
+  public User kakaoIdUpdate(Long kakaoId) {
+    this.kakaoId = kakaoId;
+    return this;
   }
 
 }

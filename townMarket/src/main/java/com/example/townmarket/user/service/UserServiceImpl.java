@@ -15,12 +15,18 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
+
 public class UserServiceImpl implements UserService { // UserServiceImpl로 수정 부탁드립니다.
+
 
   private final UserRepository userRepository;
   private final JwtUtil jwtUtil;
@@ -47,17 +53,20 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
     }
 
+
     // 닉네임 중복 확인
     if (userRepository.existsByNickname(nickname)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다.");
     }
     Profile profile = new Profile(request.getNickname());
+
     User user = User.builder()
         .username(username)
         .password(password)
         .phoneNumber(phoneNum)
         .email(email)
         .region(request.getRegion())
+        .email(request.getEmail())
         .profile(profile)
         .build();
 
@@ -69,6 +78,9 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   @Override
   public String login(HttpServletResponse response, LoginRequestDto request) {
     String username = request.getUsername();
+
+    String password = request.getPassword();
+
     // 사용자 확인
     User user = userRepository.findByUsername(username).orElseThrow(
         () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다.")
@@ -145,4 +157,5 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   public List<User> findAllUser() {
     return userRepository.findAll();
   }
+
 }
