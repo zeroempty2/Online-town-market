@@ -14,15 +14,21 @@ import jakarta.transaction.Transactional;
 import java.nio.channels.OverlappingFileLockException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService { // UserServiceImpl로 수정 부탁드립니다.
+public class UserServiceImpl implements UserService{ // UserServiceImpl로 수정 부탁드립니다.
+
   private final UserRepository userRepository;
   private final JwtUtil jwtUtil;
   private final PasswordEncoder passwordEncoder;
@@ -44,11 +50,14 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 휴대폰 번호입니다.");
     }
 
+    Profile profile = new Profile(request.getNickname(), "img");
     User user = User.builder()
         .username(username)
         .password(password)
         .phoneNumber(phoneNum)
         .region(request.getRegion())
+        .email(request.getEmail())
+        .profile(profile)
         .build();
 
     userRepository.save(user);
@@ -58,7 +67,7 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   @Override
   public String login(HttpServletResponse response, LoginRequestDto request) {
     String username = request.getUsername();
-    String password = passwordEncoder.encode(request.getPassword());
+    String password = request.getPassword();
     // 사용자 확인
     User user = userRepository.findByUsername(username).orElseThrow(
         () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다.")
@@ -74,7 +83,8 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   }
 
   @Override
-  public void logout(User user) {}
+  public void logout(User user) {
+  }
 
 
   @Override
@@ -122,4 +132,5 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   public List<User> findAllUser() {
     return userRepository.findAll();
   }
+
 }
