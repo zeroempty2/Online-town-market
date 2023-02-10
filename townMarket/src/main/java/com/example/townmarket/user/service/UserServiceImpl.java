@@ -31,21 +31,25 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
     String username = request.getUsername();
     String phoneNum = request.getPhoneNumber();
     String email = request.getEmail();
+    String nickname = request.getNickname();
     String password = passwordEncoder.encode(request.getPassword());
 
     // 회원 중복 확인
-//    User foundUser = userRepository.findByUsername(username).orElseThrow(()->new OverlappingFileLockException(""));
     if (userRepository.existsByUsername(username)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중복된 아이디 입니다.");
     }
     // 휴대폰 번호 중복 확인
-//    Optional<User> foundPhone = userRepository.findByPhoneNumber(phoneNum);
     if (userRepository.existsByPhoneNumber(phoneNum)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 휴대폰 번호입니다.");
     }
     // 이메일 중복 확인
     if (userRepository.existsByEmail(email)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
+    }
+
+    // 닉네임 중복 확인
+    if (userRepository.existsByNickname(nickname)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다.");
     }
     Profile profile = new Profile(request.getNickname());
     User user = User.builder()
