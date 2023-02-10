@@ -38,7 +38,7 @@ public class ReviewServiceImpl implements ReviewService {
         .productId(createReviewRequestDto.getProductId())
         .build();
     reviewRepository.save(review);
-    setRevieweeGrade(createReviewRequestDto, reviewee);
+    setRevieweeGrade(createReviewRequestDto.getGrade(), reviewee);
   }
 
   @Override
@@ -68,8 +68,12 @@ public class ReviewServiceImpl implements ReviewService {
   @Transactional
   public void deleteReview(Long reviewId, User user) {
     Review review = findReviewById(reviewId);
+    User reviewee = review.getReviewee();
+    int grade = -review.getGrade();
+    updateRevieweeGrade(review, 0);
     reviewWriterCheck(review, user);
     reviewRepository.deleteById(reviewId);
+    setRevieweeGrade(grade, reviewee);
   }
 
   @Override
@@ -85,9 +89,9 @@ public class ReviewServiceImpl implements ReviewService {
     }
   }
 
-  private void setRevieweeGrade(CreateReviewRequestDto createReviewRequestDto, User reviewee) {
-    int reviewCount = reviewRepository.countByRevieweeId(createReviewRequestDto.getRevieweeId());
-    userService.SetUserGrade(reviewee, createReviewRequestDto.getGrade(), reviewCount);
+  private void setRevieweeGrade(int grade, User reviewee) {
+    int reviewCount = reviewRepository.countByRevieweeId(reviewee.getId());
+    userService.SetUserGrade(reviewee, grade, reviewCount);
   }
 
   private void updateRevieweeGrade(Review review, int updateGrade) {
