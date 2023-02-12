@@ -30,7 +30,7 @@ public interface UserService {
 
   List<User> findAllUser();
 
-  void SetUserGrade(User reviewee, int grade, int count);
+  void setUserGrade(User reviewee, int grade, int count);
 
   User findUserById(Long userId);
 

@@ -36,7 +36,7 @@ public class ReviewController {
   UserDetailsImpl userDetails) {
     reviewService.createReview(createReviewRequestDto, userDetails.getUser());
     DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
-    return ResponseEntity.ok().body(defaultResponse);
+    return ResponseEntity.status(HttpStatus.CREATED).body(defaultResponse);
   }
 
   @GetMapping("/review/{reviewId}")
