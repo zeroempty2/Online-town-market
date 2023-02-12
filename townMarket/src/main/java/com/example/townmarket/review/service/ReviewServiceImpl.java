@@ -70,7 +70,6 @@ public class ReviewServiceImpl implements ReviewService {
     Review review = findReviewById(reviewId);
     User reviewee = review.getReviewee();
     int grade = -review.getGrade();
-    updateRevieweeGrade(review, 0);
     reviewWriterCheck(review, user);
     reviewRepository.deleteById(reviewId);
     setRevieweeGrade(grade, reviewee);
@@ -83,7 +82,7 @@ public class ReviewServiceImpl implements ReviewService {
     );
   }
 
-  private void reviewWriterCheck(Review review, User user) {
+  public void reviewWriterCheck(Review review, User user) {
     if (!review.isReviewWriter(user)) {
       throw new IllegalArgumentException("작성자가 아닙니다");
     }
@@ -91,7 +90,7 @@ public class ReviewServiceImpl implements ReviewService {
 
   private void setRevieweeGrade(int grade, User reviewee) {
     int reviewCount = reviewRepository.countByRevieweeId(reviewee.getId());
-    userService.SetUserGrade(reviewee, grade, reviewCount);
+    userService.setUserGrade(reviewee, grade, reviewCount);
   }
 
   private void updateRevieweeGrade(Review review, int updateGrade) {

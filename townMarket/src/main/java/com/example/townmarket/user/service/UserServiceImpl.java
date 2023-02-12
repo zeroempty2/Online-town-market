@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   }
 
   @Override
-  public void SetUserGrade(User reviewee, int grade, int count) {
+  public void setUserGrade(User reviewee, int grade, int count) {
     reviewee.getGrade().setUserGrade(grade, count);
   }
 
