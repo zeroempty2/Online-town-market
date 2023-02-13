@@ -136,11 +136,11 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   }
 
   @Override
-  public String updateProfile(Long userId, ProfileRequestDto request) {
+  public Profile updateProfile(Long userId, ProfileRequestDto request) {
     Profile profileSaved = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("회원 없음")).getProfile();
     profileSaved.update(request.getNickname(), request.getImg_url());
-    return "해당 프로필이 업데이트 완료되었습니다";
+    return profileSaved;
   }
 
   @Override

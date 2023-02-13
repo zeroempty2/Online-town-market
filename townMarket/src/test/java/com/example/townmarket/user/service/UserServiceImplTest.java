@@ -1,6 +1,7 @@
 package com.example.townmarket.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -11,6 +12,7 @@ import com.example.townmarket.commons.jwtUtil.JwtUtil;
 import com.example.townmarket.user.dto.LoginRequestDto;
 import com.example.townmarket.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.user.dto.ProfileRequestDto;
+import com.example.townmarket.user.dto.ProfileResponseDto;
 import com.example.townmarket.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.user.dto.SignupRequestDto;
 import com.example.townmarket.user.entity.Profile;
@@ -187,4 +189,86 @@ class UserServiceImplTest {
     // then
     verify(userRepository, times(1)).deleteById(newUser.getId());
   }
+
+  @Test
+  @DisplayName("회원정보 조회 성공 테스트")
+  void showProfile() {
+    // 데이터베이스에 저장되어 있는 사용자의 primary key
+    Long userId = 1L;
+
+    // 데이터베이스에 저장되어 있는 사용자 역할
+    User user = new User("testUser",
+        "1234",
+        new Profile("banana", "before"));
+
+    given(userRepository.findById(userId)).willReturn(Optional.of(user));
+
+    // when
+    ProfileResponseDto responseDto = userService.showProfile(userId);
+
+    // then
+    assertThat(responseDto.getNewNickname()).isEqualTo(user.getProfile().getNickName());
+    assertThat(responseDto.getImg_url()).isEqualTo(user.getProfile().getImg_url());
+  }
+
+  @Test
+  @DisplayName("회원정보 조회 실패 테스트: 회원 정보가 없는 경우")
+  void failsShowProfile() {
+    // 데이터베이스에 저장되어 있는 사용자의 primary key
+    Long userId = 1L;
+
+    given(userRepository.findById(userId)).willReturn(Optional.empty());
+
+    assertThatThrownBy(() -> {
+      userService.showProfile(userId); // when
+    }).isInstanceOf(IllegalArgumentException.class); // then
+  }
+
+  @Test
+  @DisplayName("회원정보 업데이트 성공 테스트")
+  void updateProfile() {
+    // 데이터베이스에 저장되어 있는 사용자의 primary key
+    Long userId = 1L;
+
+    // 데이터베이스에 저장되어 있는 사용자 역할
+    User user = new User("testUser",
+        "1234",
+        new Profile("banana", "before"));
+
+    // 업데이트할 프로필 정보
+    ProfileRequestDto requestDto = ProfileRequestDto.builder()
+        .nickname("apple")
+        .img_url("after")
+        .build();
+
+    given(userRepository.findById(userId)).willReturn(Optional.of(user));
+
+    // when
+    Profile updatedProfile = userService.updateProfile(userId, requestDto);
+
+    // then
+    assertThat(updatedProfile.getNickName()).isEqualTo(requestDto.getNickname());
+    assertThat(updatedProfile.getImg_url()).isEqualTo(requestDto.getImg_url());
+  }
+
+  @Test
+  @DisplayName("회원정보 업데이트 실패 테스트: 회원 정보가 없는 경우")
+  void failsUpdateProfile() {
+    // 데이터베이스에 저장되어 있는 사용자의 primary key
+    Long userId = 1L;
+
+    // 업데이트할 프로필 정보
+    ProfileRequestDto requestDto = ProfileRequestDto.builder()
+        .nickname("apple")
+        .img_url("after")
+        .build();
+
+    given(userRepository.findById(userId)).willReturn(Optional.empty());
+
+    assertThatThrownBy(() -> {
+      // when
+      userService.updateProfile(userId, requestDto);
+    }).isInstanceOf(IllegalArgumentException.class); // then
+  }
+
 }

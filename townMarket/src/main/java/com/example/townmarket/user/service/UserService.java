@@ -6,6 +6,7 @@ import com.example.townmarket.user.dto.ProfileRequestDto;
 import com.example.townmarket.user.dto.ProfileResponseDto;
 import com.example.townmarket.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.user.dto.SignupRequestDto;
+import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -24,7 +25,7 @@ public interface UserService {
 
   void deleteUser(Long userId, String username);
 
-  String updateProfile(Long profileId, ProfileRequestDto request);
+  Profile updateProfile(Long profileId, ProfileRequestDto request);
 
   ProfileResponseDto showProfile(Long profileId);
 
