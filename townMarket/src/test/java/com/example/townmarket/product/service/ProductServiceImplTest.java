@@ -1,12 +1,10 @@
 package com.example.townmarket.product.service;
 
-import static com.example.townmarket.product.entity.Product.ProductCategory.IT;
-import static com.example.townmarket.product.entity.Product.ProductEnum.판매_중;
-import static com.example.townmarket.product.entity.Product.ProductStatus.S;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,45 +34,22 @@ class ProductServiceImplTest {
   @DisplayName("상품 등록 성공")
   void addProduct() {
     // given
-    ProductRequestDto productRequestDto = ProductRequestDto.builder()
-        .productName("상품입니다")
-        .productPrice(15000L)
-        .productStatus(S)
-        .productCategory(IT)
-        .productEnum(판매_중)
-        .build();
-
+    ProductRequestDto productRequestDto = mock(ProductRequestDto.class);
     User user = mock(User.class);
 
     // when
-    String addProductResponse = productService.addProduct(user, productRequestDto);
+    productService.addProduct(user, productRequestDto);
 
     // then
-    assertThat(addProductResponse).isNotEmpty();
+    verify(productRepository).save(isA(Product.class));
   }
 
   @Test
   @DisplayName("상품 단일 조회 성공")
   void showProduct() {
     // given
-    ProductRequestDto productRequestDto = ProductRequestDto.builder()
-        .productName("상품입니다")
-        .productPrice(15000L)
-        .productStatus(S)
-        .productCategory(IT)
-        .productEnum(판매_중)
-        .build();
-
-    User user = mock(User.class);
-
-    Product product = new Product(
-        productRequestDto.getProductName(),
-        productRequestDto.getProductPrice(),
-        productRequestDto.getProductStatus(),
-        productRequestDto.getProductCategory(),
-        productRequestDto.getProductEnum(),
-        user.getId()
-    );
+    ProductRequestDto productRequestDto = mock(ProductRequestDto.class);
+    Product product = mock(Product.class);
 
     when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
 
@@ -86,8 +61,11 @@ class ProductServiceImplTest {
   }
 
   @Test
+  @DisplayName("상품목록 조회")
   void viewAllProduct() {
     // given
+    Product product = mock(Product.class);
+    Product product2 = mock(Product.class);
 
     // when
 
@@ -98,60 +76,34 @@ class ProductServiceImplTest {
   @DisplayName("상품 업데이트 성공")
   void updateProduct() {
     // given
-    ProductRequestDto productRequestDto = ProductRequestDto.builder()
-        .productName("상품입니다")
-        .productPrice(15000L)
-        .productStatus(S)
-        .productCategory(IT)
-        .productEnum(판매_중)
-        .build();
-
     User user = mock(User.class);
-
-    Product product = new Product(
-        productRequestDto.getProductName(),
-        productRequestDto.getProductPrice(),
-        productRequestDto.getProductStatus(),
-        productRequestDto.getProductCategory(),
-        productRequestDto.getProductEnum(),
-        user.getId()
-    );
+    Product product = mock(Product.class);
+    ProductRequestDto productRequestDto = mock(ProductRequestDto.class);
 
     when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
+    when(Optional.of(user).get().checkAuthorization(user)).thenReturn(true);
 
     // when
-    String updateResponse = productService.updateProduct(product.getId(), productRequestDto, user);
+    productService.updateProduct(product.getId(), productRequestDto, user);
 
     // then
-    assertThat(updateResponse).isEqualTo("상품이 성공적으로 업데이트되었습니다");
+    verify(product).update(productRequestDto);
   }
 
   @Test
   @DisplayName("상품 삭제 성공")
   void deleteProduct() {
     // given
-    ProductRequestDto productRequestDto = ProductRequestDto.builder()
-        .productName("상품입니다")
-        .productPrice(15000L)
-        .productStatus(S)
-        .productCategory(IT)
-        .productEnum(판매_중)
-        .build();
-
     User user = mock(User.class);
-
-    Product product = new Product(
-        productRequestDto.getProductName(),
-        productRequestDto.getProductPrice(),
-        productRequestDto.getProductStatus(),
-        productRequestDto.getProductCategory(),
-        productRequestDto.getProductEnum(),
-        user.getId()
-    );
+    Product product = mock(Product.class);
 
     when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
+    when(Optional.of(user).get().checkAuthorization(user)).thenReturn(true);
 
-    // when & then
-    verify(productRepository, times(1)).deleteById(product.getId());
+    // when
+    productService.deleteProduct(product.getId(), user);
+
+    // then
+    verify(productRepository).deleteById(any(Long.class));
   }
 }

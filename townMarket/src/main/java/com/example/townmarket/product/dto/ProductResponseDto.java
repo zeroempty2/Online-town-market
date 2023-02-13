@@ -12,7 +12,7 @@ import lombok.Getter;
 @Builder
 public class ProductResponseDto {
 
-  private long id;
+  private long productId;
 
   private String productName;
 
