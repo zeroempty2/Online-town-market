@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProfileResponseDto {
 
-  private String newNickname;
+  private String nickname;
   private String img_url;
 
   public ProfileResponseDto(Profile profile) {
-    this.newNickname = profile.getNickName();
+    this.nickname = profile.getNickName();
     this.img_url = profile.getImg_url();
   }
 }

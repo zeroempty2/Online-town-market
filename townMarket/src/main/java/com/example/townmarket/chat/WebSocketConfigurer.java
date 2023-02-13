@@ -18,10 +18,11 @@ public class WebSocketConfigurer implements WebSocketMessageBrokerConfigurer {
 //        .withSockJS();
   }
 
+
   @Override
   public void configureMessageBroker(MessageBrokerRegistry config) {
 
-    config.enableSimpleBroker("/sub");
-    config.setApplicationDestinationPrefixes("/pub");
+    config.enableSimpleBroker("/receive"); // 받는 쪽
+    config.setApplicationDestinationPrefixes("/pub"); // 보내는 쪽
   }
 }

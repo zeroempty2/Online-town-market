@@ -21,7 +21,8 @@ public class PageDto {
 
   public Pageable toPageable() {
     if (Objects.isNull(sortBy)) {
-      return PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
+      return PageRequest.of(page - 1, size,
+          Sort.by("createdAt").descending()); //sortBy 입력안하면 작성일자 기준으로 내림차순
     } else {
       return PageRequest.of(page - 1, size, Sort.by(sortBy).descending());
     }

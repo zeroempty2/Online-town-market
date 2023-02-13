@@ -1,5 +1,6 @@
 package com.example.townmarket.board.entity;
 
+import com.example.townmarket.board.dto.CreateBoardRequestDto;
 import com.example.townmarket.comment.entity.Comment;
 import com.example.townmarket.commons.TimeStamped;
 import com.example.townmarket.user.entity.User;
@@ -12,8 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,13 +34,12 @@ public class Board extends TimeStamped {
 
   private String content;
 
-  private long userId;
 
   @Enumerated(EnumType.STRING)
   private BoardSubject subject;
 
   public enum BoardSubject {
-    공지사항, 동네사항
+    공지사항, 동네소식;
   }
 
   /**
@@ -49,7 +49,7 @@ public class Board extends TimeStamped {
     this.title = title;
     this.content = content;
     this.subject = subject;
-    this.userId = user.getId();
+    this.user = user;
   }
 
   /**
@@ -60,7 +60,7 @@ public class Board extends TimeStamped {
 
   @OneToMany
 //  @OrderBy("commentId asc") // 댓글 정렬
-  private List<Comment> comment = new ArrayList<>();
+  private Set<Comment> comment = new LinkedHashSet<>();
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -69,11 +69,14 @@ public class Board extends TimeStamped {
   /**
    * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
    */
-  public void update(String title, String content, BoardSubject subject) {
-    this.title = title;
-    this.content = content;
-    this.subject = subject;
+  public void update(CreateBoardRequestDto createBoardRequestDto) {
+    this.title = createBoardRequestDto.getTitle();
+    this.content = createBoardRequestDto.getContent();
+    this.subject = createBoardRequestDto.getSubject();
   }
 
+  public boolean checkBoardWriter(User user) {
+    return this.user.equals(user); // board가 가지고 있는 유저와 파라미터로 받은 유저를 비교해서 true false반환
+  }
 
 }

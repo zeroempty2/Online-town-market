@@ -81,7 +81,7 @@ public class UserController {
 
 
   @PutMapping("/profile/update")
-  public ResponseEntity<Profile> updateProfile(
+  public ResponseEntity<ProfileResponseDto> updateProfile(
       @RequestBody ProfileRequestDto request, @AuthenticationPrincipal
   UserDetailsImpl userDetails) {
     return ResponseEntity.status(HttpStatus.OK)

@@ -21,15 +21,14 @@ public class CommentServiceImpl implements CommentService {
   // 댓글 생성
   @Override
   @Transactional
-  public String createComment(Long boardsId, CommentRequestDto commentRequestDto, User user) {
+  public void createComment(Long boardsId, CommentRequestDto commentRequestDto, User user) {
     Board board = boardRepository.findById(boardsId).orElseThrow(
         () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
+        //BoardSevice에서 메서드로 분리한 후, 서비스 의존성을 주입받아 사용
     );
-
     Comment comment = new Comment(user, board, commentRequestDto);
 
     commentRepository.save(comment);
-    return "댓글 생성에 성공했습니다.";
   }
 
 //  // 댓글 조회
@@ -44,21 +43,18 @@ public class CommentServiceImpl implements CommentService {
   // 댓글 수정
   @Override
   @Transactional
-  public String updateComment(Long commentId, Long boardId, CommentRequestDto commentRequestDto,
+  public void updateComment(Long commentId, Long boardId, CommentRequestDto commentRequestDto,
       User user) {
     Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
-        new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+        new IllegalArgumentException("해당 댓글이 존재하지 않습니다.")); //메서드로 분리
 
     boardRepository.findById(boardId).orElseThrow(
         () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
     );
-
-    if (user.equals(comment.getUser())) {
-      comment.update(commentRequestDto.getCommentContents());
-      return "댓글이 수정되었습니다.";
-    } else {
+    if (!user.equals(comment.getUser())) {//comment안에 서비스 구현
       throw new IllegalArgumentException("수정이 완료되지 않았습니다.");
     }
+    comment.update(commentRequestDto.getCommentContents());
   }
 
 

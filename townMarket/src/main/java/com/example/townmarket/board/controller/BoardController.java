@@ -32,21 +32,28 @@ public class BoardController {
 
   // 게시글 생성
   @PostMapping
-  public ResponseEntity<StatusResponseDto> createBoard(@RequestBody CreateBoardRequestDto createBoardRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(new StatusResponseDto(HttpStatus.CREATED.value(), boardService.CreateBoard(
-        createBoardRequestDto, userDetails.getUser())));
+  public ResponseEntity<StatusResponseDto> createBoard(
+      @RequestBody CreateBoardRequestDto createBoardRequestDto,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(new StatusResponseDto(HttpStatus.CREATED.value(), boardService.CreateBoard(
+            createBoardRequestDto, userDetails.getUser())));
   }
 
   // 게시글 수정
   @PutMapping("/{boardId}")
-  public ResponseEntity<StatusResponseDto> updateBoard(@PathVariable long boardId, @RequestBody CreateBoardRequestDto createBoardRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    return ResponseEntity.status(HttpStatus.OK).body(new StatusResponseDto(HttpStatus.OK.value(), boardService.updateBoard(boardId, createBoardRequestDto, userDetails.getUser())));
+  public ResponseEntity<StatusResponseDto> updateBoard(@PathVariable long boardId,
+      @RequestBody CreateBoardRequestDto createBoardRequestDto,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    return ResponseEntity.status(HttpStatus.OK).body(new StatusResponseDto(HttpStatus.OK.value(),
+        boardService.updateBoard(boardId, createBoardRequestDto, userDetails.getUser())));
   }
 
-  // 게시글 단건 조회
+  // 게시글 단건 조회, 댓글 목록으로 불러오게 추가(페이징)
   @GetMapping("/{boardId}")
   public ResponseEntity<BoardResponseDto> getBoard(@PathVariable long boardId) {
-    return ResponseEntity.status(HttpStatus.OK).headers(setHttpHeaders.setHeaderTypeJson()).body(boardService.getBoard(boardId));
+    return ResponseEntity.status(HttpStatus.OK).headers(setHttpHeaders.setHeaderTypeJson())
+        .body(boardService.getBoard(boardId));
   }
 
   // 게시글 전체 조회
@@ -57,7 +64,9 @@ public class BoardController {
 
   // 게시물 삭제
   @DeleteMapping("{boardId}")
-  public ResponseEntity<StatusResponseDto> deleteBoard(@PathVariable long boardId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    return ResponseEntity.status(HttpStatus.OK).body(new StatusResponseDto(HttpStatus.OK.value(), boardService.deleteBoard(boardId, userDetails.getUser())));
+  public ResponseEntity<StatusResponseDto> deleteBoard(@PathVariable long boardId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    return ResponseEntity.status(HttpStatus.OK).body(new StatusResponseDto(HttpStatus.OK.value(),
+        boardService.deleteBoard(boardId, userDetails.getUser())));//삭제시는 no contents
   }
 }
