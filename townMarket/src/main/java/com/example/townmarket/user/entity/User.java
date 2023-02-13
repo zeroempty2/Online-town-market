@@ -1,5 +1,6 @@
 package com.example.townmarket.user.entity;
 
+import com.example.townmarket.admin.entity.AdminRoleEnum.Authority;
 import com.example.townmarket.chat.entity.ChatRoom;
 import com.example.townmarket.commons.TimeStamped;
 import com.example.townmarket.product.entity.Product;
@@ -10,6 +11,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,10 +48,6 @@ public class User extends TimeStamped {
   @Column(name = "user_id", nullable = false)
   private Long id;
 
-
-  @Column(nullable = false)
-  private Long kakaoId;
-
   @Column(length = 25, nullable = false, unique = true)
   private String username;
 
@@ -63,6 +62,12 @@ public class User extends TimeStamped {
 
   @Column(nullable = false)
   private String region;
+
+  @Column
+  @Enumerated(EnumType.STRING)
+  private UserRoleEnum role;
+
+
   @Embedded
   private Grade grade;
 
@@ -98,7 +103,7 @@ public class User extends TimeStamped {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Product> products;
-  
+
   @Builder.Default
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<ChatRoom> chatRooms = new LinkedHashSet<>();
@@ -129,9 +134,5 @@ public class User extends TimeStamped {
     this.password = updateDto.getRegion();
   }
 
-  public User kakaoIdUpdate(Long kakaoId) {
-    this.kakaoId = kakaoId;
-    return this;
-  }
 
 }

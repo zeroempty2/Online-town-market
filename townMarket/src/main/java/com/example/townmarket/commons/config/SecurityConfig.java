@@ -1,6 +1,7 @@
 package com.example.townmarket.commons.config;
 
 import com.example.townmarket.commons.jwtUtil.JwtUtil;
+import com.example.townmarket.commons.oauth.OAuth2SuccessHandler;
 import com.example.townmarket.commons.security.AdminDetailsServiceImpl;
 import com.example.townmarket.commons.security.CustomAccessDeniedHandler;
 import com.example.townmarket.commons.security.CustomAuthenticationEntryPoint;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -24,17 +26,26 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-  private final String[] permitAllArray = {"/users/login",
-      "/users/signup",
+  private final String[] permitAllArray = {
       "/",
+      "/users/login/",
+      "/users/login2/",
+      "/users/signup/",
       "/css/**",
       "/js/**",
+      "/images/**",
+      "/login/oauth2/code/google",
+      "/users/oauth/password/**",
       "profile"};
   private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
   private final JwtUtil jwtUtil;
   private final UserDetailsServiceImpl userDetailsService;
   private final CustomAccessDeniedHandler customAccessDeniedHandler;
   private final AdminDetailsServiceImpl adminDetailsService;
+
+  private final OAuth2UserService oAuth2UserService;
+
+  private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -64,10 +75,11 @@ public class SecurityConfig {
         .and().addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService, adminDetailsService),
             UsernamePasswordAuthenticationFilter.class);
 
-    http.formLogin().loginPage("/api/user/login-page").permitAll();
-//    http.oauth2Login()//OAuth 로그인 기능에 대한 여러 설정의 진입
-//        .userInfoEndpoint()// 로그인 성공 이후 사용자 정보를 가져올 때의 설정
-//        .userService(customOAuth2UserService); //소셜 로그인 성공 후 후속 조치를 진행할 서비스의 구현체 등록
+//    http.formLogin().loginPage("/api/user/login-page").permitAll();
+    http.oauth2Login()//OAuth 로그인 기능에 대한 여러 설정의 진입
+        .userInfoEndpoint()// 로그인 성공 이후 사용자 정보를 가져올 때의 설정
+        .userService(oAuth2UserService); //소셜 로그인 성공 후 후속 조치를 진행할 서비스의 구현체 등록
+    http.oauth2Login().successHandler(oAuth2SuccessHandler);
 
     //401 인증과정 실패시 에러처리
     http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);

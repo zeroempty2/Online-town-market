@@ -35,5 +35,6 @@ public interface UserService {
   User findUserById(Long userId);
 
   void updateUserGrade(User reviewee, int grade);
-
 }
+
+

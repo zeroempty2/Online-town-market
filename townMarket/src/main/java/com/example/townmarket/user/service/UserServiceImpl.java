@@ -9,6 +9,7 @@ import com.example.townmarket.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.user.dto.SignupRequestDto;
 import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.entity.User;
+import com.example.townmarket.user.entity.UserRoleEnum;
 import com.example.townmarket.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -62,6 +63,7 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
         .email(email)
         .region(request.getRegion())
         .email(request.getEmail())
+        .role(UserRoleEnum.MEMBER)
         .profile(profile)
         .build();
 
@@ -147,6 +149,7 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
         .orElseThrow(() -> new IllegalArgumentException("회원 없음")).getProfile();
     return new ProfileResponseDto(profile);
   }
+
 
   @Override
   public void setUserGrade(User reviewee, int grade, int count) {
