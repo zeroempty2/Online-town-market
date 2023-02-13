@@ -25,7 +25,7 @@ public interface UserService {
 
   void deleteUser(Long userId, String username);
 
-  Profile updateProfile(Long profileId, ProfileRequestDto request);
+  ProfileResponseDto updateProfile(Long profileId, ProfileRequestDto request);
 
   ProfileResponseDto showProfile(Long profileId);
 

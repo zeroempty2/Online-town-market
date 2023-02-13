@@ -207,7 +207,7 @@ class UserServiceImplTest {
     ProfileResponseDto responseDto = userService.showProfile(userId);
 
     // then
-    assertThat(responseDto.getNewNickname()).isEqualTo(user.getProfile().getNickName());
+    assertThat(responseDto.getNickname()).isEqualTo(user.getProfile().getNickName());
     assertThat(responseDto.getImg_url()).isEqualTo(user.getProfile().getImg_url());
   }
 
@@ -244,10 +244,10 @@ class UserServiceImplTest {
     given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
     // when
-    Profile updatedProfile = userService.updateProfile(userId, requestDto);
+    ProfileResponseDto updatedProfile = userService.updateProfile(userId, requestDto);
 
     // then
-    assertThat(updatedProfile.getNickName()).isEqualTo(requestDto.getNickname());
+    assertThat(updatedProfile.getNickname()).isEqualTo(requestDto.getNickname());
     assertThat(updatedProfile.getImg_url()).isEqualTo(requestDto.getImg_url());
   }
 

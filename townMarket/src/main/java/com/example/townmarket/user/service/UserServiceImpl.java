@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -134,14 +135,16 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
     userRepository.deleteById(userId);
   }
 
+  @Transactional
   @Override
-  public Profile updateProfile(Long userId, ProfileRequestDto request) {
+  public ProfileResponseDto updateProfile(Long userId, ProfileRequestDto request) {
     Profile profileSaved = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("회원 없음")).getProfile();
     profileSaved.update(request.getNickname(), request.getImg_url());
-    return profileSaved;
+    return new ProfileResponseDto();
   }
 
+  @Transactional
   @Override
   public ProfileResponseDto showProfile(Long userId) {
     Profile profile = userRepository.findById(userId)
