@@ -39,9 +39,7 @@ public class ProductServiceImpl implements ProductService {
   @Override
   @Transactional
   public ProductResponseDto showProduct(long productId) {
-    Product product = productRepository.findById(productId).orElseThrow(
-        () -> new IllegalArgumentException("존재하지 않는 상품입니다")
-    );
+    Product product = findProductById(productId);
 
     return new ProductResponseDto(
         product.getId(),
@@ -55,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional
-  public Page<PagingProductResponse> viewAllProduct(PageDto pageDto) {
+  public Page<PagingProductResponse> viewAllProduct(PageDto pageDto) { //페이지로 받아오게
     List<Product> products = findAllProduct();
     return new PageImpl<>(
         products.stream().map(PagingProductResponse::new).collect(Collectors.toList()),
@@ -66,9 +64,7 @@ public class ProductServiceImpl implements ProductService {
   @Override
   @Transactional
   public String updateProduct(long productId, ProductRequestDto productDto, User user) {
-    Product product = productRepository.findById(productId).orElseThrow(
-        () -> new IllegalArgumentException("존재하지 않는 상품입니다")
-    );
+    Product product = findProductById(productId);
     if (user.getId().equals(productId)) {
       product.update(productDto);
       return "상품이 성공적으로 업데이트되었습니다";
@@ -95,4 +91,12 @@ public class ProductServiceImpl implements ProductService {
   public List<Product> findAllProduct() {
     return productRepository.findAll();
   }
+
+  public Product findProductById(Long productId) {
+    Product product = productRepository.findById(productId).orElseThrow(
+        () -> new IllegalArgumentException("존재하지 않는 상품입니다")
+    );
+    return product;
+  }
+
 }

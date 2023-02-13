@@ -1,6 +1,5 @@
 package com.example.townmarket.user.entity;
 
-import com.example.townmarket.admin.entity.AdminRoleEnum.Authority;
 import com.example.townmarket.chat.entity.ChatRoom;
 import com.example.townmarket.commons.TimeStamped;
 import com.example.townmarket.product.entity.Product;
@@ -51,7 +50,7 @@ public class User extends TimeStamped {
   @Column(length = 25, nullable = false, unique = true)
   private String username;
 
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false)
   private String password;
 
   @Column(nullable = false)
@@ -102,16 +101,16 @@ public class User extends TimeStamped {
    */
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Product> products;
+  private Set<Product> products = new LinkedHashSet<>();
 
   @Builder.Default
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<ChatRoom> chatRooms = new LinkedHashSet<>();
 
   @OneToMany(mappedBy = "reviewer", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Review> sendReviews;
+  private Set<Review> sendReviews = new LinkedHashSet<>();
   @OneToMany(mappedBy = "reviewee")
-  private Set<Review> receiveReviews;
+  private Set<Review> receiveReviews = new LinkedHashSet<>();
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.

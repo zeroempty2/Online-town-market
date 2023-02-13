@@ -5,9 +5,9 @@ import com.example.townmarket.user.entity.User;
 
 public interface CommentService {
 
-  String createComment(Long boardsId, CommentRequestDto commentRequestDto, User user);
+  void createComment(Long boardsId, CommentRequestDto commentRequestDto, User user);
 
-  String updateComment(Long commentId, Long boardsId, CommentRequestDto commentRequestDto,
+  void updateComment(Long commentId, Long boardsId, CommentRequestDto commentRequestDto,
       User user);
 
 //  CommentResponseDto getComment(long commentId);

@@ -3,15 +3,14 @@ package com.example.townmarket.product.controller;
 import com.example.townmarket.commons.dto.PageDto;
 import com.example.townmarket.commons.dto.StatusResponseDto;
 import com.example.townmarket.commons.security.UserDetailsImpl;
+import com.example.townmarket.commons.util.SetHttpHeaders;
 import com.example.townmarket.product.dto.PagingProductResponse;
 import com.example.townmarket.product.dto.ProductRequestDto;
 import com.example.townmarket.product.service.ProductService;
-import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
   private final ProductService productService;
+
+  private final SetHttpHeaders httpHeaders;
 
   @PostMapping("/products")
   public ResponseEntity addProduct(@RequestBody ProductRequestDto productRequestDto,
@@ -46,8 +47,7 @@ public class ProductController {
   // 전체 상품 조회
   @GetMapping("/products")
   public ResponseEntity<Page<PagingProductResponse>> getProducts(@RequestBody PageDto pageDto) {
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+    HttpHeaders headers = httpHeaders.setHeaderTypeJson();
     return ResponseEntity.status(HttpStatus.OK).headers(headers)
         .body(productService.viewAllProduct(pageDto));
   }
@@ -66,8 +66,7 @@ public class ProductController {
   @DeleteMapping("/products/{productId}")
   public ResponseEntity delete(@PathVariable Long productId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+    HttpHeaders headers = httpHeaders.setHeaderTypeJson();
     productService.deleteProduct(productId, userDetails.getUser());
     return ResponseEntity.status(HttpStatus.OK).headers(headers)
         .body(new StatusResponseDto(HttpStatus.OK.value(), "삭제가 완료되었습니다"));

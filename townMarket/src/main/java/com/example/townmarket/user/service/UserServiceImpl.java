@@ -13,7 +13,6 @@ import com.example.townmarket.user.entity.UserRoleEnum;
 import com.example.townmarket.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,24 +34,25 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
     String username = request.getUsername();
     String phoneNum = request.getPhoneNumber();
     String email = request.getEmail();
-    String nickname = request.getNickname() + UUID.randomUUID().toString();
+//    String nickname = request.getNickname() + UUID.randomUUID().toString();
     String password = passwordEncoder.encode(request.getPassword());
 
     // 회원 중복 확인
     if (userRepository.existsByUsername(username)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중복된 아이디 입니다.");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중복된 아이디 입니다.");  // unique = true
     }
     // 휴대폰 번호 중복 확인
     if (userRepository.existsByPhoneNumber(phoneNum)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 휴대폰 번호입니다.");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "이미 존재하는 휴대폰 번호입니다."); // unique = true
     }
     // 이메일 중복 확인
     if (userRepository.existsByEmail(email)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."); // unique = true
     }
     // 닉네임 중복 확인
 //    if (userRepository.existsByNickname(nickname)) {
-//      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다.");
+//      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."); // unique = true
 //    }
     Profile profile = new Profile(request.getNickname());
 
@@ -128,11 +128,10 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
     User user = userRepository.findByUsername(username).orElseThrow(
         () -> new RuntimeException("회원을 찾을 수 없습니다.")
     );
-    if (user.checkAuthorization(user)) {
-      userRepository.deleteById(userId);
-      return;
+    if (!user.checkAuthorization(user)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "본인 계정만 삭제할 수 있습니다.");
     }
-    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "본인 계정만 삭제할 수 있습니다.");
+    userRepository.deleteById(userId);
   }
 
   @Override
@@ -172,5 +171,4 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
   public void updateUserGrade(User reviewee, int grade) {
     reviewee.getGrade().updateUserGrade(grade);
   }
-
 }
