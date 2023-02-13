@@ -8,6 +8,7 @@ import com.example.townmarket.user.dto.ProfileRequestDto;
 import com.example.townmarket.user.dto.ProfileResponseDto;
 import com.example.townmarket.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.user.dto.SignupRequestDto;
+import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -80,7 +81,7 @@ public class UserController {
 
 
   @PutMapping("/profile/update")
-  public ResponseEntity<String> updateProfile(
+  public ResponseEntity<Profile> updateProfile(
       @RequestBody ProfileRequestDto request, @AuthenticationPrincipal
   UserDetailsImpl userDetails) {
     return ResponseEntity.status(HttpStatus.OK)

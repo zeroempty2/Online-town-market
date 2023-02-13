@@ -36,7 +36,7 @@ public class Profile {
   }
 
 
-  public void update(String nickname, String img_url) {
+  public void update(String nickName, String img_url) {
     this.nickName = nickName;
     this.img_url = img_url;
   }
