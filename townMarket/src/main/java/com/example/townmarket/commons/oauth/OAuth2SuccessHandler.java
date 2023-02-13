@@ -4,10 +4,13 @@ package com.example.townmarket.commons.oauth;
 import com.example.townmarket.commons.jwtUtil.JwtUtil;
 import com.example.townmarket.user.entity.User;
 import com.example.townmarket.user.repository.UserRepository;
+import com.example.townmarket.user.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -26,22 +29,20 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-      Authentication authentication)
-      throws IOException, ServletException, IOException {
+      Authentication authentication) throws IOException, ServletException {
     OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
-    User user = User.builder()
-        .email(oAuth2User.getAttribute("email"))
-        .password(UUID.randomUUID().toString())
-        .username(oAuth2User.getAttribute("name"))
-//        .phoneNumber(oAuth2User.getAttribute("phoneNumber"))
-        .build();
+    String email = (String) oAuth2User.getAttributes().get("email");
+    String username = (String) oAuth2User.getAttributes().get("name");
 
-//    if (!userRepository.existsByEmail(user.getEmail())) {
-//      userRepository.save(user);
-//    }
-    String token = jwtUtil.createToken(user.getUsername(),
-        user.getUsername() + "#" + UUID.randomUUID().toString().substring(0, 4));
-    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+    username = username.toLowerCase();
+
+    if(userRepository.existsByEmail(email)) {
+      String token = jwtUtil.createToken(username, username+"#"+UUID.randomUUID().toString().substring(0,4));
+      response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+    }else{
+      //패스워드 입력하도록 리다이렉트
+      response.sendRedirect("/users/oauth/password/" + email + "/" + username);
+    }
   }
 }
