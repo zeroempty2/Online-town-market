@@ -1,5 +1,6 @@
 package com.example.townmarket.annotation;
 
+import com.example.townmarket.commons.jwtUtil.JwtUtil;
 import com.example.townmarket.commons.security.UserDetailsImpl;
 import com.example.townmarket.user.entity.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
