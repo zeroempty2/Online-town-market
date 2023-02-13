@@ -28,9 +28,12 @@ public class SecurityConfig {
 
   private final String[] permitAllArray = {
       "/",
+      "/users/**",
       "/users/login/",
       "/users/login2/",
       "/users/signup/",
+      "/users/update/**",
+      "/users/profile/**",
       "/css/**",
       "/js/**",
       "/images/**",
