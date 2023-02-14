@@ -5,7 +5,7 @@ import com.example.townmarket.common.domain.board.dto.BoardRequestDto;
 import com.example.townmarket.common.domain.board.dto.PagingBoardResponse;
 import com.example.townmarket.common.domain.board.service.BoardService;
 import com.example.townmarket.common.dto.PageDto;
-import com.example.townmarket.common.responseMessageData.DefaultResponse;
+import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
@@ -33,20 +33,20 @@ public class BoardController {
 
   // 게시글 생성
   @PostMapping
-  public ResponseEntity<DefaultResponse> createBoard(
+  public ResponseEntity<StatusResponse> createBoard(
       @RequestBody BoardRequestDto boardRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     boardService.createBoard(boardRequestDto, userDetails.getUser());
-    return ResponseEntity.status(HttpStatus.CREATED).body(DefaultResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
+    return ResponseEntity.status(HttpStatus.CREATED).body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
   }
 
   // 게시글 수정
   @PutMapping("/{boardId}")
-  public ResponseEntity<DefaultResponse> updateBoard(@PathVariable Long boardId,
+  public ResponseEntity<StatusResponse> updateBoard(@PathVariable Long boardId,
       @RequestBody BoardRequestDto boardRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     boardService.updateBoard(boardId, boardRequestDto, userDetails.getUser());
-    return ResponseEntity.ok().body(DefaultResponse.valueOf(ResponseMessages.SUCCESS));
+    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
   }
 
   // 게시글 단건 조회, 댓글 목록으로 불러오게 추가(페이징)
@@ -64,9 +64,9 @@ public class BoardController {
 
   // 게시물 삭제
   @DeleteMapping("{boardId}")
-  public ResponseEntity<DefaultResponse> deleteBoard(@PathVariable Long boardId,
+  public ResponseEntity<StatusResponse> deleteBoard(@PathVariable Long boardId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     boardService.deleteBoard(boardId, userDetails.getUser());
-    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(DefaultResponse.valueOf(ResponseMessages.DELETE_SUCCESS));
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS));
   }
 }

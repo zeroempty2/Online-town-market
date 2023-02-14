@@ -1,6 +1,6 @@
 package com.example.townmarket.common.security;
 
-import com.example.townmarket.common.dto.StatusResponseDto;
+import com.example.townmarket.common.dto.StatusResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-  private static final StatusResponseDto statusResponseDto =
-      new StatusResponseDto(HttpStatus.UNAUTHORIZED.value(),
+  private static final StatusResponse statusResponse =
+      new StatusResponse(HttpStatus.UNAUTHORIZED.value(),
           HttpStatus.UNAUTHORIZED.getReasonPhrase());
 
   @Override
@@ -29,7 +29,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     try (OutputStream os = response.getOutputStream()) {
       ObjectMapper objectMapper = new ObjectMapper();
-      objectMapper.writeValue(os, statusResponseDto);
+      objectMapper.writeValue(os, statusResponse);
       os.flush();
     }
   }

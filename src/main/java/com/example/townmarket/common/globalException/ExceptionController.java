@@ -1,4 +1,4 @@
-package com.example.townmarket.common.exception;
+package com.example.townmarket.common.globalException;
 
 import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.util.SetHttpHeaders;

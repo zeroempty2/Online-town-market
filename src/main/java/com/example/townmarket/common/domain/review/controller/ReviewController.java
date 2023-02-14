@@ -5,7 +5,7 @@ import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
 import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
 import com.example.townmarket.common.domain.review.service.ReviewServiceImpl;
 import com.example.townmarket.common.dto.PageDto;
-import com.example.townmarket.common.responseMessageData.DefaultResponse;
+import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
@@ -31,47 +31,43 @@ public class ReviewController {
   private final SetHttpHeaders setHttpHeaders;
 
   @PostMapping("/review")
-  public ResponseEntity<DefaultResponse> createReview(
+  public ResponseEntity<StatusResponse> createReview(
       @RequestBody CreateReviewRequestDto createReviewRequestDto, @AuthenticationPrincipal
   UserDetailsImpl userDetails) {
     reviewService.createReview(createReviewRequestDto, userDetails.getUser());
-    return ResponseEntity.status(HttpStatus.CREATED).body(DefaultResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
+    return ResponseEntity.status(HttpStatus.CREATED).body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
   }
 
   @GetMapping("/review/{reviewId}")
   public ResponseEntity<ReviewResponseDto> showSelectReview(@PathVariable Long reviewId
   ) {
-    ReviewResponseDto reviewResponseDto = reviewService.showSelectReview(reviewId);
-    HttpHeaders headers = setHttpHeaders.setHeaderTypeJson();
-    return ResponseEntity.ok().headers(headers).body(reviewResponseDto);
+    return ResponseEntity.ok().headers(setHttpHeaders.setHeaderTypeJson()).body(reviewService.showSelectReview(reviewId));
   }
 
   @GetMapping("/reviews")
   public ResponseEntity<Page<ReviewResponseDto>> showMyReviews(PageDto pageDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    Page<ReviewResponseDto> reviewResponseDtopage = reviewService.showMyReviews(pageDto,
-        userDetails.getUser());
-    HttpHeaders headers = setHttpHeaders.setHeaderTypeJson();
-    return ResponseEntity.ok().headers(headers).body(reviewResponseDtopage);
+    return ResponseEntity.ok().headers(setHttpHeaders.setHeaderTypeJson()).body(reviewService.showMyReviews(pageDto,
+        userDetails.getUser()));
   }
 
   @PatchMapping("/reviews/update/{reviewId}")
-  public ResponseEntity<DefaultResponse> updateMyReview(@PathVariable Long reviewId,
+  public ResponseEntity<StatusResponse> updateMyReview(@PathVariable Long reviewId,
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @RequestBody UpdateReviewRequestDto updateReviewRequestDto
   ) {
     reviewService.updateMyReview(reviewId, userDetails.getUser(), updateReviewRequestDto);
-    return ResponseEntity.ok().body(DefaultResponse.valueOf(ResponseMessages.SUCCESS));
+    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
   }
 
   @DeleteMapping("/reviews/delete/{reviewId}")
-  public ResponseEntity<DefaultResponse> deleteMyReview(@PathVariable Long reviewId,
+  public ResponseEntity<StatusResponse> deleteMyReview(@PathVariable Long reviewId,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     reviewService.deleteReview(reviewId, userDetails.getUser());
-    DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
-    return new ResponseEntity<>(defaultResponse, HttpStatus.NO_CONTENT);
+    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
+    return new ResponseEntity<>(statusResponse, HttpStatus.NO_CONTENT);
   }
 
 }

@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.townmarket.annotation.WithCustomMockUser;
 import com.example.townmarket.common.domain.review.controller.ReviewController;
 import com.example.townmarket.common.dto.PageDto;
-import com.example.townmarket.common.responseMessageData.DefaultResponse;
+import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import com.example.townmarket.common.domain.review.dto.CreateReviewRequestDto;
@@ -74,7 +74,7 @@ class ReviewControllerTest {
         .reviewContents("reviewContents")
         .build();
 
-    DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
+    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
 
     ResultActions resultActions = mockMvc.perform(post("/review")
             .contentType(MediaType.APPLICATION_JSON)
