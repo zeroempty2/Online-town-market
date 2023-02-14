@@ -10,7 +10,7 @@ import lombok.Getter;
 @Builder
 public class SignupRequestDto {
 
-  @Size(min = 4, max = 10)
+  @Size(min = 4, max = 10, message = "최소4자, 최대10자")
   @Pattern(regexp = "^[a-z0-9]*$", message = "소문자와 숫자를 포함하여 4자 이상 10자 이하로 적어주세요.")
   @NotEmpty(message = "아이디를 입력해주세요.")
   private String username;
