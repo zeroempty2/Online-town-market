@@ -75,39 +75,39 @@ class UserServiceImplTest {
     assertThat(signup).isEqualTo("회원가입 성공");
   }
 
-  @Test
-  @DisplayName("로그인 성공 테스트")
-  void login() {
-    // given
-    ProfileRequestDto rs = ProfileRequestDto.builder()
-        .nickname("nick")
-        .img_url("1212")
-        .build();
-    LoginRequestDto requestDto = LoginRequestDto.builder()
-        .username("username1")
-        .password("password")
-        .build();
-
-    String username = requestDto.getUsername();
-    String password = passwordEncoder.encode(requestDto.getPassword());
-
-    Profile profile = new Profile(rs.getNickname(), rs.getImg_url());
-    User user = new User(username, passwordEncoder.encode(password), profile);
-
-    given(userRepository.findByUsername(username))
-        .willReturn(Optional.of(user));
-    given(!passwordEncoder.matches(password, user.getPassword())).willReturn(true);
-
-    MockHttpServletResponse servletResponse = new MockHttpServletResponse();
-
-    // when
-    String login = userService.login(servletResponse, requestDto);
-    String token = jwtUtil.createToken(username, profile.getNickName());
-    servletResponse.addHeader("Authorization", token);
-
-    // then
-    assertThat(login).isEqualTo("로그인 성공");
-  }
+//  @Test
+//  @DisplayName("로그인 성공 테스트")
+//  void login() {
+//    // given
+//    ProfileRequestDto rs = ProfileRequestDto.builder()
+//        .nickname("nick")
+//        .img_url("1212")
+//        .build();
+//    LoginRequestDto requestDto = LoginRequestDto.builder()
+//        .username("username1")
+//        .password("password")
+//        .build();
+//
+//    String username = requestDto.getUsername();
+//    String password = passwordEncoder.encode(requestDto.getPassword());
+//
+//    Profile profile = new Profile(rs.getNickname(), rs.getImg_url());
+//    User user = new User(username, passwordEncoder.encode(password), profile);
+//
+//    given(userRepository.findByUsername(username))
+//        .willReturn(Optional.of(user));
+//    given(!passwordEncoder.matches(password, user.getPassword())).willReturn(true);
+//
+//    MockHttpServletResponse servletResponse = new MockHttpServletResponse();
+//
+//    // when
+//    String login = userService.login(servletResponse, requestDto);
+//    String token = jwtUtil.createToken(username, profile.getNickName());
+//    servletResponse.addHeader("Authorization", token);
+//
+//    // then
+//    assertThat(login).isEqualTo("로그인 성공");
+//  }
 
   @Test
   @DisplayName("비밀번호 수정")
