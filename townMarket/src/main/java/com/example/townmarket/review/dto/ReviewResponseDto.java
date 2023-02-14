@@ -1,6 +1,7 @@
 package com.example.townmarket.review.dto;
 
 import com.example.townmarket.user.entity.Profile;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

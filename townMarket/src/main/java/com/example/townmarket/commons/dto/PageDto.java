@@ -1,14 +1,19 @@
 package com.example.townmarket.commons.dto;
 
 import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class PageDto {
 
   int page;

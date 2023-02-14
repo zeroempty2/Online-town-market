@@ -2,6 +2,7 @@ package com.example.townmarket.commons.config;
 
 import com.example.townmarket.commons.jwtUtil.JwtUtil;
 import com.example.townmarket.commons.oauth.OAuth2SuccessHandler;
+import com.example.townmarket.commons.oauth.OAuth2UserServiceImpl;
 import com.example.townmarket.commons.security.AdminDetailsServiceImpl;
 import com.example.townmarket.commons.security.CustomAccessDeniedHandler;
 import com.example.townmarket.commons.security.CustomAuthenticationEntryPoint;
@@ -28,9 +29,12 @@ public class SecurityConfig {
 
   private final String[] permitAllArray = {
       "/",
+      "/users/**",
       "/users/login/",
       "/users/login2/",
       "/users/signup/",
+      "/users/update/**",
+      "/users/profile/**",
       "/css/**",
       "/js/**",
       "/images/**",
@@ -43,7 +47,7 @@ public class SecurityConfig {
   private final CustomAccessDeniedHandler customAccessDeniedHandler;
   private final AdminDetailsServiceImpl adminDetailsService;
 
-  private final OAuth2UserService oAuth2UserService;
+  private final OAuth2UserServiceImpl oAuth2UserService;
 
   private final OAuth2SuccessHandler oAuth2SuccessHandler;
 

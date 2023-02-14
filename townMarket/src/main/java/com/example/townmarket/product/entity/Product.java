@@ -1,5 +1,6 @@
 package com.example.townmarket.product.entity;
 
+import com.example.townmarket.commons.TimeStamped;
 import com.example.townmarket.product.dto.ProductRequestDto;
 import com.example.townmarket.user.entity.User;
 import jakarta.persistence.Column;
@@ -24,7 +25,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @AllArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-public class Product {
+public class Product extends TimeStamped {
 
   /**
    * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
@@ -33,19 +34,12 @@ public class Product {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private long id;
-
-  private long userId;
-
   private String productName;
-
   private long productPrice;
-
   @Enumerated(EnumType.STRING)
   private ProductEnum productEnum;
-
   @Enumerated(EnumType.STRING)
   private ProductStatus productStatus;
-
   @Enumerated(EnumType.STRING)
   private ProductCategory productCategory;
 
@@ -66,13 +60,13 @@ public class Product {
    */
   @Builder
   public Product(String productName, Long productPrice, ProductStatus productStatus,
-      ProductCategory productCategory, ProductEnum productEnum, long userId) {
+      ProductCategory productCategory, ProductEnum productEnum, User user) {
     this.productName = productName;
     this.productPrice = productPrice;
     this.productStatus = productStatus;
     this.productEnum = productEnum;
     this.productCategory = productCategory;
-    this.userId = userId;
+    this.user = user;
   }
 
   @Builder
