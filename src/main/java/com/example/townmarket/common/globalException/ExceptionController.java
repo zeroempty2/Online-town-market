@@ -1,12 +1,10 @@
-package com.example.townmarket.common.exception;
+package com.example.townmarket.common.globalException;
 
 import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.security.SecurityException;
-import io.jsonwebtoken.security.SignatureException;
-import jakarta.servlet.http.HttpServletRequest;
+import io.jsonwebtoken.SignatureException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
@@ -24,52 +22,47 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RequiredArgsConstructor
 public class ExceptionController {
 
-  private final ExceptionService exceptionService;
   private final SetHttpHeaders setHttpHeaders;
 
   @ExceptionHandler(IllegalArgumentException.class)
   private ResponseEntity<StatusResponse> illegalArgumentExceptionHandler(
       IllegalArgumentException e) {
-    StatusResponse statusResponseDto = new StatusResponse(HttpStatus.BAD_REQUEST.value(),
+    StatusResponse statusResponse = new StatusResponse(HttpStatus.BAD_REQUEST.value(),
         e.getMessage());
+    return ResponseEntity.badRequest().headers(setHttpHeaders.setHeaderTypeJson())
+        .body(statusResponse);
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<StatusResponse> methodValidException(MethodArgumentNotValidException e) {
+    StatusResponse statusResponseDto = new StatusResponse(HttpStatus.BAD_REQUEST.value(),
+        e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
     return ResponseEntity.badRequest().headers(setHttpHeaders.setHeaderTypeJson())
         .body(statusResponseDto);
   }
 
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<StatusResponse> methodValidException(MethodArgumentNotValidException e,
-      HttpServletRequest request) {
-    log.warn("MethodArgumentNotValidException 발생 url:{}, trace:{}", request.getRequestURI(),
-        e.getStackTrace());
-    log.info(e.getMessage());
-    return ResponseEntity.badRequest()
-        .headers(setHttpHeaders.setHeaderTypeJson())
-        .body(exceptionService.makeMethodArgumentNotValidException(e.getBindingResult(),
-            e.getMessage()));
-  }
-
   @ExceptionHandler(AccessDeniedException.class)
   private ResponseEntity<StatusResponse> AccessDeniedExceptionHandler(AccessDeniedException e) {
-    StatusResponse statusResponseDto = new StatusResponse(HttpStatus.FORBIDDEN.value(),
+    StatusResponse statusResponse = new StatusResponse(HttpStatus.FORBIDDEN.value(),
         e.getMessage());
-    return new ResponseEntity<>(statusResponseDto, setHttpHeaders.setHeaderTypeJson(),
+    return new ResponseEntity<>(statusResponse, setHttpHeaders.setHeaderTypeJson(),
         HttpStatus.FORBIDDEN);
   }
 
 
   @ExceptionHandler(JwtException.class)
   private ResponseEntity<StatusResponse> JwtExceptionHandler(JwtException e) {
-    StatusResponse statusResponseDto = new StatusResponse(HttpStatus.UNAUTHORIZED.value(),
+    StatusResponse statusResponse = new StatusResponse(HttpStatus.UNAUTHORIZED.value(),
         e.getMessage());
-    return new ResponseEntity<>(statusResponseDto, setHttpHeaders.setHeaderTypeJson(),
+    return new ResponseEntity<>(statusResponse, setHttpHeaders.setHeaderTypeJson(),
         HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(SecurityException.class)
   private ResponseEntity<StatusResponse> SecurityExceptionHandler(SecurityException e) {
-    StatusResponse statusResponseDto = new StatusResponse(HttpStatus.UNAUTHORIZED.value(),
+    StatusResponse statusResponse = new StatusResponse(HttpStatus.UNAUTHORIZED.value(),
         e.getMessage());
-    return new ResponseEntity<>(statusResponseDto, setHttpHeaders.setHeaderTypeJson(),
+    return new ResponseEntity<>(statusResponse, setHttpHeaders.setHeaderTypeJson(),
         HttpStatus.UNAUTHORIZED);
   }
 

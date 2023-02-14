@@ -1,11 +1,8 @@
 package com.example.townmarket.review.controller;
 
 
-import static org.mockito.Mockito.mock;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
-
-import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -19,15 +16,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.townmarket.annotation.WithCustomMockUser;
 import com.example.townmarket.common.domain.review.controller.ReviewController;
-import com.example.townmarket.common.dto.PageDto;
-import com.example.townmarket.common.responseMessageData.DefaultResponse;
-import com.example.townmarket.common.enums.ResponseMessages;
-import com.example.townmarket.common.util.SetHttpHeaders;
 import com.example.townmarket.common.domain.review.dto.CreateReviewRequestDto;
 import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
 import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
 import com.example.townmarket.common.domain.review.service.ReviewServiceImpl;
 import com.example.townmarket.common.domain.user.entity.Profile;
+import com.example.townmarket.common.dto.PageDto;
+import com.example.townmarket.common.dto.StatusResponse;
+import com.example.townmarket.common.enums.ResponseMessages;
+import com.example.townmarket.common.globalException.ExceptionController;
+import com.example.townmarket.common.util.SetHttpHeaders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
@@ -59,6 +57,9 @@ class ReviewControllerTest {
   ObjectMapper objectMapper;
 
   @MockBean
+  ExceptionController exceptionController;
+
+  @MockBean
   ReviewServiceImpl reviewService;
 
   @MockBean
@@ -74,7 +75,7 @@ class ReviewControllerTest {
         .reviewContents("reviewContents")
         .build();
 
-    DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
+    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
 
     ResultActions resultActions = mockMvc.perform(post("/review")
             .contentType(MediaType.APPLICATION_JSON)

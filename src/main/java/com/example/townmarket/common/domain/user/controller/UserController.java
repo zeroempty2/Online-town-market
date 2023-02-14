@@ -8,7 +8,7 @@ import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.service.UserService;
 import com.example.townmarket.common.jwtUtil.JwtUtil;
-import com.example.townmarket.common.responseMessageData.DefaultResponse;
+import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,62 +35,62 @@ public class UserController {
 
 
   @PostMapping("/signup")
-  public ResponseEntity<DefaultResponse> signup(
+  public ResponseEntity<StatusResponse> signup(
       @Validated @RequestBody SignupRequestDto signupRequestDto) {
     userService.signup(signupRequestDto);
-    return ResponseEntity.ok().body(DefaultResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
+    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
 
   }
 
   @PostMapping("/login")
-  public ResponseEntity<DefaultResponse> login(
+  public ResponseEntity<StatusResponse> login(
       @Validated @RequestBody LoginRequestDto loginRequestDto,
       HttpServletResponse response) {
     userService.login(response, loginRequestDto);
-    return ResponseEntity.ok().body(DefaultResponse.valueOf(ResponseMessages.SUCCESS));
+    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
 
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<DefaultResponse> logout(HttpServletResponse response) {
+  public ResponseEntity<StatusResponse> logout(HttpServletResponse response) {
     response.setHeader(JwtUtil.AUTHORIZATION_HEADER, null);
-    return ResponseEntity.ok().body(DefaultResponse.valueOf(ResponseMessages.SUCCESS));
+    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
   }
 
   @PutMapping("/update/pw")
-  public ResponseEntity<DefaultResponse> updateUser(
+  public ResponseEntity<StatusResponse> updateUser(
       @Validated @RequestBody PasswordUpdateRequestDto updateRequestDto,
       @AuthenticationPrincipal
       UserDetailsImpl userDetails) {
     userService.updateUser(userDetails.getUsername(), updateRequestDto);
-    return ResponseEntity.ok().body(DefaultResponse.valueOf(ResponseMessages.SUCCESS));
+    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
   }
 
   @PutMapping("/update/region")
-  public ResponseEntity<DefaultResponse> updateRegion(
+  public ResponseEntity<StatusResponse> updateRegion(
       @RequestBody RegionUpdateRequestDto updateRequestDto,
       @AuthenticationPrincipal
       UserDetailsImpl userDetails) {
     userService.updateRegion(userDetails.getUsername(), updateRequestDto);
-    return ResponseEntity.ok().body(DefaultResponse.valueOf(ResponseMessages.SUCCESS));
+    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
   }
 
   @DeleteMapping("/{userId}")
-  public ResponseEntity<DefaultResponse> deleteUser(@PathVariable Long userId,
+  public ResponseEntity<StatusResponse> deleteUser(@PathVariable Long userId,
       @AuthenticationPrincipal
       UserDetailsImpl userDetails) {
     userService.deleteUser(userId, userDetails.getUsername());
-    DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
-    return new ResponseEntity<>(defaultResponse, HttpStatus.NO_CONTENT);
+    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
+    return new ResponseEntity<>(statusResponse, HttpStatus.NO_CONTENT);
   }
 
 
   @PutMapping("/profile/update")
-  public ResponseEntity<DefaultResponse> updateProfile(
+  public ResponseEntity<StatusResponse> updateProfile(
       @RequestBody ProfileRequestDto request, @AuthenticationPrincipal
   UserDetailsImpl userDetails) {
     userService.updateProfile(userDetails.getUserId(), request);
-    return ResponseEntity.ok().body(DefaultResponse.valueOf(ResponseMessages.SUCCESS));
+    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
   }
 
   @GetMapping("/profile/{userId}")
