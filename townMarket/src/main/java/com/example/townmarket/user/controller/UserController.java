@@ -1,6 +1,8 @@
 package com.example.townmarket.user.controller;
 
 import com.example.townmarket.commons.jwtUtil.JwtUtil;
+import com.example.townmarket.commons.responseMessageData.DefaultResponse;
+import com.example.townmarket.commons.responseMessageData.ResponseMessages;
 import com.example.townmarket.commons.security.UserDetailsImpl;
 import com.example.townmarket.user.dto.LoginRequestDto;
 import com.example.townmarket.user.dto.PasswordUpdateRequestDto;
@@ -8,7 +10,6 @@ import com.example.townmarket.user.dto.ProfileRequestDto;
 import com.example.townmarket.user.dto.ProfileResponseDto;
 import com.example.townmarket.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.user.dto.SignupRequestDto;
-import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,58 +35,68 @@ public class UserController {
 
 
   @PostMapping("/signup")
-  public ResponseEntity<String> signup(@Validated @RequestBody SignupRequestDto signupRequestDto) {
-    String signup = userService.signup(signupRequestDto);
-    return new ResponseEntity<>(signup, HttpStatus.CREATED);
+  public ResponseEntity<DefaultResponse> signup(
+      @Validated @RequestBody SignupRequestDto signupRequestDto) {
+    userService.signup(signupRequestDto);
+    DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
+    return ResponseEntity.ok().body(defaultResponse);
 
   }
 
   @PostMapping("/login")
-  public ResponseEntity<String> login(@Validated @RequestBody LoginRequestDto loginRequestDto,
+  public ResponseEntity<DefaultResponse> login(
+      @Validated @RequestBody LoginRequestDto loginRequestDto,
       HttpServletResponse response) {
     userService.login(response, loginRequestDto);
-    return new ResponseEntity<>("로그인이 성공하였습니다.", HttpStatus.OK);
+    DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.SUCCESS);
+    return ResponseEntity.ok().body(defaultResponse);
 
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<String> logout(HttpServletResponse response) {
+  public ResponseEntity<DefaultResponse> logout(HttpServletResponse response) {
     response.setHeader(JwtUtil.AUTHORIZATION_HEADER, null);
-    return new ResponseEntity<>("로그아웃이 완료되었습니다.", HttpStatus.OK);
+    DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.SUCCESS);
+    return ResponseEntity.ok().body(defaultResponse);
   }
 
   @PutMapping("/update/pw")
-  public ResponseEntity<String> updateUser(
+  public ResponseEntity<DefaultResponse> updateUser(
       @Validated @RequestBody PasswordUpdateRequestDto updateRequestDto,
       @AuthenticationPrincipal
       UserDetailsImpl userDetails) {
     userService.updateUser(userDetails.getUsername(), updateRequestDto);
-    return new ResponseEntity<>("비밀번호 수정이 완료되었습니다.", HttpStatus.OK);
+    DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.SUCCESS);
+    return ResponseEntity.ok().body(defaultResponse);
   }
 
   @PutMapping("/update/region")
-  public ResponseEntity<String> updateRegion(
+  public ResponseEntity<DefaultResponse> updateRegion(
       @RequestBody RegionUpdateRequestDto updateRequestDto,
       @AuthenticationPrincipal
       UserDetailsImpl userDetails) {
     userService.updateRegion(userDetails.getUsername(), updateRequestDto);
-    return new ResponseEntity<>(" 거래 가능 지역 수정이 완료되었습니다.", HttpStatus.OK);
+    DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.SUCCESS);
+    return ResponseEntity.ok().body(defaultResponse);
   }
 
   @DeleteMapping("/{userId}")
-  public ResponseEntity<String> deleteUser(@PathVariable Long userId, @AuthenticationPrincipal
-  UserDetailsImpl userDetails) {
+  public ResponseEntity<DefaultResponse> deleteUser(@PathVariable Long userId,
+      @AuthenticationPrincipal
+      UserDetailsImpl userDetails) {
     userService.deleteUser(userId, userDetails.getUsername());
-    return new ResponseEntity<>("계정 삭제가 완료되었습니다.", HttpStatus.OK);
+    DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
+    return new ResponseEntity<>(defaultResponse, HttpStatus.NO_CONTENT);
   }
 
 
   @PutMapping("/profile/update")
-  public ResponseEntity<Profile> updateProfile(
+  public ResponseEntity<DefaultResponse> updateProfile(
       @RequestBody ProfileRequestDto request, @AuthenticationPrincipal
   UserDetailsImpl userDetails) {
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(userService.updateProfile(userDetails.getUserId(), request));
+    userService.updateProfile(userDetails.getUserId(), request);
+    DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.SUCCESS);
+    return ResponseEntity.ok().body(defaultResponse);
   }
 
   @GetMapping("/profile/{userId}")
@@ -93,7 +104,4 @@ public class UserController {
   ) {
     return ResponseEntity.status(HttpStatus.OK).body(userService.showProfile(userId));
   }
-
-
-
 }

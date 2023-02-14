@@ -1,0 +1,24 @@
+// 예시
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== REQUEST
+
+include::{snippets}/reviewController/createReview/http-request.adoc[]
+
+== RESPONSE
+
+include::{snippets}/reviewController/createReview/http-response.adoc[]
+
+== REQUEST - BODY
+
+include::{snippets}/reviewController/createReview/request-body.adoc[]
+include::{snippets}/reviewController/createReview/request-fields.adoc[]
+
+== RESPONSE - BODY
+
+include::{snippets}/reviewController/createReview/response-body.adoc[]
+include::{snippets}/reviewController/createReview/response-fields.adoc[]
+
+

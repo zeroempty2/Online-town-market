@@ -29,6 +29,15 @@ public class UserControllerAuth {
 //      model.addAttribute("user", user.getUsername());
     return "login";
   }
+  //OAuth로 로그인 시 비밀번호 입력 창으로
+  @GetMapping("/users/oauth/password/{email}/{username}")
+  public String oauth(@PathVariable("email") String email, @PathVariable("username") String username, Model model) {
+    System.out.println("email = " + email);
+    System.out.println("username = " + username);
+    model.addAttribute("email", email);
+    model.addAttribute("username", username);
+    return "oauthPassword";
+  }
 
 
 }

@@ -11,49 +11,34 @@ import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.entity.User;
 import com.example.townmarket.user.entity.UserRoleEnum;
 import com.example.townmarket.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
-
-public class UserServiceImpl implements UserService { // UserServiceImpl로 수정 부탁드립니다.
-
+public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final JwtUtil jwtUtil;
   private final PasswordEncoder passwordEncoder;
 
   @Override
-  public String signup(SignupRequestDto request) {
+  @Transactional
+  public void signup(SignupRequestDto request) {
     String username = request.getUsername();
     String phoneNum = request.getPhoneNumber();
     String email = request.getEmail();
-//    String nickname = request.getNickname() + UUID.randomUUID().toString();
     String password = passwordEncoder.encode(request.getPassword());
 
-    // 회원 중복 확인
-    if (userRepository.existsByUsername(username)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중복된 아이디 입니다.");  // unique = true
-    }
-    // 휴대폰 번호 중복 확인
-    if (userRepository.existsByPhoneNumber(phoneNum)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-          "이미 존재하는 휴대폰 번호입니다."); // unique = true
-    }
-    // 이메일 중복 확인
-    if (userRepository.existsByEmail(email)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."); // unique = true
-    }
-    // 닉네임 중복 확인
-//    if (userRepository.existsByNickname(nickname)) {
-//      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."); // unique = true
-//    }
     Profile profile = new Profile(request.getNickname());
 
     User user = User.builder()
@@ -68,80 +53,78 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
         .build();
 
     userRepository.save(user);
-    return "회원가입 성공";
-
   }
 
   @Override
-  public String login(HttpServletResponse response, LoginRequestDto request) {
+  @Transactional
+  public void login(HttpServletResponse response, LoginRequestDto request) {
     String username = request.getUsername();
-
     String password = request.getPassword();
 
     // 사용자 확인
-    User user = userRepository.findByUsername(username).orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다.")
-    );
+    User user = this.findByUsername(username);
 
     // 비밀번호 확인
-    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+    if (!passwordEncoder.matches(password, user.getPassword())) {
       throw new IllegalArgumentException("비밀번호가 틀립니다.");
     }
     String token = jwtUtil.createToken(user.getUsername(), user.getProfile().getNickName());
     response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
-    return "로그인 성공";
   }
 
   @Override
+  @Transactional
   public void logout(User user) {
   }
 
 
   @Override
+  @Transactional
   public void updateUser(String username, PasswordUpdateRequestDto updateDto) {
-    User user = userRepository.findByUsername(username).orElseThrow(
-        () -> new RuntimeException("회원을 찾을 수 없습니다.")
-    );
-    if (user.checkAuthorization(user)) {
-      user.updatePassword(updateDto);
-      this.userRepository.save(user);
-      return;
-    }
-    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
-  }
+    User user = this.findByUsername(username);
 
-  @Override
-  public void updateRegion(String username, RegionUpdateRequestDto updateRequestDto) {
-    User user = userRepository.findByUsername(username).orElseThrow(
-        () -> new RuntimeException("회원을 찾을 수 없습니다.")
-    );
-    if (user.checkAuthorization(user)) {
-      user.updateRegion(updateRequestDto);
-      this.userRepository.save(user);
-      return;
-    }
-    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
-  }
-
-  @Override
-  public void deleteUser(Long userId, String username) {
-    User user = userRepository.findByUsername(username).orElseThrow(
-        () -> new RuntimeException("회원을 찾을 수 없습니다.")
-    );
     if (!user.checkAuthorization(user)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "본인 계정만 삭제할 수 있습니다.");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+    }
+
+    String password = passwordEncoder.encode(updateDto.getPassword());
+    user.updatePassword(password);
+    this.userRepository.save(user);
+  }
+
+  @Override
+  @Transactional
+  public void updateRegion(String username, RegionUpdateRequestDto updateRequestDto) {
+    User user = this.findByUsername(username);
+
+    if (!user.checkAuthorization(user)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+    }
+    user.updateRegion(updateRequestDto);
+    this.userRepository.save(user);
+  }
+
+  @Override
+  @Transactional
+  public void deleteUser(Long userId, String username) {
+    User user = this.findByUsername(username);
+
+    if (!user.checkAuthorization(user)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
     }
     userRepository.deleteById(userId);
   }
 
+  @Transactional
   @Override
-  public Profile updateProfile(Long userId, ProfileRequestDto request) {
+  public ProfileResponseDto updateProfile(Long userId, ProfileRequestDto request) {
     Profile profileSaved = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("회원 없음")).getProfile();
     profileSaved.update(request.getNickname(), request.getImg_url());
-    return profileSaved;
+    return new ProfileResponseDto();
   }
 
+  @Transactional
   @Override
   public ProfileResponseDto showProfile(Long userId) {
     Profile profile = userRepository.findById(userId)
@@ -167,8 +150,28 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
     );
   }
 
+  public User findByUsername(String username) {
+    return userRepository.findByUsername(username).orElseThrow(
+        () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다.")
+    );
+  }
+
   @Override
   public void updateUserGrade(User reviewee, int grade) {
     reviewee.getGrade().updateUserGrade(grade);
   }
+
+
+  @Override
+  public boolean existsByEmail(String email) {
+    return userRepository.existsByEmail(email);
+  }
+
+  @Override
+  public void loginOAuth2(HttpServletResponse response, OAuth2User oAuth2User) {
+
+    String token = jwtUtil.createToken(oAuth2User.getAttribute("name"), oAuth2User.getAttribute("name")+"#"+UUID.randomUUID().toString().substring(0,4));
+    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+  }
 }
+

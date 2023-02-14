@@ -4,7 +4,6 @@ import com.example.townmarket.chat.entity.ChatRoom;
 import com.example.townmarket.commons.TimeStamped;
 import com.example.townmarket.product.entity.Product;
 import com.example.townmarket.review.domain.Review;
-import com.example.townmarket.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.user.dto.RegionUpdateRequestDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -53,10 +52,10 @@ public class User extends TimeStamped {
   @Column(nullable = false)
   private String password;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String phoneNumber;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String email;
 
   @Column(nullable = false)
@@ -124,13 +123,12 @@ public class User extends TimeStamped {
     return Objects.equals(this.id, user.getId());
   }
 
-  public void updatePassword(PasswordUpdateRequestDto updateDto) {
-    this.password = updateDto.getPassword();
+  public void updatePassword(String password) {
+    this.password = password;
   }
 
-
   public void updateRegion(RegionUpdateRequestDto updateDto) {
-    this.password = updateDto.getRegion();
+    this.region = updateDto.getRegion();
   }
 
 
