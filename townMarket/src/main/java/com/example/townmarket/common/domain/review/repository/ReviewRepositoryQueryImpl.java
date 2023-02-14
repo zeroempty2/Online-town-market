@@ -1,7 +1,7 @@
 package com.example.townmarket.common.domain.review.repository;
 
-import static com.example.townmarket.product.entity.QProduct.product;
-import static com.example.townmarket.review.entity.QReview.review;
+import static com.example.townmarket.common.domain.product.entity.QProduct.product;
+import static com.example.townmarket.common.domain.review.entity.QReview.review;
 
 import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
 import com.example.townmarket.common.domain.user.entity.User;

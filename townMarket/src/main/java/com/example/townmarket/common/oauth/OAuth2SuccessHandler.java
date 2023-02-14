@@ -1,6 +1,7 @@
 package com.example.townmarket.common.oauth;
 
 
+import com.example.townmarket.common.enums.RoleEnum;
 import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
 import jakarta.servlet.ServletException;
@@ -32,7 +33,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     username = username.toLowerCase();
 
     if(userRepository.existsByEmail(email)) {
-      String token = jwtUtil.createToken(username, username+"#"+ UUID.randomUUID().toString().substring(0,4));
+      String token = jwtUtil.createToken(username, RoleEnum.MEMBER);
       response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
     }else{
       //패스워드 입력하도록 리다이렉트

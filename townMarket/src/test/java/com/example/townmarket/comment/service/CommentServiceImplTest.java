@@ -31,9 +31,6 @@ class CommentServiceImplTest {
   @Mock
   BoardService boardService;
 
-  @Mock
-  BoardRepository boardRepository;
-
   @InjectMocks
   CommentServiceImpl commentService;
 
@@ -45,7 +42,7 @@ class CommentServiceImplTest {
     Board board = mock(Board.class);
     User user = mock(User.class);
 
-    when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
+    when(boardService.findBoardById(board.getId())).thenReturn(board);
 //    when(boardService.findById(board.getId()).thenReturn(Optional.of(board);
 
     // when

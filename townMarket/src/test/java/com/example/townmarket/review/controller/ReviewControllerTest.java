@@ -90,7 +90,7 @@ class ReviewControllerTest {
             fieldWithPath("revieweeId").type(JsonFieldType.NUMBER).description("리뷰_작성자"),
             fieldWithPath("grade").type(JsonFieldType.NUMBER).description("평가_점수"),
             fieldWithPath("productId").type(JsonFieldType.NUMBER).description("상품_ID"),
-            fieldWithPath("review").type(JsonFieldType.STRING).description("리뷰_내용")
+            fieldWithPath("reviewContents").type(JsonFieldType.STRING).description("리뷰_내용")
         ),
         responseFields(
             fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
