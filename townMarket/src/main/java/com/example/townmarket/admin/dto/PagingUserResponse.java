@@ -1,7 +1,7 @@
 package com.example.townmarket.admin.dto;
 
-import com.example.townmarket.user.entity.Profile;
-import com.example.townmarket.user.entity.User;
+import com.example.townmarket.common.domain.user.entity.Profile;
+import com.example.townmarket.common.domain.user.entity.User;
 
 public class PagingUserResponse {
 

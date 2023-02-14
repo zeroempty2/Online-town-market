@@ -6,8 +6,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.townmarket.admin.dto.PagingUserResponse;
-import com.example.townmarket.commons.dto.PageDto;
-import com.example.townmarket.user.service.UserServiceImpl;
+import com.example.townmarket.common.dto.PageDto;
+import com.example.townmarket.common.domain.user.service.UserServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

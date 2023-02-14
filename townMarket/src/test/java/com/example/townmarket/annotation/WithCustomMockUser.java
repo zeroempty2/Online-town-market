@@ -1,7 +1,7 @@
 package com.example.townmarket.annotation;
 
 
-import com.example.townmarket.user.entity.UserRoleEnum;
+import com.example.townmarket.common.enums.RoleEnum;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import org.springframework.security.test.context.support.WithSecurityContext;
@@ -15,6 +15,6 @@ public @interface WithCustomMockUser {
 
   String nickname() default "nickname";
 
-  UserRoleEnum role() default UserRoleEnum.MEMBER;
+  RoleEnum role() default RoleEnum.MEMBER;
 
 }

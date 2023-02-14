@@ -6,13 +6,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.example.townmarket.board.entity.Board;
-import com.example.townmarket.board.repository.BoardRepository;
-import com.example.townmarket.board.service.BoardService;
-import com.example.townmarket.comment.dto.CommentRequestDto;
-import com.example.townmarket.comment.entity.Comment;
-import com.example.townmarket.comment.repository.CommentRepository;
-import com.example.townmarket.user.entity.User;
+import com.example.townmarket.common.domain.board.entity.Board;
+import com.example.townmarket.common.domain.board.repository.BoardRepository;
+import com.example.townmarket.common.domain.board.service.BoardService;
+import com.example.townmarket.common.domain.comment.dto.CommentRequestDto;
+import com.example.townmarket.common.domain.comment.entity.Comment;
+import com.example.townmarket.common.domain.comment.repository.CommentRepository;
+import com.example.townmarket.common.domain.comment.service.CommentServiceImpl;
+import com.example.townmarket.common.domain.user.entity.User;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,7 +70,7 @@ class CommentServiceImplTest {
     when(Optional.of(comment).get().checkCommentWriter(user)).thenReturn(true);
 
     // when
-    commentService.updateComment(comment.getId(), board.getId(), commentRequestDto, user);
+    commentService.updateComment(comment.getId(), commentRequestDto, user);
 
     // then
     verify(comment).update(commentRequestDto);
@@ -90,7 +91,7 @@ class CommentServiceImplTest {
     when(Optional.of(comment).get().checkCommentWriter(user)).thenReturn(true);
 
     // when
-    commentService.deleteComment(comment.getId(), board.getId(), user);
+    commentService.deleteComment(comment.getId(), user);
 
     // then
     verify(commentRepository).deleteById(anyLong());

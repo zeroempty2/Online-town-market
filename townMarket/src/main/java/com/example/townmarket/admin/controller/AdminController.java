@@ -2,8 +2,8 @@ package com.example.townmarket.admin.controller;
 
 import com.example.townmarket.admin.dto.PagingUserResponse;
 import com.example.townmarket.admin.service.AdminServiceImpl;
-import com.example.townmarket.commons.dto.PageDto;
-import com.example.townmarket.commons.util.SetHttpHeaders;
+import com.example.townmarket.common.dto.PageDto;
+import com.example.townmarket.common.util.SetHttpHeaders;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

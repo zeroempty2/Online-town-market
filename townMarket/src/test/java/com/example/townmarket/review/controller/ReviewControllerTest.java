@@ -6,7 +6,6 @@ import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentReques
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -19,17 +18,16 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.townmarket.annotation.WithCustomMockUser;
-import com.example.townmarket.commons.dto.PageDto;
-import com.example.townmarket.commons.responseMessageData.DefaultResponse;
-import com.example.townmarket.commons.responseMessageData.ResponseMessages;
-import com.example.townmarket.commons.util.SetHttpHeaders;
-import com.example.townmarket.review.dto.CreateReviewRequestDto;
-import com.example.townmarket.review.dto.ReviewResponseDto;
-import com.example.townmarket.review.dto.UpdateReviewRequestDto;
-import com.example.townmarket.review.service.ReviewServiceImpl;
-import com.example.townmarket.user.controller.UserController;
-import com.example.townmarket.user.entity.Profile;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.example.townmarket.common.domain.review.controller.ReviewController;
+import com.example.townmarket.common.dto.PageDto;
+import com.example.townmarket.common.responseMessageData.DefaultResponse;
+import com.example.townmarket.common.enums.ResponseMessages;
+import com.example.townmarket.common.util.SetHttpHeaders;
+import com.example.townmarket.common.domain.review.dto.CreateReviewRequestDto;
+import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
+import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
+import com.example.townmarket.common.domain.review.service.ReviewServiceImpl;
+import com.example.townmarket.common.domain.user.entity.Profile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
@@ -44,8 +42,6 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -108,7 +104,7 @@ class ReviewControllerTest {
   void showSelectReview() throws Exception {
     Long reviewId = 1L;
     ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
-        .review("review")
+        .reviewContents("review")
         .reviewerProfile(new Profile("reviewer", "img1"))
         .revieweeProfile(new Profile("reviewee", "img2"))
         .productName("productName1")
@@ -147,7 +143,7 @@ class ReviewControllerTest {
     PageDto pageDto = PageDto.builder().page(1).size(1).build();
 
     ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
-        .review("review")
+        .reviewContents("review")
         .reviewerProfile(new Profile("reviewer", "img1"))
         .revieweeProfile(new Profile("reviewee", "img2"))
         .productName("productName1")

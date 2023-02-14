@@ -1,6 +1,7 @@
 package com.example.townmarket.admin.entity;
 
-import com.example.townmarket.commons.TimeStamped;
+import com.example.townmarket.common.TimeStamped;
+import com.example.townmarket.common.enums.RoleEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,13 +34,13 @@ public class Admin extends TimeStamped {
   private String password;
 
   @Column(nullable = false)
-  private AdminRoleEnum role;
+  private RoleEnum role;
 
   /**
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
    */
   @Builder
-  public Admin(String username, String password, AdminRoleEnum role) {
+  public Admin(String username, String password, RoleEnum role) {
     this.username = username;
     this.password = password;
     this.role = role;

@@ -6,8 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.townmarket.admin.service.AdminServiceImpl;
-import com.example.townmarket.commons.dto.PageDto;
-import com.example.townmarket.commons.util.SetHttpHeaders;
+import com.example.townmarket.common.dto.PageDto;
+import com.example.townmarket.common.util.SetHttpHeaders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,9 +1,8 @@
 package com.example.townmarket.board.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.example.townmarket.board.repository.BoardRepository;
-import com.example.townmarket.product.repository.ProductRepository;
+import com.example.townmarket.common.domain.board.repository.BoardRepository;
+import com.example.townmarket.common.domain.board.service.BoardServiceImpl;
+import com.example.townmarket.common.domain.product.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

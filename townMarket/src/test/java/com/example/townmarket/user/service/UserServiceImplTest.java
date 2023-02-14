@@ -8,16 +8,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.example.townmarket.commons.jwtUtil.JwtUtil;
-import com.example.townmarket.user.dto.LoginRequestDto;
-import com.example.townmarket.user.dto.PasswordUpdateRequestDto;
-import com.example.townmarket.user.dto.ProfileRequestDto;
-import com.example.townmarket.user.dto.ProfileResponseDto;
-import com.example.townmarket.user.dto.RegionUpdateRequestDto;
-import com.example.townmarket.user.dto.SignupRequestDto;
-import com.example.townmarket.user.entity.Profile;
-import com.example.townmarket.user.entity.User;
-import com.example.townmarket.user.repository.UserRepository;
+import com.example.townmarket.common.domain.user.service.UserServiceImpl;
+import com.example.townmarket.common.jwtUtil.JwtUtil;
+import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
+import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
+import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
+import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
+import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
+import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
+import com.example.townmarket.common.domain.user.entity.Profile;
+import com.example.townmarket.common.domain.user.entity.User;
+import com.example.townmarket.common.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -99,7 +100,7 @@ class UserServiceImplTest {
 
     // when
     userService.login(servletResponse, requestDto);
-    String token = jwtUtil.createToken(username, profile.getNickName());
+    String token = jwtUtil.createToken(username, user.getRole());
     servletResponse.addHeader("Authorization", token);
   }
 
