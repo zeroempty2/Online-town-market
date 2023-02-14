@@ -14,6 +14,8 @@ import com.example.townmarket.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -165,6 +167,11 @@ public class UserServiceImpl implements UserService { // UserServiceImpl로 수�
     return userRepository.findById(userId).orElseThrow(
         () -> new RuntimeException("회원을 찾을 수 없습니다.")
     );
+  }
+
+  @Override
+  public Page<User> pagingUsers(Pageable pageable) {
+    return userRepository.findAll(pageable);
   }
 
   @Override

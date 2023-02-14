@@ -10,6 +10,8 @@ import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
@@ -32,6 +34,8 @@ public interface UserService {
   List<User> findAllUser();
 
   void setUserGrade(User reviewee, int grade, int count);
+
+  Page<User> pagingUsers(Pageable pageable);
 
   User findUserById(Long userId);
 

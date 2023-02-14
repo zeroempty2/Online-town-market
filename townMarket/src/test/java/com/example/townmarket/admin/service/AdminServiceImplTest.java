@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 import com.example.townmarket.admin.dto.PagingUserResponse;
 import com.example.townmarket.commons.dto.PageDto;
 import com.example.townmarket.user.service.UserServiceImpl;
-import java.util.Collections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +32,7 @@ class AdminServiceImplTest {
     PageDto pageDto = mock(PageDto.class);
     Pageable pageable = mock(Pageable.class);
     when(pageDto.toPageable()).thenReturn(pageable);
-    when(userService.findAllUser()).thenReturn(Collections.emptyList());
+    when(userService.pagingUsers(pageable)).thenReturn(Page.empty());
 
     //when
     Page<PagingUserResponse> users = adminService.viewAllUser(pageDto);
@@ -42,6 +41,6 @@ class AdminServiceImplTest {
     assertThat(users).isEmpty();
 
     //verify
-    verify(userService).findAllUser();
+    verify(userService).pagingUsers(pageable);
   }
 }
