@@ -1,6 +1,6 @@
 package com.example.townmarket.board.entity;
 
-import com.example.townmarket.board.dto.CreateBoardRequestDto;
+import com.example.townmarket.board.dto.BoardRequestDto;
 import com.example.townmarket.comment.entity.Comment;
 import com.example.townmarket.commons.TimeStamped;
 import com.example.townmarket.user.entity.User;
@@ -15,8 +15,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
@@ -45,6 +50,7 @@ public class Board extends TimeStamped {
   /**
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
    */
+  @Builder
   public Board(String title, String content, BoardSubject subject, User user) {
     this.title = title;
     this.content = content;
@@ -69,10 +75,10 @@ public class Board extends TimeStamped {
   /**
    * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
    */
-  public void update(CreateBoardRequestDto createBoardRequestDto) {
-    this.title = createBoardRequestDto.getTitle();
-    this.content = createBoardRequestDto.getContent();
-    this.subject = createBoardRequestDto.getSubject();
+  public void update(BoardRequestDto boardRequestDto) {
+    this.title = boardRequestDto.getTitle();
+    this.content = boardRequestDto.getContent();
+    this.subject = boardRequestDto.getSubject();
   }
 
   public boolean checkBoardWriter(User user) {
