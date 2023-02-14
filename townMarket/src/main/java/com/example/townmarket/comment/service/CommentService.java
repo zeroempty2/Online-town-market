@@ -10,8 +10,6 @@ public interface CommentService {
   void updateComment(Long commentId, Long boardsId, CommentRequestDto commentRequestDto,
       User user);
 
-//  CommentResponseDto getComment(long commentId);
-
-  String deleteComment(Long commentId, Long boardsId, User user);
+  void deleteComment(Long commentId, Long boardsId, User user);
 
 }

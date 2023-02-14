@@ -4,6 +4,7 @@ import com.example.townmarket.board.dto.CreateBoardRequestDto;
 import com.example.townmarket.comment.entity.Comment;
 import com.example.townmarket.commons.TimeStamped;
 import com.example.townmarket.user.entity.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -58,8 +59,7 @@ public class Board extends TimeStamped {
   @ManyToOne(fetch = FetchType.LAZY)
   private User user;
 
-  @OneToMany
-//  @OrderBy("commentId asc") // 댓글 정렬
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Comment> comment = new LinkedHashSet<>();
 
   /**

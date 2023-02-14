@@ -1,13 +1,13 @@
 package com.example.townmarket.product.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.townmarket.commons.dto.PageDto;
+import com.example.townmarket.product.dto.PagingProductResponse;
 import com.example.townmarket.product.dto.ProductRequestDto;
 import com.example.townmarket.product.dto.ProductResponseDto;
 import com.example.townmarket.product.entity.Product;
@@ -20,6 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
@@ -51,7 +53,7 @@ class ProductServiceImplTest {
     ProductRequestDto productRequestDto = mock(ProductRequestDto.class);
     Product product = mock(Product.class);
 
-    when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
+    when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
 
     // when
     ProductResponseDto productResponse = productService.showProduct(product.getId());
@@ -64,12 +66,17 @@ class ProductServiceImplTest {
   @DisplayName("상품목록 조회")
   void viewAllProduct() {
     // given
-    Product product = mock(Product.class);
-    Product product2 = mock(Product.class);
+    Pageable pageable = mock(Pageable.class);
+    PageDto pageDto = mock(PageDto.class);
+
+    when(pageDto.toPageable()).thenReturn(pageable);
+    when(productRepository.findAll(pageable)).thenReturn(Page.empty());
 
     // when
+    Page<PagingProductResponse> pagingProductResponse = productService.viewAllProduct(pageDto);
 
     // then
+    assertThat(pagingProductResponse).isNotNull();
   }
 
   @Test
@@ -80,8 +87,8 @@ class ProductServiceImplTest {
     Product product = mock(Product.class);
     ProductRequestDto productRequestDto = mock(ProductRequestDto.class);
 
-    when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
-    when(Optional.of(user).get().checkAuthorization(user)).thenReturn(true);
+    when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+    when(Optional.of(product).get().checkProductWriter(user)).thenReturn(true);
 
     // when
     productService.updateProduct(product.getId(), productRequestDto, user);
@@ -97,13 +104,13 @@ class ProductServiceImplTest {
     User user = mock(User.class);
     Product product = mock(Product.class);
 
-    when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
-    when(Optional.of(user).get().checkAuthorization(user)).thenReturn(true);
+    when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+    when(Optional.of(product).get().checkProductWriter(user)).thenReturn(true);
 
     // when
     productService.deleteProduct(product.getId(), user);
 
     // then
-    verify(productRepository).deleteById(any(Long.class));
+    verify(productRepository).deleteById(product.getId());
   }
 }

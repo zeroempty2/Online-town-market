@@ -56,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
   @Transactional
   public void updateProduct(Long productId, ProductRequestDto productDto, User user) {
     Product product = findProductById(productId);
-    if (!user.checkAuthorization(user)) {
+    if (!product.checkProductWriter(user)) {
       throw new IllegalArgumentException("본인의 상품이 아닙니다");
     }
     product.update(productDto);
@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
   public void deleteProduct(Long productId, User user) {
     Product product = findProductById(productId);
 
-    if (!user.checkAuthorization(user)) {
+    if (!product.checkProductWriter(user)) {
       throw new IllegalArgumentException("본인의 상품이 아닙니다");
     }
     productRepository.deleteById(product.getId());
