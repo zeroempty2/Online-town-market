@@ -60,14 +60,15 @@ class ReviewServiceImplTest {
   void showSelectReview() {
     //given
     var reviewResponseDto = mock(ReviewResponseDto.class);
-    when(reviewRepository.findProfileAndReviewByReviewId(any(Long.class))).thenReturn(
+    when(reviewRepository.searchByReviewId(any(Long.class))).thenReturn(
         reviewResponseDto);
+    when(reviewRepository.existsReviewByProductId((any(Long.class)))).thenReturn(true);
     //when
     var reviewResponseDtoResult = reviewService.showSelectReview(any(Long.class));
     //then
     assertThat(reviewResponseDtoResult).isEqualTo(reviewResponseDto);
     //verify
-    verify(reviewRepository).findProfileAndReviewByReviewId(any(Long.class));
+    verify(reviewRepository).searchByReviewId(any(Long.class));
   }
 
   @Test
@@ -78,7 +79,7 @@ class ReviewServiceImplTest {
     var user = mock(User.class);
     var pageable = mock(Pageable.class);
     when(pageDto.toPageable()).thenReturn(pageable);
-    when(reviewRepository.findProfileAndReviewByReviewIdPaging(pageable, user)).thenReturn(
+    when(reviewRepository.searchByUserAndPaging(user, pageable)).thenReturn(
         Page.empty());
     //when
     var reviewResponseDtoPage = reviewService.showMyReviews(pageDto, user);

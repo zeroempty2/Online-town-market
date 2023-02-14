@@ -36,7 +36,7 @@ public class Review extends TimeStamped {
   @Max(5)
   private int grade;
   @Column
-  private String review;
+  private String reviewContents;
   @Column
   private Long productId;
 
@@ -45,9 +45,9 @@ public class Review extends TimeStamped {
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
    */
   @Builder
-  public Review(int grade, String review, User reviewee, User reviewer, Long productId) {
+  public Review(int grade, String reviewContents, User reviewee, User reviewer, Long productId) {
     this.grade = grade;
-    this.review = review;
+    this.reviewContents = reviewContents;
     this.reviewee = reviewee;
     this.reviewer = reviewer;
     this.productId = productId;
@@ -76,6 +76,6 @@ public class Review extends TimeStamped {
 
   public void updateReview(UpdateReviewRequestDto updateReviewRequestDto) {
     this.grade = updateReviewRequestDto.getGrade();
-    this.review = updateReviewRequestDto.getReview();
+    this.reviewContents = updateReviewRequestDto.getReviewContents();
   }
 }

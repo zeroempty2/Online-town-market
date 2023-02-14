@@ -8,7 +8,7 @@ import lombok.Getter;
 public class UpdateReviewRequestDto {
 
   private Long reviewId;
-  private String review;
+  private String reviewContents;
   private int grade;
 
 }

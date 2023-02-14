@@ -1,6 +1,5 @@
 package com.example.townmarket.review.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -15,8 +14,6 @@ import com.example.townmarket.commons.util.SetHttpHeaders;
 import com.example.townmarket.review.dto.CreateReviewRequestDto;
 import com.example.townmarket.review.dto.UpdateReviewRequestDto;
 import com.example.townmarket.review.service.ReviewServiceImpl;
-import com.example.townmarket.user.controller.UserController;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,8 +24,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -58,7 +53,7 @@ class ReviewControllerTest {
         .revieweeId(1L)
         .grade(1)
         .productId(1L)
-        .review("review")
+        .reviewContents("reviewContents")
         .build();
 
     ResultActions resultActions = mockMvc.perform(post("/review")
@@ -93,7 +88,7 @@ class ReviewControllerTest {
     Long reviewId = 1L;
     UpdateReviewRequestDto updateReviewRequestDto = UpdateReviewRequestDto.builder()
         .reviewId(1L)
-        .review("review")
+        .reviewContents("reviewContents")
         .grade(1).build();
 
     mockMvc.perform(patch("/reviews/update/{reviewId}", reviewId)

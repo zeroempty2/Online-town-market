@@ -10,7 +10,6 @@ import com.example.townmarket.user.entity.User;
 import com.example.townmarket.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
     User reviewee = userService.findUserById(createReviewRequestDto.getRevieweeId());
     Review review = Review.builder()
         .grade(createReviewRequestDto.getGrade())
-        .review(createReviewRequestDto.getReview())
+        .reviewContents(createReviewRequestDto.getReviewContents())
         .reviewee(reviewee)
         .reviewer(reviewer)
         .productId(createReviewRequestDto.getProductId())
@@ -44,14 +43,16 @@ public class ReviewServiceImpl implements ReviewService {
   @Override
   @Transactional(readOnly = true)
   public ReviewResponseDto showSelectReview(Long reviewId) {
-    return reviewRepository.findProfileAndReviewByReviewId(reviewId);
+    if (!reviewRepository.existsReviewByProductId(reviewId)) {
+      throw new IllegalArgumentException("유효하지 않은 리뷰입니다");
+    }
+    return reviewRepository.searchByReviewId(reviewId);
   }
 
   @Override
   @Transactional(readOnly = true)
   public Page<ReviewResponseDto> showMyReviews(PageDto pageDto, User user) {
-    Pageable pageable = pageDto.toPageable();
-    return reviewRepository.findProfileAndReviewByReviewIdPaging(pageable, user);
+    return reviewRepository.searchByUserAndPaging(user, pageDto.toPageable());
   }
 
   @Override
