@@ -8,8 +8,10 @@ import com.example.townmarket.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.user.dto.SignupRequestDto;
 import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.entity.User;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 public interface UserService {
 
@@ -36,6 +38,10 @@ public interface UserService {
   User findUserById(Long userId);
 
   void updateUserGrade(User reviewee, int grade);
+
+  boolean existsByEmail(String email);
+
+  void loginOAuth2(HttpServletResponse response, OAuth2User oAuth2User);
 }
 
 

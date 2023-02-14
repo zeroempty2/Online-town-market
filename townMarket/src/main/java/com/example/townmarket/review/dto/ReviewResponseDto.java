@@ -1,8 +1,10 @@
 package com.example.townmarket.review.dto;
 
 import com.example.townmarket.user.entity.Profile;
+import lombok.Builder;
 
 
+@Builder
 public class ReviewResponseDto {
 
   private int grade;

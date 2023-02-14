@@ -11,12 +11,14 @@ import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.entity.User;
 import com.example.townmarket.user.entity.UserRoleEnum;
 import com.example.townmarket.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -158,4 +160,18 @@ public class UserServiceImpl implements UserService {
   public void updateUserGrade(User reviewee, int grade) {
     reviewee.getGrade().updateUserGrade(grade);
   }
+
+
+  @Override
+  public boolean existsByEmail(String email) {
+    return userRepository.existsByEmail(email);
+  }
+
+  @Override
+  public void loginOAuth2(HttpServletResponse response, OAuth2User oAuth2User) {
+
+    String token = jwtUtil.createToken(oAuth2User.getAttribute("name"), oAuth2User.getAttribute("name")+"#"+UUID.randomUUID().toString().substring(0,4));
+    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+  }
 }
+

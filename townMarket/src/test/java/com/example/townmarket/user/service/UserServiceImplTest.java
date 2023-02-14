@@ -67,6 +67,7 @@ class UserServiceImplTest {
     verify(userRepository, times(1)).save(any());
   }
 
+
   @Test
   @DisplayName("로그인 성공 테스트")
   void login() {
@@ -101,6 +102,7 @@ class UserServiceImplTest {
     String token = jwtUtil.createToken(username, profile.getNickName());
     servletResponse.addHeader("Authorization", token);
   }
+
 
   @Test
   @DisplayName("비밀번호 수정")
