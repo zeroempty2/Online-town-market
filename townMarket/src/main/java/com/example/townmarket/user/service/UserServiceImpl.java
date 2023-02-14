@@ -22,7 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -122,8 +121,8 @@ public class UserServiceImpl implements UserService {
   public ProfileResponseDto updateProfile(Long userId, ProfileRequestDto request) {
     Profile profileSaved = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("회원 없음")).getProfile();
-    profileSaved.update(request.getNickname(), request.getImg_url());
-    return new ProfileResponseDto();
+    profileSaved.update(request);
+    return new ProfileResponseDto(profileSaved);
   }
 
   @Transactional
