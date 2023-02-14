@@ -11,7 +11,11 @@ import com.example.townmarket.user.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+
 
 public interface UserService {
 
@@ -34,6 +38,8 @@ public interface UserService {
   List<User> findAllUser();
 
   void setUserGrade(User reviewee, int grade, int count);
+
+  Page<User> pagingUsers(Pageable pageable);
 
   User findUserById(Long userId);
 

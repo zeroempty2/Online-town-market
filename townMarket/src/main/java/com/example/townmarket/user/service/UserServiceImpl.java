@@ -16,6 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -154,6 +156,11 @@ public class UserServiceImpl implements UserService {
     return userRepository.findByUsername(username).orElseThrow(
         () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다.")
     );
+  }
+
+  @Override
+  public Page<User> pagingUsers(Pageable pageable) {
+    return userRepository.findAll(pageable);
   }
 
   @Override
