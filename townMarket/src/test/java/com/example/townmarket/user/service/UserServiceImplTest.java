@@ -18,6 +18,7 @@ import com.example.townmarket.user.dto.SignupRequestDto;
 import com.example.townmarket.user.entity.Profile;
 import com.example.townmarket.user.entity.User;
 import com.example.townmarket.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,78 +54,72 @@ class UserServiceImplTest {
         .password("password")
         .phoneNumber("010-xxxx-xxxx")
         .email("asd@naver.com")
+        .nickname("바니바니")
         .region("양평동")
         .build();
 
-    String username = requestDto.getUsername();
-    String phoneNumber = requestDto.getPhoneNumber();
-    String email = requestDto.getEmail();
-
     User user = mock(User.class);
 
-    given(userRepository.existsByUsername(username)).willReturn(
-        false);
-    given(userRepository.existsByPhoneNumber(phoneNumber)).willReturn(false);
-    given(userRepository.existsByEmail(email)).willReturn(false);
-
     //when
-    String signup = userService.signup(requestDto);
+    userService.signup(requestDto);
 
     //then
     verify(userRepository, times(1)).save(any());
-    assertThat(signup).isEqualTo("회원가입 성공");
   }
 
-//  @Test
-//  @DisplayName("로그인 성공 테스트")
-//  void login() {
-//    // given
-//    ProfileRequestDto rs = ProfileRequestDto.builder()
-//        .nickname("nick")
-//        .img_url("1212")
-//        .build();
-//    LoginRequestDto requestDto = LoginRequestDto.builder()
-//        .username("username1")
-//        .password("password")
-//        .build();
-//
-//    String username = requestDto.getUsername();
-//    String password = passwordEncoder.encode(requestDto.getPassword());
-//
-//    Profile profile = new Profile(rs.getNickname(), rs.getImg_url());
-//    User user = new User(username, passwordEncoder.encode(password), profile);
-//
-//    given(userRepository.findByUsername(username))
-//        .willReturn(Optional.of(user));
-//    given(!passwordEncoder.matches(password, user.getPassword())).willReturn(true);
-//
-//    MockHttpServletResponse servletResponse = new MockHttpServletResponse();
-//
-//    // when
-//    String login = userService.login(servletResponse, requestDto);
-//    String token = jwtUtil.createToken(username, profile.getNickName());
-//    servletResponse.addHeader("Authorization", token);
-//
-//    // then
-//    assertThat(login).isEqualTo("로그인 성공");
-//  }
 
   @Test
-  @DisplayName("비밀번호 수정")
-  void updateUser() {
+  @DisplayName("로그인 성공 테스트")
+  void login() {
+    // given
     SignupRequestDto request = SignupRequestDto.builder()
         .username("username1")
         .password("password")
         .phoneNumber("010-xxxx-xxxx")
-        .email("asdf@naver.com")
+        .email("asd@naver.com")
+        .nickname("바니바니")
+        .region("양평동")
+        .build();
+    LoginRequestDto requestDto = LoginRequestDto.builder()
+        .username("username1")
+        .password("password")
+        .build();
+
+    String username = requestDto.getUsername();
+    String password = requestDto.getPassword();
+
+    Profile profile = new Profile(request.getNickname());
+    User user = new User(username, passwordEncoder.encode(password), profile);
+
+    given(userRepository.findByUsername(username))
+        .willReturn(Optional.of(user));
+    given(!passwordEncoder.matches(password, user.getPassword())).willReturn(true);
+
+    MockHttpServletResponse servletResponse = new MockHttpServletResponse();
+
+    // when
+    userService.login(servletResponse, requestDto);
+    String token = jwtUtil.createToken(username, profile.getNickName());
+    servletResponse.addHeader("Authorization", token);
+  }
+
+
+  @Test
+  @DisplayName("비밀번호 수정")
+  @Transactional
+  void updateUser() {
+    SignupRequestDto request = SignupRequestDto.builder()
+        .username("username1")
+        .password("password")
         .build();
 
     PasswordUpdateRequestDto requestDto = PasswordUpdateRequestDto.builder()
         .password("pass")
         .build();
     String password = passwordEncoder.encode(requestDto.getPassword());
-    User newUser = User.builder().username(request.getUsername()).password(password)
-        .phoneNumber(request.getPhoneNumber()).email(request.getEmail()).build();
+    User newUser = User.builder()
+        .username(request.getUsername()).password(password)
+        .build();
 
     given(userRepository.findByUsername(newUser.getUsername()))
         .willReturn(Optional.of(newUser));
@@ -207,7 +202,7 @@ class UserServiceImplTest {
     ProfileResponseDto responseDto = userService.showProfile(userId);
 
     // then
-    assertThat(responseDto.getNewNickname()).isEqualTo(user.getProfile().getNickName());
+    assertThat(responseDto.getNickname()).isEqualTo(user.getProfile().getNickName());
     assertThat(responseDto.getImg_url()).isEqualTo(user.getProfile().getImg_url());
   }
 
@@ -244,10 +239,10 @@ class UserServiceImplTest {
     given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
     // when
-    Profile updatedProfile = userService.updateProfile(userId, requestDto);
+    ProfileResponseDto updatedProfile = userService.updateProfile(userId, requestDto);
 
     // then
-    assertThat(updatedProfile.getNickName()).isEqualTo(requestDto.getNickname());
+    assertThat(updatedProfile.getNickname()).isEqualTo(requestDto.getNickname());
     assertThat(updatedProfile.getImg_url()).isEqualTo(requestDto.getImg_url());
   }
 

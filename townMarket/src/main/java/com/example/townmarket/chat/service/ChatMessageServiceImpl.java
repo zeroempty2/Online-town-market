@@ -30,7 +30,6 @@ public class ChatMessageServiceImpl implements ChatMessageService {
       ChatMessage messages = new ChatMessage(message.getSender(), message.getReceiver(),
           message.getMessage(), room);
       messageRepository.save(messages);
-
     }
   }
 }

@@ -51,7 +51,7 @@ public class ChatRoom {
   public ChatRoom(Product product, User user) {
     this.roomName = product.getProductName();
     this.productId = product.getId();
-    this.seller = product.getUserId();
+    this.seller = product.getUser().getId();
     this.buyer = user.getId();
     this.user = user;
   }

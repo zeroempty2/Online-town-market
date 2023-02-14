@@ -15,9 +15,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 public interface UserService {
 
-  String signup(SignupRequestDto request);
+  void signup(SignupRequestDto request);
 
-  String login(HttpServletResponse response, LoginRequestDto request);
+  void login(HttpServletResponse response, LoginRequestDto request);
 
   void logout(User user);
 
@@ -27,7 +27,7 @@ public interface UserService {
 
   void deleteUser(Long userId, String username);
 
-  Profile updateProfile(Long profileId, ProfileRequestDto request);
+  ProfileResponseDto updateProfile(Long profileId, ProfileRequestDto request);
 
   ProfileResponseDto showProfile(Long profileId);
 
