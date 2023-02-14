@@ -96,4 +96,8 @@ public class Product extends TimeStamped {
     this.productEnum = productRequestDto.getProductEnum();
     this.productCategory = productRequestDto.getProductCategory();
   }
+
+  public boolean checkProductWriter(User user) {
+    return this.user.equals(user);
+  }
 }

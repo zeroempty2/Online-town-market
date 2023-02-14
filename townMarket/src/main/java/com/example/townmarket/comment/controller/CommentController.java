@@ -2,10 +2,10 @@ package com.example.townmarket.comment.controller;
 
 import com.example.townmarket.comment.dto.CommentRequestDto;
 import com.example.townmarket.comment.service.CommentService;
-import com.example.townmarket.commons.dto.StatusResponseDto;
 import com.example.townmarket.commons.responseMessageData.DefaultResponse;
 import com.example.townmarket.commons.responseMessageData.ResponseMessages;
 import com.example.townmarket.commons.security.UserDetailsImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,19 +28,12 @@ public class CommentController {
   // 댓글 생성
   @PostMapping("/board/{boardsId}")
   public ResponseEntity<DefaultResponse> createComment(@PathVariable Long boardsId,
-      @RequestBody CommentRequestDto commentRequestDto,
+      @Valid @RequestBody CommentRequestDto commentRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     commentService.createComment(boardsId, commentRequestDto, userDetails.getUser());
     DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
-    return ResponseEntity.ok().body(defaultResponse);
+    return ResponseEntity.status(HttpStatus.CREATED).body(defaultResponse);
   }
-
-  // 댓글 불러오기 (전체? 단건?)
-//  @GetMapping("/comments/board/{boardsId}")
-//  public ResponseEntity<CommentResponseDto> getComment(@PathVariable long commentId) {
-//    return ResponseEntity.status(HttpStatus.OK).headers(setHttpHeaders.setHeaderTypeJson())
-//        .body(commentService.getComment(commentId));
-//  }
 
   // 댓글 수정
   @PutMapping("/{commentId}/board/{boardsId}")
@@ -56,11 +49,12 @@ public class CommentController {
 
   // 댓글 삭제
   @DeleteMapping("/{commentId}/board/{boardsId}")
-  public ResponseEntity<StatusResponseDto> deleteComment(@PathVariable Long commentId,
+  public ResponseEntity<DefaultResponse> deleteComment(@PathVariable Long commentId,
       @PathVariable Long boardsId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    return ResponseEntity.status(HttpStatus.OK).body(new StatusResponseDto(HttpStatus.OK.value(),
-        commentService.deleteComment(commentId, boardsId, userDetails.getUser())));
+    commentService.deleteComment(commentId, boardsId, userDetails.getUser());
+    DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(defaultResponse);
   }
 
 }
