@@ -1,5 +1,6 @@
 package com.example.townmarket.user.entity;
 
+import com.example.townmarket.user.dto.ProfileRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Builder;
@@ -15,7 +16,7 @@ public class Profile {
    * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
    */
 
-  @Column
+  @Column(unique = true)
   private String nickName;
 
   @Column
@@ -36,9 +37,9 @@ public class Profile {
   }
 
 
-  public void update(String nickName, String img_url) {
-    this.nickName = nickName;
-    this.img_url = img_url;
+  public void update(ProfileRequestDto requestDto) {
+    this.nickName = requestDto.getNickname();
+    this.img_url = requestDto.getImg_url();
   }
 
   /**

@@ -13,9 +13,9 @@ import java.util.List;
 
 public interface UserService {
 
-  String signup(SignupRequestDto request);
+  void signup(SignupRequestDto request);
 
-  String login(HttpServletResponse response, LoginRequestDto request);
+  void login(HttpServletResponse response, LoginRequestDto request);
 
   void logout(User user);
 
