@@ -8,7 +8,7 @@ import lombok.Getter;
 public class CreateReviewRequestDto {
 
   private Long revieweeId;
-  private String review;
+  private String reviewContents;
   private int grade;
   private Long productId;
 

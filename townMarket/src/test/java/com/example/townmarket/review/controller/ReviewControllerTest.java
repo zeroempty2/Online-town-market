@@ -1,5 +1,7 @@
 package com.example.townmarket.review.controller;
 
+
+import static org.mockito.Mockito.mock;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
 
@@ -17,7 +19,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.townmarket.annotation.WithCustomMockUser;
-
 import com.example.townmarket.commons.dto.PageDto;
 import com.example.townmarket.commons.responseMessageData.DefaultResponse;
 import com.example.townmarket.commons.responseMessageData.ResponseMessages;
@@ -74,7 +75,7 @@ class ReviewControllerTest {
         .revieweeId(1L)
         .grade(1)
         .productId(1L)
-        .review("review")
+        .reviewContents("reviewContents")
         .build();
 
     DefaultResponse defaultResponse = DefaultResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
@@ -189,7 +190,7 @@ class ReviewControllerTest {
     Long reviewId = 1L;
     UpdateReviewRequestDto updateReviewRequestDto = UpdateReviewRequestDto.builder()
         .reviewId(1L)
-        .review("review")
+        .reviewContents("reviewContents")
         .grade(1).build();
 
     mockMvc.perform(patch("/reviews/update/{reviewId}", reviewId)
