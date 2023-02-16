@@ -85,6 +85,7 @@ public class BoardServiceImpl implements BoardService {
   }
 // 중복 로직 메서드 분리
   @Override
+  @Transactional(readOnly = true)
   public Board findBoardById(Long boardId) {
     return boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("게시글이 없습니다."));
   }
