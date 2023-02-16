@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.townmarket.admin.controller.AdminController;
 import com.example.townmarket.admin.service.AdminServiceImpl;
+import com.example.townmarket.common.domain.product.controller.ProductController;
 import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.globalException.ExceptionController;
 import com.example.townmarket.common.util.SetHttpHeaders;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -28,18 +30,19 @@ import org.springframework.test.web.servlet.ResultActions;
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @WebMvcTest(controllers = AdminController.class)
 @MockBean(JpaMetamodelMappingContext.class)
+@AutoConfigureRestDocs
 class AdminControllerTest {
 
   @Autowired
-  private MockMvc mockMvc;
+  MockMvc mockMvc;
   @Autowired
-  private ObjectMapper objectMapper;
+  ObjectMapper objectMapper;
   @MockBean
-  private ExceptionController exceptionController;
+  ExceptionController exceptionController;
   @MockBean
-  private AdminServiceImpl adminService;
+  AdminServiceImpl adminService;
   @MockBean
-  private SetHttpHeaders httpHeaders;
+  SetHttpHeaders httpHeaders;
 
   @Test
   @DisplayName("유저 목록 조회")
