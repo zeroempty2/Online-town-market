@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -20,11 +21,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
   private final String[] permitAllArray = {
       "/",
@@ -55,6 +58,16 @@ public class SecurityConfig {
     return new BCryptPasswordEncoder();
   }
 
+  @Override
+  public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**")
+        .allowedOrigins("http://localhost:8080", "http://127.0.0.1:5500") // 허용할 출처
+        .allowedMethods("GET", "POST", "PATCH", "OPTIONS", "DELETE") // 허용할 HTTP method
+        .allowCredentials(true) // 쿠키 인증 요청 허용
+        .exposedHeaders("Authorization")
+        .maxAge(3000);// 원하는 시간만큼 pre-flight 리퀘스트를 캐싱
+  }
+
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {
     return (web) -> web.ignoring()
@@ -71,7 +84,7 @@ public class SecurityConfig {
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     http.authorizeHttpRequests()
-        .requestMatchers("/**").permitAll()
+        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
         .requestMatchers(permitAllArray).permitAll()
         .requestMatchers("/admin/users").hasAnyRole("TOP_MANAGER", "MIDDLE_MANAGER")
         .anyRequest().authenticated()
