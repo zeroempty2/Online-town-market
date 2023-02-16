@@ -64,7 +64,6 @@ dependencies {
 
     // Jasypt properties 암호화
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
-    implementation group: 'org.bouncycastle', name: 'bcprov-jdk16', version: '1.46'
 
 }
 
