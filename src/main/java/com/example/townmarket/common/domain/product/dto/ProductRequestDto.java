@@ -4,10 +4,11 @@ import com.example.townmarket.common.domain.product.entity.Product.ProductCatego
 import com.example.townmarket.common.domain.product.entity.Product.ProductEnum;
 import com.example.townmarket.common.domain.product.entity.Product.ProductStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
 public class ProductRequestDto {
 
   private String productName;
@@ -20,4 +21,13 @@ public class ProductRequestDto {
 
   private ProductEnum productEnum;
 
+  @Builder
+  public ProductRequestDto(String productName, long productPrice, ProductStatus productStatus,
+      ProductCategory productCategory, ProductEnum productEnum) {
+    this.productName = productName;
+    this.productPrice = productPrice;
+    this.productStatus = productStatus;
+    this.productCategory = productCategory;
+    this.productEnum = productEnum;
+  }
 }

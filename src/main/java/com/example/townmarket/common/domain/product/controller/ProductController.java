@@ -58,8 +58,8 @@ public class ProductController {
   }
 
   // 단일 상품 업데이트
-  @PutMapping("/update")
-  public ResponseEntity<StatusResponse> update(@RequestParam Long productId,
+  @PutMapping("/update/{productId}")
+  public ResponseEntity<StatusResponse> update(@PathVariable Long productId,
       @RequestBody ProductRequestDto productRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     productService.updateProduct(productId, productRequestDto, userDetails.getUser());

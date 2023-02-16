@@ -7,6 +7,7 @@ import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.domain.user.entity.User;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ReviewService {
 
