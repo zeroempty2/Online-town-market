@@ -42,6 +42,8 @@ public class ProductServiceImpl implements ProductService {
         .productPrice(product.getProductPrice())
         .productStatus(product.getProductStatus())
         .productCategory(product.getProductCategory())
+        .createdAt(product.getCreatedAt())
+        .modifiedAt(product.getModifiedAt())
         .build();
   }
 
