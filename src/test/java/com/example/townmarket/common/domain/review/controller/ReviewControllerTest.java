@@ -1,4 +1,4 @@
-package com.example.townmarket.review.controller;
+package com.example.townmarket.common.domain.review.controller;
 
 
 import static org.mockito.ArgumentMatchers.isA;

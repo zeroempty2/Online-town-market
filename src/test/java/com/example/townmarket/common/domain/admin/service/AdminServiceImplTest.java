@@ -1,4 +1,4 @@
-package com.example.townmarket.admin.service;
+package com.example.townmarket.common.domain.admin.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.townmarket.admin.dto.PagingUserResponse;
+import com.example.townmarket.admin.service.AdminServiceImpl;
 import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.domain.user.service.UserServiceImpl;
 import org.junit.jupiter.api.DisplayName;
