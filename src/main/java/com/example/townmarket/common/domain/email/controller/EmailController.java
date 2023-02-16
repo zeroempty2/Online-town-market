@@ -21,7 +21,6 @@ public class EmailController {
 
   private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-
   @PostMapping("/mail")
   @ResponseBody
   public String emailConfirm(@RequestParam String email) throws Exception {
