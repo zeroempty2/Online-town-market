@@ -59,6 +59,7 @@ public class CommentServiceImpl implements CommentService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Comment findCommentById(Long commentId) {
     return commentRepository.findById(commentId).orElseThrow(() ->
         new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));

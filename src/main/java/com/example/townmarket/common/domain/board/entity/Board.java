@@ -62,7 +62,7 @@ public class Board extends TimeStamped {
   private User user;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
-  private Set<Comment> comment = new LinkedHashSet<>();
+  private Set<Comment> comments = new LinkedHashSet<>();
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.

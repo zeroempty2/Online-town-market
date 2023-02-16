@@ -5,9 +5,11 @@ import com.example.townmarket.common.domain.board.dto.BoardRequestDto;
 import com.example.townmarket.common.domain.board.dto.PagingBoardResponse;
 import com.example.townmarket.common.domain.board.entity.Board;
 import com.example.townmarket.common.domain.board.repository.BoardRepository;
+import com.example.townmarket.common.domain.comment.dto.CommentResponseDto;
 import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
 import com.example.townmarket.common.domain.user.entity.User;
+import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -64,6 +66,9 @@ public class BoardServiceImpl implements BoardService {
         .title(board.getTitle())
         .content(board.getContent())
         .subject(board.getSubject())
+        .comments(board.getComments().stream().map(CommentResponseDto::new).collect(Collectors.toList()))
+        .createdAt(board.getCreatedAt())
+        .modifiedAt(board.getModifiedAt())
         .build();
   }
 
