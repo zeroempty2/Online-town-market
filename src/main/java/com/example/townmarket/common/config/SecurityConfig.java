@@ -40,6 +40,9 @@ public class SecurityConfig {
       "/images/**",
       "/login/oauth2/code/google",
       "/users/oauth/password/**",
+      "/mail/**",
+      "/verify/**",
+      "/users/oauth/password/**",
       "profile"};
   private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
   private final JwtUtil jwtUtil;
