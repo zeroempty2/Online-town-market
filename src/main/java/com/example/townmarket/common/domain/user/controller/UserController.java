@@ -1,5 +1,6 @@
 package com.example.townmarket.common.domain.user.controller;
 
+import com.example.townmarket.common.domain.email.service.EmailService;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
@@ -32,12 +33,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
+  private final EmailService emailService;
 
 
   @PostMapping("/signup")
   public ResponseEntity<StatusResponse> signup(
       @Validated @RequestBody SignupRequestDto signupRequestDto) {
     userService.signup(signupRequestDto);
+
+    //이메일 인증 했는지 확인
+    if (!emailService.verifyCode(signupRequestDto.getEmail())) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+          .body(StatusResponse.valueOf(ResponseMessages.valueOf("/email")));
+    }
     return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
 
   }

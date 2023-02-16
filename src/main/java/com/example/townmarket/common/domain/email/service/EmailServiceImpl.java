@@ -78,5 +78,16 @@ public class EmailServiceImpl implements EmailService {
     }
     return ePw;
   }
+
+  @Override
+  public Boolean verifyCode(String code) {
+    boolean result = false;
+    System.out.println("code : " + code);
+    System.out.println("code match : " + EmailServiceImpl.ePw.equals(code));
+    if (EmailServiceImpl.ePw.equals(code)) {
+      result = true;
+    }
+    return result;
+  }
 }
 

@@ -33,13 +33,6 @@ public class EmailController {
   @ResponseBody
   public Boolean verifyCode(String code) {
     logger.info("Post verifyCode");
-
-    boolean result = false;
-    System.out.println("code : " + code);
-    System.out.println("code match : " + EmailServiceImpl.ePw.equals(code));
-    if (EmailServiceImpl.ePw.equals(code)) {
-      result = true;
-    }
-    return result;
+    return emailService.verifyCode(code);
   }
 }
