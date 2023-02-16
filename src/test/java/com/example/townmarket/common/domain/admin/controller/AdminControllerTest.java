@@ -1,10 +1,11 @@
-package com.example.townmarket.admin.controller;
+package com.example.townmarket.common.domain.admin.controller;
 
 import static org.mockito.Mockito.mock;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.townmarket.admin.controller.AdminController;
 import com.example.townmarket.admin.service.AdminServiceImpl;
 import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.globalException.ExceptionController;

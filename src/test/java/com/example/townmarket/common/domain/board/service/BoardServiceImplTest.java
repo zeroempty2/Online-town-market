@@ -1,4 +1,4 @@
-package com.example.townmarket.board.service;
+package com.example.townmarket.common.domain.board.service;
 
 import com.example.townmarket.common.domain.board.repository.BoardRepository;
 import com.example.townmarket.common.domain.board.service.BoardServiceImpl;

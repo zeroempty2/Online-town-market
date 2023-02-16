@@ -1,4 +1,4 @@
-package com.example.townmarket.user.service;
+package com.example.townmarket.common.domain.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

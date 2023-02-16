@@ -91,6 +91,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         .and().addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService, adminDetailsService),
             UsernamePasswordAuthenticationFilter.class);
 
+    http.formLogin().loginPage("/users/login");
+
 //    http.formLogin().loginPage("/api/user/login-page").permitAll();
     http.oauth2Login()//OAuth 로그인 기능에 대한 여러 설정의 진입
         .userInfoEndpoint()// 로그인 성공 이후 사용자 정보를 가져올 때의 설정

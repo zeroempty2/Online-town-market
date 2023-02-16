@@ -1,18 +1,16 @@
-package com.example.townmarket.comment.service;
+package com.example.townmarket.common.domain.comment.service;
 
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.townmarket.common.domain.board.entity.Board;
-import com.example.townmarket.common.domain.board.repository.BoardRepository;
 import com.example.townmarket.common.domain.board.service.BoardService;
 import com.example.townmarket.common.domain.comment.dto.CommentRequestDto;
 import com.example.townmarket.common.domain.comment.entity.Comment;
 import com.example.townmarket.common.domain.comment.repository.CommentRepository;
-import com.example.townmarket.common.domain.comment.service.CommentServiceImpl;
 import com.example.townmarket.common.domain.user.entity.User;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +41,6 @@ class CommentServiceImplTest {
     User user = mock(User.class);
 
     when(boardService.findBoardById(board.getId())).thenReturn(board);
-//    when(boardService.findById(board.getId()).thenReturn(Optional.of(board);
 
     // when
     commentService.createComment(board.getId(), commentRequestDto, user);
@@ -57,12 +54,9 @@ class CommentServiceImplTest {
   void updateComment() {
     // given
     User user = mock(User.class);
-    Board board = mock(Board.class);
     Comment comment = mock(Comment.class);
     CommentRequestDto commentRequestDto = mock(CommentRequestDto.class);
 
-//    when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
-//    when(boardService.findById(board.getId()).thenReturn(Optional.of(board);
     when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
     when(Optional.of(comment).get().checkCommentWriter(user)).thenReturn(true);
 
@@ -79,11 +73,8 @@ class CommentServiceImplTest {
   void deleteComment() {
     // given
     User user = mock(User.class);
-    Board board = mock(Board.class);
     Comment comment = mock(Comment.class);
 
-//    when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
-//    when(boardService.findById(board.getId()).thenReturn(Optional.of(board);
     when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
     when(Optional.of(comment).get().checkCommentWriter(user)).thenReturn(true);
 
@@ -91,7 +82,21 @@ class CommentServiceImplTest {
     commentService.deleteComment(comment.getId(), user);
 
     // then
-    verify(commentRepository).deleteById(anyLong());
+    verify(commentRepository).deleteById(comment.getId());
 
+  }
+
+  @Test
+  @DisplayName("댓글 레포지토리 조회 후 댓글 반환 성공 테스트")
+  void findCommentById() {
+    // given
+    Comment comment = mock(Comment.class);
+    when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+
+    // when
+    Comment resultCommentFindById = commentService.findCommentById(comment.getId());
+
+    // then
+    assertThat(resultCommentFindById).isEqualTo(comment);
   }
 }

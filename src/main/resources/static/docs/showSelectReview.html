@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /review/1?_csrf=8R-7YRB0J7lfV1ieIgKVFbZaRDbj5n_Dpuj_piAYU1Z7m0hCwCuNByFDQtpybmn7RC-hLI5jaVTV10nulI3LkBArYGFK_nsg HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /review/1?_csrf=90kcX8Ob9mm3GM0SMp3bgRzE2WuN7eKv9T_IBrhqbVJSQbXIxnh_PvD4wQyaLfohB7Dvtnn19FPpjtOCwVzwMttbCTA0d4z6 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -457,12 +457,28 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
-X-Frame-Options: DENY</code></pre>
+X-Frame-Options: DENY
+Content-Length: 256
+
+{
+  "grade" : 1,
+  "reviewContents" : "review",
+  "reviewerProfile" : {
+    "nickName" : "reviewer",
+    "img_url" : "img1"
+  },
+  "revieweeProfile" : {
+    "nickName" : "reviewee",
+    "img_url" : "img2"
+  },
+  "productName" : "productName1"
+}</code></pre>
 </div>
 </div>
 </div>
@@ -482,7 +498,19 @@ X-Frame-Options: DENY</code></pre>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code></code></pre>
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "grade" : 1,
+  "reviewContents" : "review",
+  "reviewerProfile" : {
+    "nickName" : "reviewer",
+    "img_url" : "img1"
+  },
+  "revieweeProfile" : {
+    "nickName" : "reviewee",
+    "img_url" : "img2"
+  },
+  "productName" : "productName1"
+}</code></pre>
 </div>
 </div>
 </div>
@@ -491,7 +519,7 @@ X-Frame-Options: DENY</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-02-14 11:15:28 +0900
+Last updated 2023-02-15 00:13:52 +0900
 </div>
 </div>
 </body>
