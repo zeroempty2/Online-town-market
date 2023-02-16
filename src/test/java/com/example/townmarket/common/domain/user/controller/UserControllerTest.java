@@ -19,6 +19,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.townmarket.common.domain.email.service.EmailService;
+import com.example.townmarket.common.domain.user.controller.UserController;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.service.UserService;
@@ -65,6 +67,9 @@ class UserControllerTest {
   @MockBean
   SetHttpHeaders setHttpHeaders;
 
+  @MockBean
+  EmailService emailService;
+
   @Test
   @DisplayName("회원가입 성공")
   @WithMockUser
@@ -80,28 +85,31 @@ class UserControllerTest {
 
     StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
 
+    given(emailService.verifyCode(any())).willReturn(true);
     ResultActions resultActions = mockMvc.perform(post("/users/signup")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsBytes(signupRequestDto))
         .with(csrf()));
 
-    resultActions.andExpect(status().isOk())
-        .andDo(document("usercontroller/signup",
-            getDocumentRequest(),
-            getDocumentResponse(),
-            requestFields(
-                fieldWithPath("username").type(JsonFieldType.STRING).description("유저 이름"),
-                fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
-                fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-                fieldWithPath("region").type(JsonFieldType.STRING).description("지역"),
-                fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("핸드폰 번호")
-            ),
-            responseFields(
-                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
-            )
-        ));
+
+    resultActions.andExpect(status().isOk());
+
+    resultActions.andDo(document("usercontroller/signup",
+        getDocumentRequest(),
+        getDocumentResponse(),
+        requestFields(
+            fieldWithPath("username").type(JsonFieldType.STRING).description("유저 이름"),
+            fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
+            fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+            fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+            fieldWithPath("region").type(JsonFieldType.STRING).description("지역"),
+            fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("핸드폰 번호")
+        ),
+        responseFields(
+            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+        )
+    ));
 
   }
 

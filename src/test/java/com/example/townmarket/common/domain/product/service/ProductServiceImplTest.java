@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.townmarket.common.domain.product.service.ProductServiceImpl;
 import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.domain.product.dto.PagingProductResponse;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
