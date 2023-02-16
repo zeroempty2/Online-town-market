@@ -21,12 +21,6 @@ public class EmailController {
 
   private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-
-  @GetMapping("/")
-  public String main() {
-    return "chat/email";
-  }
-
   @PostMapping("/mail")
   @ResponseBody
   public String emailConfirm(@RequestParam String email) throws Exception {
