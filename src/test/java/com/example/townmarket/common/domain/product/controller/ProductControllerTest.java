@@ -14,6 +14,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.townmarket.annotation.WithCustomMockUser;
+import com.example.townmarket.common.domain.product.controller.ProductController;
 import com.example.townmarket.common.domain.product.dto.PagingProductResponse;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
 import com.example.townmarket.common.domain.product.dto.ProductResponseDto;
@@ -83,7 +84,7 @@ class ProductControllerTest {
                 .with(csrf()))
         .andExpect(status().isCreated());
 
-    resultActions.andDo(document("product/addProduct",
+    resultActions.andDo(document("productController/addProduct",
         getDocumentRequest(),
         getDocumentResponse(),
         requestFields(
@@ -121,16 +122,17 @@ class ProductControllerTest {
         .with(csrf()));
 
     resultActions.andExpect(status().isOk());
-    resultActions.andDo(document("product/getProductId",
+    resultActions.andDo(document("productController/getProductId",
         getDocumentRequest(),
         getDocumentResponse(),
         responseFields(
+            fieldWithPath("createdAt").description(JsonFieldType.OBJECT).description("생성일자"),
+            fieldWithPath("modifiedAt").description(JsonFieldType.OBJECT).description("수정일자"),
             fieldWithPath("productId").description(JsonFieldType.NUMBER).description("상품명"),
             fieldWithPath("productName").description(JsonFieldType.STRING).description("상품명"),
             fieldWithPath("productPrice").description(JsonFieldType.NUMBER).description("상품가격"),
             fieldWithPath("productStatus").description(JsonFieldType.OBJECT).description("상품상태"),
-            fieldWithPath("productCategory").description(JsonFieldType.OBJECT)
-                .description("상품 카테고리"),
+            fieldWithPath("productCategory").description(JsonFieldType.OBJECT).description("상품 카테고리"),
             fieldWithPath("productEnum").description(JsonFieldType.OBJECT).description("상품 거래 상태")
         )));
 
@@ -164,7 +166,7 @@ class ProductControllerTest {
             .content(objectMapper.writeValueAsBytes(pageDto))
             .with(csrf()))
         .andExpect(status().isOk());
-    resultActions.andDo(document("product/getProducts",
+    resultActions.andDo(document("productController/getProducts",
         getDocumentRequest(),
         getDocumentResponse(),
         requestFields(
@@ -200,7 +202,7 @@ class ProductControllerTest {
                 .with(csrf()))
         .andExpect(status().isOk());
 
-    resultActions.andDo(document("product/update",
+    resultActions.andDo(document("productController/update",
         getDocumentRequest(),
         getDocumentResponse(),
         requestFields(
@@ -229,7 +231,7 @@ class ProductControllerTest {
             delete("/products/{productId}", productId).with(csrf()))
         .andExpect(status().isNoContent());
     StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
-    resultActions.andDo(document("product/update",
+    resultActions.andDo(document("productController/update",
         getDocumentResponse(),
         responseFields(
             fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),

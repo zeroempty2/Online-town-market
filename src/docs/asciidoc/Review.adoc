@@ -3,22 +3,28 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
-== REQUEST
+== REVIEW API
+
+---
+*CreateReview*
+
+** REQUEST
 
 include::{snippets}/reviewController/createReview/http-request.adoc[]
 
-== RESPONSE
+** RESPONSE
 
 include::{snippets}/reviewController/createReview/http-response.adoc[]
 
-== REQUEST - BODY
+** REQUEST - BODY
 
 include::{snippets}/reviewController/createReview/request-body.adoc[]
 include::{snippets}/reviewController/createReview/request-fields.adoc[]
 
-== RESPONSE - BODY
+** RESPONSE - BODY
 
 include::{snippets}/reviewController/createReview/response-body.adoc[]
 include::{snippets}/reviewController/createReview/response-fields.adoc[]
 
-
+---
+*Review*
