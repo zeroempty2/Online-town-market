@@ -21,13 +21,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-public class SecurityConfig implements WebMvcConfigurer {
+public class SecurityConfig {
 
   private final String[] permitAllArray = {
       "/",
@@ -58,15 +56,6 @@ public class SecurityConfig implements WebMvcConfigurer {
     return new BCryptPasswordEncoder();
   }
 
-  @Override
-  public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/**")
-        .allowedOrigins("http://localhost:8080", "http://127.0.0.1:5500") // 허용할 출처
-        .allowedMethods("GET", "POST", "PATCH", "OPTIONS", "DELETE") // 허용할 HTTP method
-        .allowCredentials(true) // 쿠키 인증 요청 허용
-        .exposedHeaders("Authorization")
-        .maxAge(3000);// 원하는 시간만큼 pre-flight 리퀘스트를 캐싱
-  }
 
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {
