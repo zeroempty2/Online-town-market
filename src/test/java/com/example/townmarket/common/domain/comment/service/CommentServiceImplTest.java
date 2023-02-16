@@ -11,6 +11,7 @@ import com.example.townmarket.common.domain.board.service.BoardService;
 import com.example.townmarket.common.domain.comment.dto.CommentRequestDto;
 import com.example.townmarket.common.domain.comment.entity.Comment;
 import com.example.townmarket.common.domain.comment.repository.CommentRepository;
+import com.example.townmarket.common.domain.comment.service.CommentServiceImpl;
 import com.example.townmarket.common.domain.user.entity.User;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
