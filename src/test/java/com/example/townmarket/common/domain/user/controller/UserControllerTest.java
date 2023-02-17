@@ -86,8 +86,7 @@ class UserControllerTest {
             fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
             fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
             fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-            fieldWithPath("region").type(JsonFieldType.STRING).description("지역"),
-            fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("핸드폰 번호")
+            fieldWithPath("region").type(JsonFieldType.STRING).description("지역")
         ),
         responseFields(
             fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
