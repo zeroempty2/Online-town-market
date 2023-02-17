@@ -8,9 +8,9 @@ import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.service.UserService;
-import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
+import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -40,19 +40,12 @@ public class UserController {
   public ResponseEntity<StatusResponse> signup(
       @Validated @RequestBody SignupRequestDto signupRequestDto) {
     userService.signup(signupRequestDto);
-
-    //이메일 인증 했는지 확인
-    if (!emailService.verifyCode(signupRequestDto.getEmail())) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-          .body(StatusResponse.valueOf(ResponseMessages.valueOf("/email")));
-    }
     return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
-
   }
 
   @PostMapping("/login")
   public ResponseEntity<StatusResponse> login(
-      @Validated @RequestBody LoginRequestDto loginRequestDto,
+      @RequestBody LoginRequestDto loginRequestDto,
       HttpServletResponse response) {
     userService.login(response, loginRequestDto);
     return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
