@@ -1,6 +1,5 @@
 package com.example.townmarket.common.domain.user.controller;
 
-import com.example.townmarket.common.domain.email.service.EmailService;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
-  private final EmailService emailService;
 
 
   @PostMapping("/signup")

@@ -15,7 +15,7 @@ public class SignupRequestDto {
   @NotEmpty(message = "아이디를 입력해주세요.")
   private String username;
 
-  @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,15}$", message = "소문자와 대문자 그리고 숫자를 포함하여 8자 이상 15자 이하로 적어주세요.")
+  @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,15}$", message = "소문자와 대문자 특수문자 그리고 숫자를 포함하여 8자 이상 15자 이하로 적어주세요.")
   @NotEmpty(message = "비밀번호를 입력해주세요.")
   private String password;
 

@@ -1,7 +1,5 @@
 package com.example.townmarket.common.domain.email.service;
 
-import com.example.townmarket.common.domain.user.entity.User;
-import com.example.townmarket.common.domain.user.repository.UserRepository;
 import jakarta.mail.Message.RecipientType;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;

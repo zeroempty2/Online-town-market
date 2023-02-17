@@ -116,7 +116,7 @@ class ProductControllerTest {
         .productCategory(ProductCategory.CAR)
         .productEnum(ProductEnum.나눔)
         .build();
-    given(productService.showProduct(productId)).willReturn(productResponseDto);
+    given(productService.getProduct(productId)).willReturn(productResponseDto);
 
     ResultActions resultActions = mockMvc.perform(get("/products/{productId}", productId)
         .with(csrf()));
@@ -159,7 +159,7 @@ class ProductControllerTest {
     Page<PagingProductResponse> productResponseDtos = new PageImpl<>(
         Collections.singletonList(pagingProductResponse), pageable, 1);
 
-    given(productService.viewAllProduct(pageDto)).willReturn(productResponseDtos);
+    given(productService.getProducts(pageDto)).willReturn(productResponseDtos);
 
     ResultActions resultActions = mockMvc.perform(get("/products")
             .contentType(MediaType.APPLICATION_JSON)
@@ -231,7 +231,7 @@ class ProductControllerTest {
             delete("/products/{productId}", productId).with(csrf()))
         .andExpect(status().isNoContent());
     StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
-    resultActions.andDo(document("productController/update",
+    resultActions.andDo(document("productController/deleteProduct",
         getDocumentResponse(),
         responseFields(
             fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
