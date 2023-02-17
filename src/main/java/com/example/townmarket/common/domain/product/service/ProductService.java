@@ -14,10 +14,10 @@ public interface ProductService {
   void addProduct(User user, ProductRequestDto productDto);
 
   // 단일 상품 조회
-  ProductResponseDto showProduct(Long productId);
+  ProductResponseDto getProduct(Long productId);
 
   // 전체 상품 조회
-  Page<PagingProductResponse> viewAllProduct(PageDto pageDto);
+  Page<PagingProductResponse> getProducts(PageDto pageDto);
 
   // 상품 내용 수정
   void updateProduct(Long productId, ProductRequestDto productDto, User user);

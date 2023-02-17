@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -46,7 +45,7 @@ public class ProductController {
   @GetMapping("/{productId}")
   public ResponseEntity<ProductResponseDto> getProduct(@PathVariable Long productId) {
     return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
-        .body(productService.showProduct(productId));
+        .body(productService.getProduct(productId));
   }
 
   // 전체 상품 조회
@@ -54,7 +53,7 @@ public class ProductController {
   public ResponseEntity<Page<PagingProductResponse>> getProducts(@RequestBody PageDto pageDto) {
 
     return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
-        .body(productService.viewAllProduct(pageDto));
+        .body(productService.getProducts(pageDto));
   }
 
   // 단일 상품 업데이트

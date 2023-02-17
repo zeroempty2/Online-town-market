@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional(readOnly = true)
-  public ProductResponseDto showProduct(Long productId) {
+  public ProductResponseDto getProduct(Long productId) {
     Product product = findProductById(productId);
     return ProductResponseDto.builder()
         .productId(product.getId())
@@ -48,8 +48,8 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  @Transactional
-  public Page<PagingProductResponse> viewAllProduct(PageDto pageDto) {
+  @Transactional(readOnly = true)
+  public Page<PagingProductResponse> getProducts(PageDto pageDto) {
     Page<Product> products = productRepository.findAll(pageDto.toPageable());
     return products.map(PagingProductResponse::new);
   }
@@ -75,6 +75,7 @@ public class ProductServiceImpl implements ProductService {
     productRepository.deleteById(product.getId());
   }
   @Override
+  @Transactional(readOnly = true)
   public Product findProductById(Long productId) {
     return productRepository.findById(productId).orElseThrow(
         () -> new IllegalArgumentException("존재하지 않는 상품입니다")

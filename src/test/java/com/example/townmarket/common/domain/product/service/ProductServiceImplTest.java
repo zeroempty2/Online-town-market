@@ -49,7 +49,7 @@ class ProductServiceImplTest {
 
   @Test
   @DisplayName("상품 단일 조회 성공")
-  void showProduct() {
+  void getProduct() {
     // given
     ProductRequestDto productRequestDto = mock(ProductRequestDto.class);
     Product product = mock(Product.class);
@@ -57,7 +57,7 @@ class ProductServiceImplTest {
     when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
 
     // when
-    ProductResponseDto productResponse = productService.showProduct(product.getId());
+    ProductResponseDto productResponse = productService.getProduct(product.getId());
 
     // then
     assertThat(productResponse.getProductName()).isEqualTo(productRequestDto.getProductName());
@@ -65,7 +65,7 @@ class ProductServiceImplTest {
 
   @Test
   @DisplayName("상품목록 조회")
-  void viewAllProduct() {
+  void getProducts() {
     // given
     Pageable pageable = mock(Pageable.class);
     PageDto pageDto = mock(PageDto.class);
@@ -74,7 +74,7 @@ class ProductServiceImplTest {
     when(productRepository.findAll(pageable)).thenReturn(Page.empty());
 
     // when
-    Page<PagingProductResponse> pagingProductResponse = productService.viewAllProduct(pageDto);
+    Page<PagingProductResponse> pagingProductResponse = productService.getProducts(pageDto);
 
     // then
     assertThat(pagingProductResponse).isNotNull();
