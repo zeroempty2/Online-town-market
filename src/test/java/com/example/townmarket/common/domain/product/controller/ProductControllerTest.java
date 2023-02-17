@@ -231,7 +231,7 @@ class ProductControllerTest {
             delete("/products/{productId}", productId).with(csrf()))
         .andExpect(status().isNoContent());
     StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
-    resultActions.andDo(document("productController/update",
+    resultActions.andDo(document("productController/deleteProduct",
         getDocumentResponse(),
         responseFields(
             fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
