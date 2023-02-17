@@ -21,7 +21,7 @@ public class PageDto {
 
   String sortBy;
 
-  boolean isAsc;
+  boolean isAsc; // boolean은 is를 뺴고 인식
 
   public Pageable toPageable() {
     if (Objects.isNull(sortBy)) {

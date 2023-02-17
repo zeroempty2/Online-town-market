@@ -48,8 +48,8 @@ public class ReviewController {
   public ResponseEntity<Page<ReviewResponseDto>> showMyReviews(PageDto pageDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return ResponseEntity.ok().headers(setHttpHeaders.setHeaderTypeJson()).body(reviewService.showMyReviews(pageDto,
-        userDetails.getUser()));
+    Page<ReviewResponseDto> reviewResponseDtos = reviewService.showMyReviews(pageDto,userDetails.getUser());
+    return ResponseEntity.ok().headers(setHttpHeaders.setHeaderTypeJson()).body(reviewResponseDtos);
   }
 
   @PatchMapping("/reviews/update/{reviewId}")

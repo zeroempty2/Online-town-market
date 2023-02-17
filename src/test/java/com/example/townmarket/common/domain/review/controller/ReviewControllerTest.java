@@ -57,6 +57,8 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -158,12 +160,12 @@ class ReviewControllerTest {
   @Test
   @WithCustomMockUser
   void showMyReviews() throws Exception {
-    PageDto pageDto = PageDto.builder().page(1).size(10).isAsc(false).sortBy("createdAt").build();
-    UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
-    User user = User.builder()
-        .username("username")
-        .password("password")
-        .build();
+    PageDto pageDto = PageDto.builder().page(1).size(10).isAsc(false).sortBy("productName").build();
+
+    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+        .getPrincipal();
+
+    User user = userDetails.getUser();
 
     ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
         .reviewContents("review")
@@ -175,10 +177,17 @@ class ReviewControllerTest {
     Pageable pageable = pageDto.toPageable();
 
     Page<ReviewResponseDto> reviewResponseDtoPage = new PageImpl<>(
-        Collections.singletonList(reviewResponseDto),pageable,pageable.getPageSize());
+        Collections.singletonList(reviewResponseDto),pageable,1);
 
-    given(userDetails.getUser()).willReturn(user);
-    given(reviewService.showMyReviews(pageDto, userDetails.getUser())).willReturn(reviewResponseDtoPage);
+/***
+ * 테스트 코드 내부에 json 파일 - 해당 실제 응답값이 담겨있는 파일-을 읽어와서 해당 willReturn에 넣어주기
+ * 응답값이 있는 파일을 읽어오기
+ * objectmapper를 통해 해당 읽어온 파일을 객체 클래스로 변환, willReturn에 넣어주기
+ * 파일을 객체 클래스로? 아니면 해당 json 응답값을 string으로 변환 후 응답값에 넣어주기
+ */
+
+//    given(userDetails.getUser()).willReturn(user);
+    given(reviewService.showMyReviews(pageDto,user)).willReturn(reviewResponseDtoPage);
 
     ResultActions resultActions = mockMvc.perform(get("/reviews")
             .content(objectMapper.writeValueAsBytes(pageDto))
@@ -195,19 +204,13 @@ class ReviewControllerTest {
             fieldWithPath("asc").type(JsonFieldType.BOOLEAN).description("리뷰내용")
         )
 //        responseFields(
-//            fieldWithPath("reviewContents").type(JsonFieldType.STRING).description("리뷰내용")
-//            fieldWithPath("reviewerProfile").type(JsonFieldType.OBJECT)
-//                .description("리뷰작성자_프로필"),
-//            fieldWithPath("reviewerProfile.nickName").type(JsonFieldType.STRING)
-//                .description("리뷰작성자_프로필_닉네임"),
-//            fieldWithPath("reviewerProfile.img_url").type(JsonFieldType.STRING)
-//                .description("리뷰작성자_프로필_이미지"),
-//            fieldWithPath("revieweeProfile").type(JsonFieldType.OBJECT)
-//                .description("판매자_프로필"),
-//            fieldWithPath("revieweeProfile.nickName").type(JsonFieldType.STRING)
-//                .description("판매자프로필_닉네임"),
-//            fieldWithPath("revieweeProfile.img_url").type(JsonFieldType.STRING)
-//                .description("판매자프로필_이미지"),
+//            fieldWithPath("reviewContents").type(JsonFieldType.STRING).description("리뷰내용"),
+//            fieldWithPath("reviewerProfile").type(JsonFieldType.OBJECT).description("리뷰작성자_프로필"),
+//            fieldWithPath("reviewerProfile.nickName").type(JsonFieldType.STRING).description("리뷰작성자_프로필_닉네임"),
+//            fieldWithPath("reviewerProfile.img_url").type(JsonFieldType.STRING).description("리뷰작성자_프로필_이미지"),
+//            fieldWithPath("revieweeProfile").type(JsonFieldType.OBJECT).description("판매자_프로필"),
+//            fieldWithPath("revieweeProfile.nickName").type(JsonFieldType.STRING).description("판매자프로필_닉네임"),
+//            fieldWithPath("revieweeProfile.img_url").type(JsonFieldType.STRING).description("판매자프로필_이미지"),
 //            fieldWithPath("productName").type(JsonFieldType.STRING).description("상품이름"))
             ));
   }
