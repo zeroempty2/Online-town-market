@@ -80,7 +80,7 @@ public class BoardServiceImpl implements BoardService {
     if(!board.checkBoardWriter(user)) {
       throw new IllegalArgumentException("본인의 게시글이 아닙니다.");
     }
-    productRepository.deleteById(board.getId());
+    boardRepository.deleteById(board.getId());
 
   }
 // 중복 로직 메서드 분리
