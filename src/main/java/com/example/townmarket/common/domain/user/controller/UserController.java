@@ -1,5 +1,7 @@
 package com.example.townmarket.common.domain.user.controller;
 
+import com.example.townmarket.common.domain.user.dto.DuplicateCheckRequestDto;
+import com.example.townmarket.common.domain.user.dto.DuplicateCheckResponseDto;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
@@ -11,6 +13,7 @@ import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.security.UserDetailsImpl;
+import com.example.townmarket.common.util.SetHttpHeaders;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,7 +35,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
+  private final SetHttpHeaders httpHeaders;
 
+  @PostMapping("/duplicate")
+  public ResponseEntity<DuplicateCheckResponseDto> duplicateCheck(
+      @RequestBody DuplicateCheckRequestDto duplicateCheckRequestDto) {
+    return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
+        .body(userService.duplicateCheck(duplicateCheckRequestDto));
+  }
 
   @PostMapping("/signup")
   public ResponseEntity<StatusResponse> signup(

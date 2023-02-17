@@ -66,7 +66,6 @@ class UserControllerTest {
         .email("xxx0011@gmail.com")
         .nickname("nickname")
         .region("서울")
-        .phoneNumber("010-1111-2222")
         .build();
 
     StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
