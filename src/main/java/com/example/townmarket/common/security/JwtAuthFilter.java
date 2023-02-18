@@ -1,6 +1,7 @@
 package com.example.townmarket.common.security;
 
 import com.example.townmarket.common.jwtUtil.JwtUtil;
+import com.example.townmarket.common.redis.repository.TokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -26,11 +27,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
   private final UserDetailsServiceImpl userDetailsService;
   private final AdminDetailsServiceImpl adminDetailsService;
 
+  private final TokenRepository tokenRepository;
+
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
 
-    String token = jwtUtil.resolveToken(request);
+    String token = jwtUtil.resolveAccessToken(request);
 
     if (token != null) {
       if (!jwtUtil.validateToken(token)) {
@@ -43,7 +46,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         return;
       }
       Claims info = jwtUtil.getUserInfoFromToken(token);
-      setAuthentication(info.getSubject());
+      String refreshToken = jwtUtil.resolveRefreshToken(request);
+      if (!tokenRepository.existsByAccessToken(token) && !tokenRepository.existsByRefreshToken(
+          refreshToken)) {
+        setAuthentication(info.getSubject());
+      }else{
+        return;
+      }
     }
     filterChain.doFilter(request, response);
   }

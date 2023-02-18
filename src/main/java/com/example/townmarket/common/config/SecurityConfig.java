@@ -43,6 +43,7 @@ public class SecurityConfig {
       "/mail/**",
       "/verify/**",
       "/users/oauth/password/**",
+      "/refresh/**",
       "profile"};
   private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
   private final JwtUtil jwtUtil;

@@ -33,8 +33,10 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     username = username.toLowerCase();
 
     if(userRepository.existsByEmail(email)) {
-      String token = jwtUtil.createToken(username, RoleEnum.MEMBER);
-      response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+      String AccessToken = jwtUtil.createAccessToken(username, RoleEnum.MEMBER);
+      String RefreshToken = jwtUtil.createRefreshToken(username, RoleEnum.MEMBER);
+      response.addHeader(JwtUtil.AUTHORIZATION_HEADER, AccessToken);
+      response.addHeader(JwtUtil.REFRESH_HEADER, RefreshToken);
     }else{
       //패스워드 입력하도록 리다이렉트
       response.sendRedirect("/users/oauth/password/" + email + "/" + username);

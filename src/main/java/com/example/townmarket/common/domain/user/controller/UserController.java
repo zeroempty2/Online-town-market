@@ -11,6 +11,7 @@ import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.security.UserDetailsImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -53,8 +54,8 @@ public class UserController {
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<StatusResponse> logout(HttpServletResponse response) {
-    response.setHeader(JwtUtil.AUTHORIZATION_HEADER, null);
+  public ResponseEntity<StatusResponse> logout(HttpServletRequest request,HttpServletResponse response) {
+    userService.logout(request,response);
     return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
   }
 
