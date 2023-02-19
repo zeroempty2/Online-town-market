@@ -12,6 +12,8 @@ import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
+import com.example.townmarket.common.redis.converter.TokenDtoToByteArrayConverter;
+import com.example.townmarket.common.redis.dto.TokenDto;
 import com.example.townmarket.common.redis.entity.Tokens;
 import com.example.townmarket.common.redis.service.RefreshService;
 import io.jsonwebtoken.Claims;
@@ -36,6 +38,8 @@ public class UserServiceImpl implements UserService {
   private final PasswordEncoder passwordEncoder;
 
   private final RefreshService refreshService;
+
+  private final TokenDtoToByteArrayConverter tokenDtoToByteArrayConverter;
 
   @Override
   @Transactional
@@ -90,8 +94,11 @@ public class UserServiceImpl implements UserService {
     String username = userInfoFromToken.getSubject();
     User user = findByUsername(username);
     String refreshToken = jwtUtil.resolveRefreshToken(request);
-    Tokens tokens = Tokens.builder().refreshToken(refreshToken).accessToken(accessToken).userId(
-        user.getId()).build();
+    TokenDto tokenDto = TokenDto.builder().refreshToken(refreshToken).accessToken(accessToken)
+        .build();
+    byte[] convert = tokenDtoToByteArrayConverter.convert(tokenDto);
+    Tokens tokens = Tokens.builder().tokenDto(convert).id(
+        user.getUsername()).build();
     // token blacklist 저장
     refreshService.saveBlackList(tokens);
     response.setHeader(JwtUtil.AUTHORIZATION_HEADER, null);

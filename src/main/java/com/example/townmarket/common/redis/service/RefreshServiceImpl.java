@@ -5,7 +5,7 @@ import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
 import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.redis.entity.Tokens;
-import com.example.townmarket.common.redis.repository.TokenRepository;
+import com.example.townmarket.common.redis.repository.BlacklistTokenRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,13 +18,15 @@ public class RefreshServiceImpl implements  RefreshService{
 
   private final UserRepository userRepository;
 
-  private final TokenRepository tokenRepository;
+  private final BlacklistTokenRepository blacklistTokenRepository;
   private final JwtUtil jwtUtil;
+
+
 
 
   @Override // 토큰 블랙리스트
   public void saveBlackList(Tokens tokens) {
-    tokenRepository.save(tokens);
+    blacklistTokenRepository.save(tokens);
   }
 
   @Override // 토큰 재발급
