@@ -1,5 +1,7 @@
 package com.example.townmarket.common.domain.user.service;
 
+import com.example.townmarket.common.domain.user.dto.DuplicateCheckRequestDto;
+import com.example.townmarket.common.domain.user.dto.DuplicateCheckResponseDto;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
@@ -9,7 +11,6 @@ import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -46,6 +47,9 @@ public interface UserService {
 
   boolean existsByEmail(String email);
 
+  ProfileResponseDto getMyProfile(String username);
+
+  DuplicateCheckResponseDto duplicateCheck(DuplicateCheckRequestDto duplicateCheckRequestDto);
 
 }
 

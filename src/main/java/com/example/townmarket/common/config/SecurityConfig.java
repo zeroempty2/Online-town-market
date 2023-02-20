@@ -84,7 +84,7 @@ public class SecurityConfig {
         .and().addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService, adminDetailsService),
             UsernamePasswordAuthenticationFilter.class);
 
-    http.formLogin().loginPage("/users/login");
+//    http.formLogin().loginPage("/users/login");
 
 //    http.formLogin().loginPage("/api/user/login-page").permitAll();
     http.oauth2Login()//OAuth 로그인 기능에 대한 여러 설정의 진입
