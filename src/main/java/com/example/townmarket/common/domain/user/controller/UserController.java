@@ -1,5 +1,7 @@
 package com.example.townmarket.common.domain.user.controller;
 
+import com.example.townmarket.common.domain.user.dto.DuplicateCheckRequestDto;
+import com.example.townmarket.common.domain.user.dto.DuplicateCheckResponseDto;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
@@ -11,6 +13,7 @@ import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.security.UserDetailsImpl;
+import com.example.townmarket.common.util.SetHttpHeaders;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,20 +35,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
+  private final SetHttpHeaders httpHeaders;
 
+  @PostMapping("/duplicate")
+  public ResponseEntity<DuplicateCheckResponseDto> duplicateCheck(
+      @RequestBody DuplicateCheckRequestDto duplicateCheckRequestDto) {
+    return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
+        .body(userService.duplicateCheck(duplicateCheckRequestDto));
+  }
 
   @PostMapping("/signup")
   public ResponseEntity<StatusResponse> signup(
       @Validated @RequestBody SignupRequestDto signupRequestDto) {
     userService.signup(signupRequestDto);
-
     return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
-
   }
 
   @PostMapping("/login")
   public ResponseEntity<StatusResponse> login(
-      @Validated @RequestBody LoginRequestDto loginRequestDto,
+      @RequestBody LoginRequestDto loginRequestDto,
       HttpServletResponse response) {
     userService.login(response, loginRequestDto);
     return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
@@ -98,5 +106,12 @@ public class UserController {
   public ResponseEntity<ProfileResponseDto> showProfile(@PathVariable Long userId
   ) {
     return ResponseEntity.status(HttpStatus.OK).body(userService.showProfile(userId));
+  }
+
+  @GetMapping("/profile")
+  public ResponseEntity<ProfileResponseDto> getMyProfile(@AuthenticationPrincipal
+  UserDetailsImpl userDetails) {
+    return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
+        .body(userService.getMyProfile(userDetails.getUsername()));
   }
 }

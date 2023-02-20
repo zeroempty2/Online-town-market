@@ -32,9 +32,9 @@ public class EmailController {
     return emailService.sendSimpleMessage(email);
   }
 
-  @PostMapping("/verify")
-  public Boolean verifyCode(String code) {
-    logger.info("Post verifyCode");
-    return emailService.verifyCode(code);
-  }
+//  @PostMapping("/verify")
+//  public Boolean verifyCode(String code) {
+//    logger.info("Post verifyCode");
+//    return emailService.verifyCode(code);
+//  }
 }

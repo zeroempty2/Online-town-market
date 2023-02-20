@@ -8,8 +8,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.example.townmarket.common.domain.user.service.UserServiceImpl;
-import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
@@ -19,6 +17,7 @@ import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
+import com.example.townmarket.common.jwtUtil.JwtUtil;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -53,7 +52,6 @@ class UserServiceImplTest {
     SignupRequestDto requestDto = SignupRequestDto.builder()
         .username("username1")
         .password("password")
-        .phoneNumber("010-xxxx-xxxx")
         .email("asd@naver.com")
         .nickname("바니바니")
         .region("양평동")
@@ -76,7 +74,6 @@ class UserServiceImplTest {
     SignupRequestDto request = SignupRequestDto.builder()
         .username("username1")
         .password("password")
-        .phoneNumber("010-xxxx-xxxx")
         .email("asd@naver.com")
         .nickname("바니바니")
         .region("양평동")
@@ -138,7 +135,6 @@ class UserServiceImplTest {
     SignupRequestDto request = SignupRequestDto.builder()
         .username("username1")
         .password("password")
-        .phoneNumber("010-xxxx-xxxx")
         .email("asdas@naver.com")
         .region("양평동")
         .build();
@@ -148,7 +144,7 @@ class UserServiceImplTest {
         .build();
     String region = requestDto.getRegion();
     User newUser = User.builder().username(request.getUsername()).password(request.getPassword())
-        .phoneNumber(request.getPhoneNumber()).email(request.getEmail()).region(region).build();
+        .email(request.getEmail()).region(region).build();
 
     given(userRepository.findByUsername(newUser.getUsername()))
         .willReturn(Optional.of(newUser));
@@ -167,13 +163,12 @@ class UserServiceImplTest {
     SignupRequestDto request = SignupRequestDto.builder()
         .username("username1")
         .password("password")
-        .phoneNumber("010-xxxx-xxxx")
         .email("asd@naver.com")
         .region("양평동")
         .build();
 
     User newUser = User.builder().username(request.getUsername()).password(request.getPassword())
-        .phoneNumber(request.getPhoneNumber()).email(request.getEmail()).region(request.getRegion())
+        .email(request.getEmail()).region(request.getRegion())
         .build();
 
     given(userRepository.findByUsername(newUser.getUsername()))

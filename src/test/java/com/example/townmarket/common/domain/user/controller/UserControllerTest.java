@@ -2,47 +2,33 @@ package com.example.townmarket.common.domain.user.controller;
 
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.townmarket.common.domain.email.service.EmailService;
-import com.example.townmarket.common.domain.user.controller.UserController;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.service.UserService;
 import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.util.SetHttpHeaders;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -76,11 +62,10 @@ class UserControllerTest {
   void signup() throws Exception {
     SignupRequestDto signupRequestDto = SignupRequestDto.builder()
         .username("username")
-        .password("Password")
+        .password("Password!2")
         .email("xxx0011@gmail.com")
         .nickname("nickname")
         .region("서울")
-        .phoneNumber("010-1111-2222")
         .build();
 
     StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
@@ -90,7 +75,6 @@ class UserControllerTest {
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsBytes(signupRequestDto))
         .with(csrf()));
-
 
     resultActions.andExpect(status().isOk());
 
@@ -102,8 +86,7 @@ class UserControllerTest {
             fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
             fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
             fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-            fieldWithPath("region").type(JsonFieldType.STRING).description("지역"),
-            fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("핸드폰 번호")
+            fieldWithPath("region").type(JsonFieldType.STRING).description("지역")
         ),
         responseFields(
             fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),

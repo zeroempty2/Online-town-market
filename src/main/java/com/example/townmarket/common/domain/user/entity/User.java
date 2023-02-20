@@ -1,11 +1,11 @@
 package com.example.townmarket.common.domain.user.entity;
 
-import com.example.townmarket.common.enums.RoleEnum;
-import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.TimeStamped;
+import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
+import com.example.townmarket.common.enums.RoleEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -25,6 +25,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 //lombok
 @Getter
@@ -35,8 +37,8 @@ import lombok.NoArgsConstructor;
 //jpa
 @Entity
 @Table(name = "users")
-
-//@DynamicInsert
+@DynamicInsert
+@DynamicUpdate
 public class User extends TimeStamped {
 
   /**
@@ -53,13 +55,13 @@ public class User extends TimeStamped {
   @Column(nullable = false)
   private String password;
 
-  @Column(nullable = false, unique = true)
-  private String phoneNumber;
+//  @Column(nullable = false)
+//  private String phoneNumber;
 
   @Column(nullable = false, unique = true)
   private String email;
 
-  @Column(nullable = false)
+  @Column
   private String region;
 
   @Column
@@ -78,11 +80,10 @@ public class User extends TimeStamped {
    */
 
   @Builder
-  public User(String username, String password, String phoneNumber, String email, String region,
+  public User(String username, String password, String email, String region,
       Profile profile) {
     this.username = username;
     this.password = password;
-    this.phoneNumber = phoneNumber;
     this.email = email;
     this.region = region;
     this.profile = profile;

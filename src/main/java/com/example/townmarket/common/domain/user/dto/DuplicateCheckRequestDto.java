@@ -5,12 +5,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class LoginRequestDto {
+public class DuplicateCheckRequestDto {
 
+  String duplicateField;
 
-  private String username;
-
-
-  private String password;
-
+  String content;
 }

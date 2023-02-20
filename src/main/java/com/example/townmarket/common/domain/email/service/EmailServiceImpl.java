@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -16,12 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class EmailServiceImpl implements EmailService {
 
   private final JavaMailSender emailSender;
-  public static final String ePw = createKey();
+  public String ePw;
 
 
   private MimeMessage createMessage(String to) throws Exception {
-    System.out.println("보내는 대상 : " + to);
-    System.out.println("인증 번호 : " + ePw);
+
     MimeMessage message = emailSender.createMimeMessage();
 
     message.addRecipients(RecipientType.TO, to);//보내는 대상
@@ -36,15 +34,17 @@ public class EmailServiceImpl implements EmailService {
     msgg += "<br>";
     msgg += "<div style='background-color: ghostwhite; font-family:verdana; padding-left: 20px'>";
     msgg += "<div style='font-size:180%'>";
-    msgg += ePw + "<div>";
+    msgg += createKey() + "<div>";
     msgg += "</div>";
     message.setText(msgg, "utf-8", "html");//내용
     message.setFrom(new InternetAddress("5w31892p@gmail.com", "낙낙상회"));//보내는 사람
-
+    System.out.println("보내는 대상 : " + to);
+    System.out.println("인증 번호 : " + ePw);
     return message;
+    
   }
 
-  public static String createKey() {
+  public String createKey() {
     StringBuffer key = new StringBuffer();
     Random rnd = new Random();
 
@@ -63,11 +63,11 @@ public class EmailServiceImpl implements EmailService {
         // 0~9
       }
     }
-    return key.toString();
+    ePw = key.toString();
+    return ePw;
   }
 
   @Override
-  @Transactional
   public String sendSimpleMessage(String to) throws Exception {
 
     MimeMessage message = createMessage(to);
@@ -80,16 +80,15 @@ public class EmailServiceImpl implements EmailService {
     return ePw;
   }
 
-  @Override
-  @Transactional
-  public Boolean verifyCode(String code) {
-    boolean result = false;
-    System.out.println("authCode : " + EmailServiceImpl.ePw);
-    System.out.println("myCode : " + code);
-    System.out.println("code match : " + EmailServiceImpl.ePw.equals(code));
-    if (EmailServiceImpl.ePw.equals(code)) {
-      result = true;
-    }
-    return result;
-  }
+//  @Override
+//  public Boolean verifyCode(String code) {
+//    boolean result = false;
+//    System.out.println("authCode : " + EmailServiceImpl.ePw);
+//    System.out.println("myCode : " + code);
+//    System.out.println("code match : " + EmailServiceImpl.ePw.equals(code));
+//    if (EmailServiceImpl.ePw.equals(code)) {
+//      result = true;
+//    }
+//    return result;
+//  }
 }
