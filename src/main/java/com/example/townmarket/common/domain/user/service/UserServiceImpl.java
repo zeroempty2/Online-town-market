@@ -173,6 +173,11 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public ProfileResponseDto getMyProfile(String username) {
+    return userRepository.getProfileByUsername(username);
+  }
+
+  @Override
   @Transactional(readOnly = true)
   public DuplicateCheckResponseDto duplicateCheck(
       DuplicateCheckRequestDto duplicateCheckRequestDto) {

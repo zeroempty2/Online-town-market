@@ -107,4 +107,11 @@ public class UserController {
   ) {
     return ResponseEntity.status(HttpStatus.OK).body(userService.showProfile(userId));
   }
+
+  @GetMapping("/profile")
+  public ResponseEntity<ProfileResponseDto> getMyProfile(@AuthenticationPrincipal
+  UserDetailsImpl userDetails) {
+    return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
+        .body(userService.getMyProfile(userDetails.getUsername()));
+  }
 }
