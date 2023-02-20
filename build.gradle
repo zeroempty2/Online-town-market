@@ -65,6 +65,11 @@ dependencies {
     // Jasypt properties 암호화
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 
+    implementation 'com.google.code.gson:gson:2.9.0'
+    // json 파싱용
+    implementation 'org.jsoup:jsoup:1.14.3'
+    implementation 'org.json:json:20220320'
+
 }
 
 test {
