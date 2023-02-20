@@ -46,6 +46,7 @@ public class SecurityConfig {
       "/verify/**",
       "/users/oauth/password/**",
       "/refresh/**",
+      "/user/api/search/**",
       "profile"};
   private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
   private final JwtUtil jwtUtil;

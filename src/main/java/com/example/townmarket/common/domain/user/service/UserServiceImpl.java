@@ -1,23 +1,27 @@
 package com.example.townmarket.common.domain.user.service;
 
-import com.example.townmarket.common.enums.RoleEnum;
+import com.example.townmarket.common.domain.user.dto.DuplicateCheckRequestDto;
+import com.example.townmarket.common.domain.user.dto.DuplicateCheckResponseDto;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
-import com.example.townmarket.common.domain.user.entity.User;
-
-import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.domain.user.entity.Profile;
+import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
+
 import com.example.townmarket.common.redis.converter.TokenDtoToByteArrayConverter;
 import com.example.townmarket.common.redis.dto.TokenDto;
 import com.example.townmarket.common.redis.entity.Tokens;
 import com.example.townmarket.common.redis.service.RefreshService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
+
+import com.example.townmarket.common.enums.RoleEnum;
+import com.example.townmarket.common.jwtUtil.JwtUtil;
+
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +49,6 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public void signup(SignupRequestDto request) {
     String username = request.getUsername();
-    String phoneNum = request.getPhoneNumber();
     String email = request.getEmail();
     String password = passwordEncoder.encode(request.getPassword());
 
@@ -54,7 +57,6 @@ public class UserServiceImpl implements UserService {
     User user = User.builder()
         .username(username)
         .password(password)
-        .phoneNumber(phoneNum)
         .email(email)
         .region(request.getRegion())
         .email(request.getEmail())
@@ -199,6 +201,32 @@ public class UserServiceImpl implements UserService {
   @Override
   public boolean existsByEmail(String email) {
     return userRepository.existsByEmail(email);
+  }
+
+  @Override
+  public ProfileResponseDto getMyProfile(String username) {
+    return userRepository.getProfileByUsername(username);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public DuplicateCheckResponseDto duplicateCheck(
+      DuplicateCheckRequestDto duplicateCheckRequestDto) {
+    switch (duplicateCheckRequestDto.getDuplicateField()) {
+      case ("username") -> {
+        return new DuplicateCheckResponseDto(
+            userRepository.existsByUsername(duplicateCheckRequestDto.getContent()));
+      }
+      case ("email") -> {
+        return new DuplicateCheckResponseDto(
+            userRepository.existsByEmail(duplicateCheckRequestDto.getContent()));
+      }
+      case ("nickname") -> {
+        return new DuplicateCheckResponseDto(
+            userRepository.existByNickname(duplicateCheckRequestDto.getContent()));
+      }
+    }
+    throw new IllegalArgumentException("잘못된 입력입니다");
   }
 
 }
