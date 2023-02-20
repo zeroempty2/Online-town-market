@@ -9,6 +9,7 @@ import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.entity.User;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ public interface UserService {
 
   void login(HttpServletResponse response, LoginRequestDto request);
 
-  void logout(User user);
+
 
   void updateUser(String username, PasswordUpdateRequestDto updateDto);
 
@@ -51,6 +52,7 @@ public interface UserService {
 
   DuplicateCheckResponseDto duplicateCheck(DuplicateCheckRequestDto duplicateCheckRequestDto);
 
+  void logout(HttpServletRequest request, HttpServletResponse response);
 }
 
 

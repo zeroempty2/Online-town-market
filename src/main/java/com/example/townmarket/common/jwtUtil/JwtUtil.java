@@ -2,6 +2,7 @@ package com.example.townmarket.common.jwtUtil;
 
 
 import com.example.townmarket.common.enums.RoleEnum;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -26,9 +27,14 @@ import org.springframework.util.StringUtils;
 public class JwtUtil {
 
   public static final String AUTHORIZATION_HEADER = "Authorization";
+
+  public static final String REFRESH_HEADER = "Refresh";
   public static final String AUTHORIZATION_KEY = "auth";
+
+  public static final String REFRESH_KEY = "refresh";
   private static final String BEARER_PREFIX = "Bearer ";
-  private static final long TOKEN_TIME = 60 * 60 * 1000L;
+  private static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L;
+  private static final long REFRESH_TOKEN_TIME = 60 * 60 * 60 * 1000L;
 
   @Value("${jwt.secret.key}")
   private String secretKey;
@@ -42,7 +48,7 @@ public class JwtUtil {
   }
 
   // header 토큰을 가져오기
-  public String resolveToken(HttpServletRequest request) {
+  public String resolveAccessToken(HttpServletRequest request) {
     String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
     if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
       return bearerToken.substring(7);
@@ -50,15 +56,36 @@ public class JwtUtil {
     return null;
   }
 
-  // 토큰 생성
-  public String createToken(String username,RoleEnum role) {
+  public String resolveRefreshToken(HttpServletRequest request) {
+    String bearerToken = request.getHeader(REFRESH_HEADER);
+    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+      return bearerToken.substring(7);
+    }
+    return null;
+  }
+
+
+  public String createAccessToken(String username,RoleEnum role) {
     Date date = new Date();
 
     return BEARER_PREFIX +
         Jwts.builder()
             .setSubject(username)
             .claim(AUTHORIZATION_KEY, role)
-            .setExpiration(new Date(date.getTime() + TOKEN_TIME))
+            .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_TIME))
+            .setIssuedAt(date)
+            .signWith(key, signatureAlgorithm)
+            .compact();
+  }
+
+  public String createRefreshToken(String username,RoleEnum role) {
+    Date date = new Date();
+
+    return BEARER_PREFIX +
+        Jwts.builder()
+            .setSubject(username)
+            .claim(AUTHORIZATION_KEY, role)
+            .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_TIME))
             .setIssuedAt(date)
             .signWith(key, signatureAlgorithm)
             .compact();
@@ -71,7 +98,7 @@ public class JwtUtil {
         Jwts.builder()
             .setSubject(username)
             .claim(AUTHORIZATION_KEY, role)
-            .setExpiration(new Date(date.getTime() + TOKEN_TIME))
+            .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_TIME))
             .setIssuedAt(date)
             .signWith(key, signatureAlgorithm)
             .compact();

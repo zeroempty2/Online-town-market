@@ -1,6 +1,10 @@
 package com.example.townmarket.common.security;
 
 import com.example.townmarket.common.jwtUtil.JwtUtil;
+import com.example.townmarket.common.redis.converter.TokenDtoToByteArrayConverter;
+import com.example.townmarket.common.redis.dto.TokenDto;
+import com.example.townmarket.common.redis.entity.Tokens;
+import com.example.townmarket.common.redis.repository.BlacklistTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -8,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,11 +31,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
   private final UserDetailsServiceImpl userDetailsService;
   private final AdminDetailsServiceImpl adminDetailsService;
 
+  private final BlacklistTokenRepository blacklistTokenRepository;
+
+  private final TokenDtoToByteArrayConverter tokenDtoToByteArrayConverter;
+
+
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
 
-    String token = jwtUtil.resolveToken(request);
+    String token = jwtUtil.resolveAccessToken(request);
 
     if (token != null) {
       if (!jwtUtil.validateToken(token)) {
@@ -42,8 +52,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         setAdminAuthentication(info.getSubject());
         return;
       }
+      String refreshToken = jwtUtil.resolveRefreshToken(request);
       Claims info = jwtUtil.getUserInfoFromToken(token);
-      setAuthentication(info.getSubject());
+      String username = info.getSubject();
+
+      Optional<Tokens> tokens = blacklistTokenRepository.findById(username);
+      if (tokens.isPresent()) {
+        byte[] bytes = tokens.get().getTokenDto();
+        TokenDto tokenDto = tokenDtoToByteArrayConverter.convertTokenDto(bytes);
+        if (tokenDto.getRefreshToken().equals(refreshToken) || tokenDto.getAccessToken()
+            .equals(token)) {
+          jwtExceptionHandler(response, "Token is deleted", HttpStatus.UNAUTHORIZED.value());
+          return;
+        }
+      }
+      setAuthentication(username);
     }
     filterChain.doFilter(request, response);
   }
@@ -86,5 +109,4 @@ public class JwtAuthFilter extends OncePerRequestFilter {
       log.error(e.getMessage());
     }
   }
-
 }
