@@ -52,20 +52,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         setAdminAuthentication(info.getSubject());
         return;
       }
-      String refreshToken = jwtUtil.resolveRefreshToken(request);
       Claims info = jwtUtil.getUserInfoFromToken(token);
       String username = info.getSubject();
-
-      Optional<Tokens> tokens = blacklistTokenRepository.findById(username);
-      if (tokens.isPresent()) {
-        byte[] bytes = tokens.get().getTokenDto();
-        TokenDto tokenDto = tokenDtoToByteArrayConverter.convertTokenDto(bytes);
-        if (tokenDto.getRefreshToken().equals(refreshToken) || tokenDto.getAccessToken()
-            .equals(token)) {
-          jwtExceptionHandler(response, "Token is deleted", HttpStatus.UNAUTHORIZED.value());
-          return;
-        }
-      }
       setAuthentication(username);
     }
     filterChain.doFilter(request, response);
