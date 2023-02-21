@@ -32,6 +32,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     User user = userRepository.findByUsername(username).orElseThrow(
         () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
     );
+
     ChatRoom chatRooms = new ChatRoom(product, user);
     roomRepository.save(chatRooms);
   }

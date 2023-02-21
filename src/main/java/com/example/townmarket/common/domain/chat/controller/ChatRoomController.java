@@ -3,6 +3,8 @@ package com.example.townmarket.common.domain.chat.controller;
 import com.example.townmarket.common.domain.chat.dto.ChatRoomDto;
 import com.example.townmarket.common.domain.chat.dto.ChatRoomListDtailDto;
 import com.example.townmarket.common.domain.chat.service.ChatRoomService;
+import com.example.townmarket.common.dto.StatusResponse;
+import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,10 +25,10 @@ public class ChatRoomController {
 
   /* 채팅방 등록 */
   @PostMapping("/chatroom/{productId}")
-  public ResponseEntity<String> createRoom(@PathVariable Long productId,
+  public ResponseEntity<StatusResponse> createRoom(@PathVariable Long productId,
       @AuthenticationPrincipal UserDetails userDetails) {
     roomService.createRoom(productId, userDetails.getUsername());
-    return new ResponseEntity<>("채팅방 생성 완료", HttpStatus.CREATED);
+    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
   }
 
   /* 해당 채팅방 보기 */
@@ -39,22 +41,20 @@ public class ChatRoomController {
   }
 
   /*나의 채팅 리스트*/
-  @GetMapping("/chatrooms/{userId}")
-  public ResponseEntity<ChatRoomListDtailDto> myChatList(@PathVariable Long userId,
+  @GetMapping("/chatrooms")
+  public ResponseEntity<ChatRoomListDtailDto> myChatList(
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-    if (!userId.equals(userDetails.getUserId())) {
-      new ResponseEntity<>("채팅 리스트는 본인만 조회할 수 있습니다.", HttpStatus.FORBIDDEN);
-    }
     ChatRoomListDtailDto roomList = roomService.myChatList(userDetails.getUserId());
     return ResponseEntity.status(HttpStatus.OK).body(roomList);
   }
 
   /* 채팅방 삭제 */
   @DeleteMapping("/chatroom/{roomId}")
-  public ResponseEntity<String> deleteChat(@PathVariable Long roomId, @AuthenticationPrincipal
+  public ResponseEntity<StatusResponse> deleteChat(@PathVariable Long roomId, @AuthenticationPrincipal
   UserDetailsImpl userDetails) {
     roomService.deleteChat(roomId, userDetails.getUsername());
-    return new ResponseEntity<>("채팅 삭제가 완료되었습니다.", HttpStatus.OK);
+    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
+    return new ResponseEntity<>(statusResponse, HttpStatus.NO_CONTENT);
   }
 }

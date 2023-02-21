@@ -1,4 +1,4 @@
-package com.example.townmarket.common.domain.address;
+package com.example.townmarket.common.domain.address.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

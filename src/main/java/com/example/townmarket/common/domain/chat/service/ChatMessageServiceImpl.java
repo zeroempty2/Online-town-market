@@ -24,7 +24,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         () -> new IllegalArgumentException("채팅방이 존재하지 않습니다.")
     );
 
-    if (message.getProductId() != room.getProductId()) {
+    if (message.getProductId() != room.getProduct().getId()) {
       throw new IllegalArgumentException("해당 상품의 채팅방이 존재하지 않습니다.");
     } else {
       ChatMessage messages = new ChatMessage(message.getSender(), message.getReceiver(),

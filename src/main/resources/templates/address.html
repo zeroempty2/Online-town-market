@@ -58,7 +58,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/user/api/search/geo",
+        url: "/users/search/geo",
         data: {fullAddress: address},
       }).done(function (fragment) {
 
@@ -182,7 +182,7 @@
     };
 
     $.ajax({
-      url: "/user/api/search/reverse-geo",
+      url: "/users/search/reverse-geo",
       data: AddressRequest,
       type: "GET",
     }).done(function (fragment) {

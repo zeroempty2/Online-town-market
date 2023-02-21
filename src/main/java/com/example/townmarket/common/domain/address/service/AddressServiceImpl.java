@@ -1,5 +1,6 @@
-package com.example.townmarket.common.domain.address;
+package com.example.townmarket.common.domain.address.service;
 
+import com.example.townmarket.common.domain.address.BaseUtility;
 import com.example.townmarket.common.domain.address.dto.AddressDTO;
 import com.example.townmarket.common.domain.address.dto.KaKaoMapResponse;
 import com.google.gson.Gson;
@@ -20,7 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AddressService {
+public class AddressServiceImpl implements AddressService{
 
     @Value("${kakaoAk.key}")
     private  String authorization_key;

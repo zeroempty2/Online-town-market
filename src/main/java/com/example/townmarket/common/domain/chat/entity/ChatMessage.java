@@ -55,7 +55,7 @@ public class ChatMessage {
     this.sender = sender;
     this.receiver = receiver;
     this.message = message;
-    this.productId = room.getProductId();
+    this.productId = room.getProduct().getId();
     this.sendDate = LocalDateTime.now();
     this.room = room;
   }
