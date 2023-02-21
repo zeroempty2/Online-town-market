@@ -72,8 +72,6 @@ dependencies {
     //redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 
-
-
     implementation 'com.google.code.gson:gson:2.9.0'
     // json 파싱용
     implementation 'org.jsoup:jsoup:1.14.3'

@@ -81,12 +81,13 @@ public class User extends TimeStamped {
 
   @Builder
   public User(String username, String password, String email, String region,
-      Profile profile) {
+      Profile profile, Grade grade) {
     this.username = username;
     this.password = password;
     this.email = email;
     this.region = region;
     this.profile = profile;
+    this.grade = grade;
   }
 
   @Builder
@@ -109,7 +110,7 @@ public class User extends TimeStamped {
   private Set<ChatRoom> chatRooms = new LinkedHashSet<>();
 
   @Builder.Default
-  @OneToMany(mappedBy = "reviewer", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "reviewer")
   private Set<Review> sendReviews = new LinkedHashSet<>();
 
   @Builder.Default
