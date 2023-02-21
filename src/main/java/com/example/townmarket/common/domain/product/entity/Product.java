@@ -38,9 +38,9 @@ public class Product extends TimeStamped {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  private long id;
+  private Long id;
   private String productName;
-  private long productPrice;
+  private Long productPrice;
   @Enumerated(EnumType.STRING)
   private ProductEnum productEnum;
   @Enumerated(EnumType.STRING)
