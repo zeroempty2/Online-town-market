@@ -1,5 +1,9 @@
 package com.example.townmarket.common.domain.comment.controller;
 
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_CREATED;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_DELETE;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_OK;
+
 import com.example.townmarket.common.domain.comment.dto.CommentRequestDto;
 import com.example.townmarket.common.domain.comment.service.CommentService;
 import com.example.townmarket.common.dto.StatusResponse;
@@ -30,7 +34,7 @@ public class CommentController {
       @RequestBody CommentRequestDto commentRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     commentService.createComment(boardsId, commentRequestDto, userDetails.getUser());
-    return ResponseEntity.status(HttpStatus.CREATED).body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
+    return RESPONSE_CREATED;
   }
 
   // 댓글 수정
@@ -39,7 +43,7 @@ public class CommentController {
       @RequestBody CommentRequestDto commentRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     commentService.updateComment(commentId, commentRequestDto, userDetails.getUser());
-    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
+    return RESPONSE_OK;
   }
 
   // 댓글 삭제
@@ -47,7 +51,7 @@ public class CommentController {
   public ResponseEntity<StatusResponse> deleteComment(@PathVariable Long commentId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     commentService.deleteComment(commentId, userDetails.getUser());
-    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS));
+    return RESPONSE_DELETE;
   }
 }
 

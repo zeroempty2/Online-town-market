@@ -1,5 +1,10 @@
 package com.example.townmarket.common.domain.product.controller;
 
+import static com.example.townmarket.common.domain.product.controller.ProductController.PRODUCT_URI_API;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_CREATED;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_DELETE;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_OK;
+
 import com.example.townmarket.common.domain.product.dto.PagingProductResponse;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
 import com.example.townmarket.common.domain.product.dto.ProductResponseDto;
@@ -26,8 +31,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/products")
+@RequestMapping(PRODUCT_URI_API)
 public class ProductController {
+
+  public static final String PRODUCT_URI_API = "/products";
 
   private final ProductService productService;
 
@@ -39,8 +46,7 @@ public class ProductController {
       @RequestBody ProductRequestDto productRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     productService.addProduct(userDetails.getUser(), productRequestDto);
-    return ResponseEntity.status(HttpStatus.CREATED)
-        .body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
+    return RESPONSE_CREATED;
   }
 
   // 단일 상품 조회
@@ -65,20 +71,19 @@ public class ProductController {
 
   // 단일 상품 업데이트
   @PutMapping("/update/{productId}")
-  public ResponseEntity<StatusResponse> update(@PathVariable Long productId,
+  public ResponseEntity<StatusResponse> updateProducts(@PathVariable Long productId,
       @RequestBody ProductRequestDto productRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     productService.updateProduct(productId, productRequestDto, userDetails.getUser());
-    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
+    return RESPONSE_OK;
   }
 
   // 단일 상품 삭제
   @DeleteMapping("/{productId}")
-  public ResponseEntity<StatusResponse> delete(@PathVariable Long productId,
+  public ResponseEntity<StatusResponse> deleteProduct(@PathVariable Long productId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     productService.deleteProduct(productId, userDetails.getUser());
-    return ResponseEntity.status(HttpStatus.NO_CONTENT)
-        .body(StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS));
+    return RESPONSE_DELETE;
   }
 
 }
