@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -38,7 +39,8 @@ public class ProductController {
       @RequestBody ProductRequestDto productRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     productService.addProduct(userDetails.getUser(), productRequestDto);
-    return ResponseEntity.status(HttpStatus.CREATED).body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
   }
 
   // 단일 상품 조회
@@ -49,11 +51,16 @@ public class ProductController {
   }
 
   // 전체 상품 조회
+//  @GetMapping
+//  public ResponseEntity<Page<PagingProductResponse>> getProducts(@RequestBody PageDto pageDto) {
+//    return ResponseEntity.ok()
+//        .body(productService.getProducts(pageDto));
+//  }
   @GetMapping
-  public ResponseEntity<Page<PagingProductResponse>> getProducts(@RequestBody PageDto pageDto) {
-
-    return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
-        .body(productService.getProducts(pageDto));
+  public ResponseEntity<Page<PagingProductResponse>> getProducts(@RequestParam int page,
+      @RequestParam int size) {
+    return ResponseEntity.ok()
+        .body(productService.getProducts(PageDto.builder().page(page).size(size).build()));
   }
 
   // 단일 상품 업데이트
@@ -70,7 +77,8 @@ public class ProductController {
   public ResponseEntity<StatusResponse> delete(@PathVariable Long productId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     productService.deleteProduct(productId, userDetails.getUser());
-    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS));
+    return ResponseEntity.status(HttpStatus.NO_CONTENT)
+        .body(StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS));
   }
 
 }
