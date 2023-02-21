@@ -19,4 +19,5 @@ public class S3Controller {
   public String imageUpload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
     return s3Service.upload(multipartFile, "testfortownmarketproject", "image");
   }
+
 }

@@ -9,6 +9,7 @@ import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.entity.User;
+import com.example.townmarket.common.enums.RoleEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -53,6 +54,8 @@ public interface UserService {
   DuplicateCheckResponseDto duplicateCheck(DuplicateCheckRequestDto duplicateCheckRequestDto);
 
   void logout(HttpServletRequest request, HttpServletResponse response);
+
+  void loginOAuth2(String username, RoleEnum role, HttpServletResponse response);
 }
 
 

@@ -107,6 +107,12 @@ public class UserServiceImpl implements UserService {
     response.setHeader(JwtUtil.REFRESH_HEADER, null);
   }
 
+  @Override
+  public void loginOAuth2(String username, RoleEnum role, HttpServletResponse response) {
+    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createAccessToken(username,role));
+    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createRefreshToken(username,role));
+  }
+
 
   @Override
   @Transactional

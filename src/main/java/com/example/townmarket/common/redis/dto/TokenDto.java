@@ -15,4 +15,8 @@ public class TokenDto {
   private String accessToken;
   private String refreshToken;
 
+  public boolean checkRefreshToken(String token) {
+    return refreshToken.equals(token);
+  }
+
 }
