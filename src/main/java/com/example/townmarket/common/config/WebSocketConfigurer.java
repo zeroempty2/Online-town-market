@@ -14,8 +14,12 @@ public class WebSocketConfigurer implements WebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(StompEndpointRegistry registry) {
 
     registry.addEndpoint("/chat")
-        .setAllowedOriginPatterns("*");
-//        .withSockJS();
+        .setAllowedOriginPatterns("http://localhost:8080")
+        //보안상의 문제로 전체를 허용하는 것보다 직접 하나씩 지정해주어야 함
+        .withSockJS()
+        .setClientLibraryUrl("https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.js");
+    // sockjs CDN 주소를 입력해도 무관
+
   }
 
 
@@ -23,6 +27,6 @@ public class WebSocketConfigurer implements WebSocketMessageBrokerConfigurer {
   public void configureMessageBroker(MessageBrokerRegistry config) {
 
     config.enableSimpleBroker("/receive"); // 받는 쪽
-    config.setApplicationDestinationPrefixes("/pub"); // 보내는 쪽
+    config.setApplicationDestinationPrefixes("/send"); // 보내는 쪽
   }
 }

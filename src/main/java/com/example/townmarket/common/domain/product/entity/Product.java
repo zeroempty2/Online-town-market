@@ -1,8 +1,10 @@
 package com.example.townmarket.common.domain.product.entity;
 
 import com.example.townmarket.common.TimeStamped;
+import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
 import com.example.townmarket.common.domain.user.entity.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +14,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -80,6 +85,9 @@ public class Product extends TimeStamped {
   @ManyToOne
   @JoinColumn(name = "users_id")
   private User user;
+
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<ChatRoom> room = new LinkedHashSet<>();
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.

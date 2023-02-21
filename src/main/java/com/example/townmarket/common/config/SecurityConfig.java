@@ -47,7 +47,10 @@ public class SecurityConfig {
       "/verify/**",
       "/users/oauth/password/**",
       "/refresh/**",
-      "/user/api/search/**",
+      "/users/search/**",
+      "/chatrooms/**",
+      "/chatroom/**",
+      "/users/search/**",
       "profile"};
   private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
   private final JwtUtil jwtUtil;
@@ -77,6 +80,7 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.csrf().disable();
+    http.headers().frameOptions().sameOrigin(); // 웹소켓 관련
 
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
