@@ -3,10 +3,8 @@ package com.example.townmarket.common.domain.user.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @Embeddable
 public class Grade {
 
@@ -33,9 +31,16 @@ public class Grade {
    */
 
 
+  public Grade() {
+    this.averageGrade = 0;
+    this.count = 0;
+    this.totalGrade = 0;
+  }
+
   /**
    * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
    */
+
   public void setUserGrade(int grade, int count) {
     this.totalGrade += grade;
     this.count += count;
