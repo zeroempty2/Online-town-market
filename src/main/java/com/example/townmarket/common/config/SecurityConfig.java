@@ -3,8 +3,6 @@ package com.example.townmarket.common.config;
 import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.oauth.OAuth2SuccessHandler;
 import com.example.townmarket.common.oauth.OAuth2UserServiceImpl;
-import com.example.townmarket.common.redis.converter.TokenDtoToByteArrayConverter;
-import com.example.townmarket.common.redis.repository.BlacklistTokenRepository;
 import com.example.townmarket.common.security.AdminDetailsServiceImpl;
 import com.example.townmarket.common.security.CustomAccessDeniedHandler;
 import com.example.townmarket.common.security.CustomAuthenticationEntryPoint;
@@ -40,6 +38,7 @@ public class SecurityConfig {
       "/css/**",
       "/js/**",
       "/images/**",
+      "/products",
       "/login/oauth2/code/google",
       "/login/**",
       "/users/oauth/password/**",
@@ -59,11 +58,6 @@ public class SecurityConfig {
   private final OAuth2UserServiceImpl oAuth2UserService;
 
   private final OAuth2SuccessHandler oAuth2SuccessHandler;
-
-  private final BlacklistTokenRepository blacklistTokenRepository;
-
-  private final TokenDtoToByteArrayConverter tokenDtoToByteArrayConverter;
-
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -91,8 +85,7 @@ public class SecurityConfig {
         .requestMatchers(permitAllArray).permitAll()
         .requestMatchers("/admin/users").hasAnyRole("TOP_MANAGER", "MIDDLE_MANAGER")
         .anyRequest().authenticated()
-        .and().addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService, adminDetailsService,
-                blacklistTokenRepository,tokenDtoToByteArrayConverter),
+        .and().addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService, adminDetailsService),
             UsernamePasswordAuthenticationFilter.class);
 
 //    http.formLogin().loginPage("/users/login");
