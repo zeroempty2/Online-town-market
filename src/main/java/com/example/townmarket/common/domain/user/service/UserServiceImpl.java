@@ -11,17 +11,14 @@ import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
-
+import com.example.townmarket.common.enums.RoleEnum;
+import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.redis.converter.TokenDtoToByteArrayConverter;
 import com.example.townmarket.common.redis.dto.TokenDto;
 import com.example.townmarket.common.redis.entity.Tokens;
 import com.example.townmarket.common.redis.service.RefreshService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
-
-import com.example.townmarket.common.enums.RoleEnum;
-import com.example.townmarket.common.jwtUtil.JwtUtil;
-
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -78,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
     // 비밀번호 확인
     if (!passwordEncoder.matches(password, user.getPassword())) {
-      throw new IllegalArgumentException("비밀번호가 틀립니다.");
+      throw new IllegalArgumentException("입력한 정보가 틀립니다.");
     }
     // token 발급
     String accessToken = jwtUtil.createAccessToken(user.getUsername(), user.getRole());
