@@ -8,6 +8,7 @@ import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
+import com.example.townmarket.common.domain.user.entity.Grade;
 import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
@@ -50,6 +51,7 @@ public class UserServiceImpl implements UserService {
     String password = passwordEncoder.encode(request.getPassword());
 
     Profile profile = new Profile(request.getNickname());
+    Grade grade = new Grade();
 
     User user = User.builder()
         .username(username)
@@ -59,6 +61,7 @@ public class UserServiceImpl implements UserService {
         .email(request.getEmail())
         .role(RoleEnum.MEMBER)
         .profile(profile)
+        .grade(grade)
         .build();
 
     userRepository.save(user);
