@@ -2,11 +2,16 @@ package com.example.townmarket.common.domain.board.dto;
 
 import com.example.townmarket.common.domain.board.entity.Board;
 import com.example.townmarket.common.domain.board.entity.Board.BoardSubject;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PagingBoardResponse {
 
   private String title;

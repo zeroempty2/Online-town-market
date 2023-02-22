@@ -123,7 +123,7 @@ class BoardControllerTest {
   @Test
   @WithCustomMockUser
   void getBoards() throws Exception {
-    PagingBoardResponse pagingBoardResponse = PagingBoardResponse.builder().title("글 제목")
+    PagingBoardResponse pagingBoardResponse = PagingBoardResponse.builder().title("글제목")
         .subject(BoardSubject.동네소식).build();
 
     PageDto pageDto = PageDto.builder().page(1).size(10).isAsc(false).sortBy("title").build();

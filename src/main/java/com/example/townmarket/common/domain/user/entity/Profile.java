@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
 @NoArgsConstructor
 @Embeddable
 public class Profile {
