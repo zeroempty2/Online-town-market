@@ -21,18 +21,19 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AddressServiceImpl implements AddressService{
+public class AddressServiceImpl implements AddressService {
 
-    @Value("${kakaoAk.key}")
-    private  String authorization_key;
+  @Value("${kakaoAk.key}")
+  private String authorization_key;
 
-    private final RestTemplate restTemplate;
+  private final RestTemplate restTemplate;
 
-    private final BaseUtility utility;
+  private final BaseUtility utility;
 
-    Gson gson = new Gson();
+  Gson gson = new Gson();
 
-    public AddressDTO getXY(String query) {
+  @Override
+  public AddressDTO getXY(String query) {
     String url = "https://dapi.kakao.com/v2/local/search/address.json";
     UriComponents uri = UriComponentsBuilder.newInstance()
         .fromHttpUrl(url)
@@ -49,7 +50,8 @@ public class AddressServiceImpl implements AddressService{
         String.class);
 
     JSONObject datas = new JSONObject(response.getBody().toString());
-    JSONObject addressData = datas.getJSONArray("documents").getJSONObject(0).getJSONObject("address");
+    JSONObject addressData = datas.getJSONArray("documents").getJSONObject(0)
+        .getJSONObject("address");
     double x = Math.round(Double.parseDouble(addressData.getString("x")) * 10000000) / 10000000.0;
     double y = Math.round(Double.parseDouble(addressData.getString("y")) * 10000000) / 10000000.0;
     return AddressDTO.builder()
@@ -58,8 +60,8 @@ public class AddressServiceImpl implements AddressService{
         .build();
   }
 
-
-    public String getAddress(double x, double y) {
+  @Override
+  public String getAddress(double x, double y) {
     String url = "https://dapi.kakao.com/v2/local/geo/coord2regioncode.json";
 
     UriComponents uri = UriComponentsBuilder.newInstance()
@@ -78,7 +80,8 @@ public class AddressServiceImpl implements AddressService{
         requestMessage,
         String.class);
 
-    KaKaoMapResponse mapped_data = gson.fromJson(response.getBody().toString(), KaKaoMapResponse.class);
+    KaKaoMapResponse mapped_data = gson.fromJson(response.getBody().toString(),
+        KaKaoMapResponse.class);
     String target = mapped_data.documents.get(0).address_name;
     return target;
   }
