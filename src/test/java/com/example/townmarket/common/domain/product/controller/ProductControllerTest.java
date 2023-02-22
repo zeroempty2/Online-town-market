@@ -4,9 +4,11 @@ package com.example.townmarket.common.domain.product.controller;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -14,7 +16,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.townmarket.annotation.WithCustomMockUser;
-import com.example.townmarket.common.domain.product.controller.ProductController;
 import com.example.townmarket.common.domain.product.dto.PagingProductResponse;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
 import com.example.townmarket.common.domain.product.dto.ProductResponseDto;
@@ -132,7 +133,8 @@ class ProductControllerTest {
             fieldWithPath("productName").description(JsonFieldType.STRING).description("상품명"),
             fieldWithPath("productPrice").description(JsonFieldType.NUMBER).description("상품가격"),
             fieldWithPath("productStatus").description(JsonFieldType.OBJECT).description("상품상태"),
-            fieldWithPath("productCategory").description(JsonFieldType.OBJECT).description("상품 카테고리"),
+            fieldWithPath("productCategory").description(JsonFieldType.OBJECT)
+                .description("상품 카테고리"),
             fieldWithPath("productEnum").description(JsonFieldType.OBJECT).description("상품 거래 상태")
         )));
 
@@ -159,7 +161,7 @@ class ProductControllerTest {
     Page<PagingProductResponse> productResponseDtos = new PageImpl<>(
         Collections.singletonList(pagingProductResponse), pageable, 1);
 
-    given(productService.getProducts(pageDto)).willReturn(productResponseDtos);
+    given(productService.getProducts(pageable)).willReturn(productResponseDtos);
 
     ResultActions resultActions = mockMvc.perform(get("/products")
             .contentType(MediaType.APPLICATION_JSON)

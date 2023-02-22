@@ -9,14 +9,14 @@ import com.example.townmarket.common.domain.product.dto.PagingProductResponse;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
 import com.example.townmarket.common.domain.product.dto.ProductResponseDto;
 import com.example.townmarket.common.domain.product.service.ProductService;
-import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.dto.StatusResponse;
-import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -63,10 +62,10 @@ public class ProductController {
 //        .body(productService.getProducts(pageDto));
 //  }
   @GetMapping
-  public ResponseEntity<Page<PagingProductResponse>> getProducts(@RequestParam int page,
-      @RequestParam int size) {
+  public ResponseEntity<Page<PagingProductResponse>> getProducts(
+      @PageableDefault(size = 9, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
     return ResponseEntity.ok()
-        .body(productService.getProducts(PageDto.builder().page(page).size(size).build()));
+        .body(productService.getProducts(pageable));
   }
 
   // 단일 상품 업데이트
