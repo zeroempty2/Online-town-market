@@ -1,5 +1,10 @@
 package com.example.townmarket.common.domain.user.controller;
 
+import static com.example.townmarket.common.domain.user.controller.UserController.USER_API_URI;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_CREATED;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_DELETE;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_OK;
+
 import com.example.townmarket.common.domain.user.dto.DuplicateCheckRequestDto;
 import com.example.townmarket.common.domain.user.dto.DuplicateCheckResponseDto;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
@@ -35,9 +40,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping(USER_API_URI)
 public class UserController {
 
+  public static final String USER_API_URI = "/users";
   private final UserService userService;
   private final SetHttpHeaders httpHeaders;
 
@@ -52,7 +58,7 @@ public class UserController {
   public ResponseEntity<StatusResponse> signup(
       @Validated @RequestBody SignupRequestDto signupRequestDto) {
     userService.signup(signupRequestDto);
-    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
+    return RESPONSE_CREATED;
   }
 
   @PostMapping("/login")
@@ -60,14 +66,14 @@ public class UserController {
       @RequestBody LoginRequestDto loginRequestDto,
       HttpServletResponse response) {
     userService.login(response, loginRequestDto);
-    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
+    return RESPONSE_OK;
 
   }
 
   @PostMapping("/logout")
   public ResponseEntity<StatusResponse> logout(HttpServletRequest request,HttpServletResponse response) {
     userService.logout(request,response);
-    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
+    return RESPONSE_OK;
   }
 
   @PutMapping("/update/pw")
@@ -76,7 +82,7 @@ public class UserController {
       @AuthenticationPrincipal
       UserDetailsImpl userDetails) {
     userService.updateUser(userDetails.getUsername(), updateRequestDto);
-    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
+    return RESPONSE_OK;
   }
 
   @PutMapping("/update/region")
@@ -85,7 +91,7 @@ public class UserController {
       @AuthenticationPrincipal
       UserDetailsImpl userDetails) {
     userService.updateRegion(userDetails.getUsername(), updateRequestDto);
-    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
+    return RESPONSE_OK;
   }
 
   @DeleteMapping("/{userId}")
@@ -94,7 +100,7 @@ public class UserController {
       UserDetailsImpl userDetails) {
     userService.deleteUser(userId, userDetails.getUsername());
     StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
-    return new ResponseEntity<>(statusResponse, HttpStatus.NO_CONTENT);
+    return RESPONSE_DELETE;
   }
 
 
@@ -103,7 +109,7 @@ public class UserController {
       @RequestBody ProfileRequestDto request, @AuthenticationPrincipal
   UserDetailsImpl userDetails) {
     userService.updateProfile(userDetails.getUserId(), request);
-    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
+    return RESPONSE_OK;
   }
 
   @GetMapping("/profile/{userId}")

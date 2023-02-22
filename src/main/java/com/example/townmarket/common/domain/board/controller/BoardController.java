@@ -1,5 +1,10 @@
 package com.example.townmarket.common.domain.board.controller;
 
+import static com.example.townmarket.common.domain.board.controller.BoardController.BOARD_API_URI;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_CREATED;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_DELETE;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_OK;
+
 import com.example.townmarket.common.domain.board.dto.BoardResponseDto;
 import com.example.townmarket.common.domain.board.dto.BoardRequestDto;
 import com.example.townmarket.common.domain.board.dto.PagingBoardResponse;
@@ -24,9 +29,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/boards")
+@RequestMapping(BOARD_API_URI)
 @RequiredArgsConstructor
 public class BoardController {
+
+  public static final String BOARD_API_URI = "/boards";
 
   private final BoardService boardService;
   private final SetHttpHeaders httpHeaders;
@@ -37,7 +44,7 @@ public class BoardController {
       @RequestBody BoardRequestDto boardRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     boardService.createBoard(boardRequestDto, userDetails.getUser());
-    return ResponseEntity.status(HttpStatus.CREATED).body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
+    return RESPONSE_CREATED;
   }
 
   // 게시글 수정
@@ -46,7 +53,7 @@ public class BoardController {
       @RequestBody BoardRequestDto boardRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     boardService.updateBoard(boardId, boardRequestDto, userDetails.getUser());
-    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
+    return RESPONSE_OK;
   }
 
   // 게시글 단건 조회, 댓글 목록으로 불러오게 추가(페이징)
@@ -59,7 +66,8 @@ public class BoardController {
   // 게시글 전체 조회
   @GetMapping
   public ResponseEntity<Page<PagingBoardResponse>> getBoards(@RequestBody PageDto pageDto) {
-    return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson()).body(boardService.getBoards(pageDto));
+    return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
+        .body(boardService.getBoards(pageDto));
   }
 
   // 게시물 삭제
@@ -67,6 +75,6 @@ public class BoardController {
   public ResponseEntity<StatusResponse> deleteBoard(@PathVariable Long boardId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     boardService.deleteBoard(boardId, userDetails.getUser());
-    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS));
+    return RESPONSE_DELETE;
   }
 }
