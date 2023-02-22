@@ -122,4 +122,8 @@ public class Product extends TimeStamped {
   public Set<ChatRoom> getChatRooms() {
     return this.room;
   }
+
+  public boolean checkProductEnum(ProductEnum productEnum) {
+    return productEnum.equals(ProductEnum.판매완료);
+  }
 }
