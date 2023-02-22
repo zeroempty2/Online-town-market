@@ -46,15 +46,13 @@ public class ReviewRepositoryQueryImpl implements ReviewRepositoryQuery {
   }
 
   private JPAQuery<ReviewResponseDto> query() {
-    return jpaQueryFactory.select(Projections.fields(ReviewResponseDto.class,
+    return jpaQueryFactory.select(Projections.constructor(ReviewResponseDto.class,
             review.grade,
             review.reviewContents,
             review.reviewer.profile.as("reviewerProfile"),
             review.reviewee.profile.as("revieweeProfile"),
             product.productName))
         .from(review)
-        .leftJoin(review.reviewer).fetchJoin()
-        .leftJoin(review.reviewee).fetchJoin()
         .leftJoin(product)
         .on(review.productId.eq(product.id))
         .setHint("org.hibernate.readOnly", true);
@@ -63,7 +61,7 @@ public class ReviewRepositoryQueryImpl implements ReviewRepositoryQuery {
   private JPAQuery<Long> countQuery(User reviewer) {
     return jpaQueryFactory.select(Wildcard.count)
         .from(review)
-        .leftJoin(review.reviewer).fetchJoin()
+        .leftJoin(review.reviewer)
         .where(reviewerEq(reviewer));
   }
 
