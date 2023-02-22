@@ -9,6 +9,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,6 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,10 +26,12 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-@Entity
+//lombok
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+//jpa
+@Entity
 @DynamicInsert
 @DynamicUpdate
 public class Product extends TimeStamped {
@@ -47,6 +51,8 @@ public class Product extends TimeStamped {
   private ProductStatus productStatus;
   @Enumerated(EnumType.STRING)
   private ProductCategory productCategory;
+  @Column
+  private Long interestCount;
 
 
   public enum ProductEnum {
@@ -73,6 +79,7 @@ public class Product extends TimeStamped {
     this.productEnum = productEnum;
     this.productCategory = productCategory;
     this.user = user;
+    this.interestCount = 0L;
   }
 
   @Builder
@@ -83,7 +90,7 @@ public class Product extends TimeStamped {
   /**
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "users_id")
   private User user;
 
@@ -113,4 +120,13 @@ public class Product extends TimeStamped {
   public Set<ChatRoom> getChatRooms() {
     return this.room;
   }
+
+  public void plusInterest() {
+    this.interestCount++;
+  }
+
+  public void minusInterest() {
+    this.interestCount--;
+  }
+
 }
