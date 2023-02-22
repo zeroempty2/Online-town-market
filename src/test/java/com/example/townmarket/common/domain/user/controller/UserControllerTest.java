@@ -2,8 +2,6 @@ package com.example.townmarket.common.domain.user.controller;
 
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -70,7 +68,7 @@ class UserControllerTest {
 
     StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
 
-    given(emailService.verifyCode(any())).willReturn(true);
+//    given(emailService.verifyCode(any())).willReturn(true);
     ResultActions resultActions = mockMvc.perform(post("/users/signup")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsBytes(signupRequestDto))

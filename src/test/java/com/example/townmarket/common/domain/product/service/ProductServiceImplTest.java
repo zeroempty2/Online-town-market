@@ -6,14 +6,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.example.townmarket.common.domain.product.service.ProductServiceImpl;
-import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.domain.product.dto.PagingProductResponse;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
 import com.example.townmarket.common.domain.product.dto.ProductResponseDto;
 import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
 import com.example.townmarket.common.domain.user.entity.User;
+import com.example.townmarket.common.dto.PageDto;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -89,10 +88,10 @@ class ProductServiceImplTest {
     ProductRequestDto productRequestDto = mock(ProductRequestDto.class);
 
     when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
-    when(Optional.of(product).get().checkProductWriter(user)).thenReturn(true);
+    when(Optional.of(product).get().checkProductWriter(isA(Long.class))).thenReturn(true);
 
     // when
-    productService.updateProduct(product.getId(), productRequestDto, user);
+    productService.updateProduct(product.getId(), productRequestDto, isA(Long.class));
 
     // then
     verify(product).update(productRequestDto);
@@ -105,12 +104,13 @@ class ProductServiceImplTest {
     // given
     User user = mock(User.class);
     Product product = mock(Product.class);
+    Long id = mock(Long.class);
 
     when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
-    when(Optional.of(product).get().checkProductWriter(user)).thenReturn(true);
+    when(Optional.of(product).get().checkProductWriter(isA(Long.class))).thenReturn(true);
 
     // when
-    productService.deleteProduct(product.getId(), user);
+    productService.deleteProduct(product.getId(), isA(Long.class));
 
     // then
     verify(productRepository).deleteById(product.getId());
