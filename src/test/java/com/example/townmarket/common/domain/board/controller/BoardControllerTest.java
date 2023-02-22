@@ -2,38 +2,33 @@ package com.example.townmarket.common.domain.board.controller;
 
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 import com.example.townmarket.annotation.WithCustomMockUser;
 import com.example.townmarket.common.domain.board.dto.BoardRequestDto;
 import com.example.townmarket.common.domain.board.dto.BoardResponseDto;
 import com.example.townmarket.common.domain.board.dto.PagingBoardResponse;
-import com.example.townmarket.common.domain.board.entity.Board;
 import com.example.townmarket.common.domain.board.entity.Board.BoardSubject;
 import com.example.townmarket.common.domain.board.service.BoardService;
-import com.example.townmarket.common.domain.comment.entity.Comment;
-import com.example.townmarket.common.domain.review.controller.ReviewController;
 import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.util.SetHttpHeaders;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Collection;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -60,7 +55,6 @@ class BoardControllerTest {
 
   @Autowired
   ObjectMapper objectMapper;
-
 
 
   @MockBean
@@ -105,7 +99,7 @@ class BoardControllerTest {
         .subject(BoardSubject.동네소식).build();
 
     StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.SUCCESS);
-    ResultActions resultActions = mockMvc.perform(put("/boards/{boardId}",boardId)
+    ResultActions resultActions = mockMvc.perform(put("/boards/{boardId}", boardId)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(boardRequestDto))
             .with(csrf()))
@@ -138,7 +132,7 @@ class BoardControllerTest {
     Page<PagingBoardResponse> pages = new PageImpl<>(Collections.singletonList(pagingBoardResponse),
         pageable, pageable.getPageSize());
 
-    given(boardService.getBoards(pageDto)).willReturn(pages);
+    given(boardService.getBoards(pageable)).willReturn(pages);
 
     ResultActions resultActions = mockMvc.perform(get("/boards")
             .contentType(MediaType.APPLICATION_JSON)
@@ -170,7 +164,7 @@ class BoardControllerTest {
 
     given(boardService.getBoard(boardId)).willReturn(boardResponseDto);
 
-    ResultActions resultActions = mockMvc.perform(get("/boards/{boardId}",boardId)
+    ResultActions resultActions = mockMvc.perform(get("/boards/{boardId}", boardId)
             .with(csrf()))
         .andExpect(status().isOk());
 
@@ -194,7 +188,7 @@ class BoardControllerTest {
     Long boardId = 1L;
     StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
 
-    ResultActions resultActions = mockMvc.perform(delete("/boards/{boardId}",boardId)
+    ResultActions resultActions = mockMvc.perform(delete("/boards/{boardId}", boardId)
             .with(csrf()))
         .andExpect(status().isNoContent());
 
