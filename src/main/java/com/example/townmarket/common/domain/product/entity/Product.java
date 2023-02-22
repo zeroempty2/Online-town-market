@@ -106,8 +106,8 @@ public class Product extends TimeStamped {
     this.productCategory = productRequestDto.getProductCategory();
   }
 
-  public boolean checkProductWriter(User user) {
-    return this.user.equals(user);
+  public boolean checkProductWriter(Long userId) {
+    return this.user.getId().equals(userId);
   }
 
   public Set<ChatRoom> getChatRooms() {

@@ -1,8 +1,8 @@
 package com.example.townmarket.common.domain.comment.entity;
 
+import com.example.townmarket.common.TimeStamped;
 import com.example.townmarket.common.domain.board.entity.Board;
 import com.example.townmarket.common.domain.comment.dto.CommentRequestDto;
-import com.example.townmarket.common.TimeStamped;
 import com.example.townmarket.common.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -67,6 +67,6 @@ public class Comment extends TimeStamped {
   }
 
   public boolean checkCommentWriter(User user) {
-    return this.user.equals(user);
+    return this.user.getId().equals(user.getId());
   }
 }

@@ -1,8 +1,8 @@
 package com.example.townmarket.common.domain.board.entity;
 
+import com.example.townmarket.common.TimeStamped;
 import com.example.townmarket.common.domain.board.dto.BoardRequestDto;
 import com.example.townmarket.common.domain.comment.entity.Comment;
-import com.example.townmarket.common.TimeStamped;
 import com.example.townmarket.common.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -61,7 +61,7 @@ public class Board extends TimeStamped {
   @ManyToOne(fetch = FetchType.LAZY)
   private User user;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   private Set<Comment> comments = new LinkedHashSet<>();
 
   /**
@@ -78,7 +78,8 @@ public class Board extends TimeStamped {
   }
 
   public boolean checkBoardWriter(User user) {
-    return this.user.equals(user); // board가 가지고 있는 유저와 파라미터로 받은 유저를 비교해서 true false반환
+    return this.user.getId()
+        .equals(user.getId()); // board가 가지고 있는 유저와 파라미터로 받은 유저를 비교해서 true false반환
   }
 
 }

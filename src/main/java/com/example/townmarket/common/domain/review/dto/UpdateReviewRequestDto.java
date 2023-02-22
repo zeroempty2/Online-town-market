@@ -7,7 +7,6 @@ import lombok.Getter;
 @Builder
 public class UpdateReviewRequestDto {
 
-  private Long reviewId;
   private String reviewContents;
   private int grade;
 

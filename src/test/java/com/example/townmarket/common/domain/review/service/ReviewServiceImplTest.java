@@ -8,15 +8,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.example.townmarket.common.domain.review.service.ReviewServiceImpl;
-import com.example.townmarket.common.dto.PageDto;
-import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.domain.review.dto.CreateReviewRequestDto;
 import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
 import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
+import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.domain.review.repository.ReviewRepository;
+import com.example.townmarket.common.domain.user.entity.Grade;
+import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.service.UserServiceImpl;
+import com.example.townmarket.common.dto.PageDto;
+import com.example.townmarket.common.enums.RoleEnum;
 import java.util.Objects;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -91,18 +93,30 @@ class ReviewServiceImplTest {
   @Test
   @DisplayName("본인이 리뷰 수정")
   void updateMyReview() {
+    Profile profile = new Profile();
+    Grade grade = new Grade();
+
+    User user = User.builder()
+        .id(1L)
+        .username("user")
+        .password("Password!23")
+        .email("asda11as@gmail.com")
+        .role(RoleEnum.MEMBER)
+        .profile(profile)
+        .grade(grade)
+        .build();
     //given
 
     var review = mock(Review.class);
-    var user = mock(User.class);
     var updateReviewRequestDto = mock(UpdateReviewRequestDto.class);
+    var userId = user.getId();
 
     when(reviewRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(
         review)); // doNothing().when(myList).add(isA(Integer.class) 과 같은 형식으로 void도 처리가능
-    when(Objects.requireNonNull(review).isReviewWriter(user)).thenReturn(true);
+    when(Objects.requireNonNull(review).isReviewWriter(user.getId())).thenReturn(true);
 
     //when
-    reviewService.updateMyReview(any(Long.class), user, updateReviewRequestDto);
+    reviewService.updateMyReview(any(Long.class), user.getId(), updateReviewRequestDto);
     //then
 
     //verify
@@ -113,17 +127,29 @@ class ReviewServiceImplTest {
   @Test
   @DisplayName("리뷰 삭제")
   void deleteReview() {
+    Profile profile = new Profile();
+    Grade grade = new Grade();
+
+    User user = User.builder()
+        .id(1L)
+        .username("user")
+        .password("Password!23")
+        .email("asda11as@gmail.com")
+        .role(RoleEnum.MEMBER)
+        .profile(profile)
+        .grade(grade)
+        .build();
     //given
     var review = mock(Review.class);
     var reviewee = mock(User.class);
-    var user = mock(User.class);
+    var reviewerId = user.getId();
     when(reviewRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(
         review));
     when(review.getReviewee()).thenReturn(reviewee);
-    when(review.isReviewWriter(user)).thenReturn(true);
+    when(review.isReviewWriter(reviewerId)).thenReturn(true);
 
     //when
-    reviewService.deleteReview(any(Long.class), user);
+    reviewService.deleteReview(any(Long.class), reviewerId);
 
     //then
 
@@ -152,13 +178,13 @@ class ReviewServiceImplTest {
     //given
     var review = mock(Review.class);
     var user = mock(User.class);
-    when(review.isReviewWriter(user)).thenReturn(true);
+    when(review.isReviewWriter(isA(Long.class))).thenReturn(true);
     //when
-    reviewService.reviewWriterCheck(review, user);
+    reviewService.reviewWriterCheck(review, isA(Long.class));
     //then
 
     //verify
-    verify(review).isReviewWriter(user);
+    verify(review).isReviewWriter(isA(Long.class));
   }
 
 }
