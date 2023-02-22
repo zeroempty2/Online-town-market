@@ -1,23 +1,41 @@
 package com.example.townmarket.common.domain.user.controller;
 
+import static com.example.townmarket.common.domain.user.controller.UserController.USER_API_URI;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_CREATED;
+import static com.example.townmarket.fixture.UserFixture.DUPLICATE_CHECK_REQUEST_DTO;
+import static com.example.townmarket.fixture.UserFixture.DUPLICATE_CHECK_RESPONSE_DTO;
+import static com.example.townmarket.fixture.UserFixture.LOGIN_REQUEST_DTO;
+import static com.example.townmarket.fixture.UserFixture.MEMBER_UNIQUE_ID;
+import static com.example.townmarket.fixture.UserFixture.PASSWORD_UPDATE_REQUEST_DTO;
+import static com.example.townmarket.fixture.UserFixture.PROFILE_RESPONSE_DTO;
+import static com.example.townmarket.fixture.UserFixture.REGION_UPDATE_REQUEST_DTO;
+import static com.example.townmarket.fixture.UserFixture.SIGNUP_REQUEST_DTO;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.townmarket.annotation.WithCustomMockUser;
 import com.example.townmarket.common.domain.email.service.EmailService;
+import com.example.townmarket.common.domain.user.dto.DuplicateCheckRequestDto;
+import com.example.townmarket.common.domain.user.dto.DuplicateCheckResponseDto;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.service.UserService;
 import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
+import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -31,6 +49,8 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -53,30 +73,19 @@ class UserControllerTest {
   @MockBean
   SetHttpHeaders setHttpHeaders;
 
-  @MockBean
-  EmailService emailService;
-
   @Test
-  @DisplayName("회원가입 성공")
   @WithMockUser
+  @DisplayName("회원가입 성공 상태코드 201 반환")
   void signup() throws Exception {
-    SignupRequestDto signupRequestDto = SignupRequestDto.builder()
-        .username("username")
-        .password("Password!2")
-        .email("xxx0011@gmail.com")
-        .nickname("nickname")
-        .region("서울")
-        .build();
 
-    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
+    doNothing().when(userService).signup(SIGNUP_REQUEST_DTO);
 
-    given(emailService.verifyCode(any())).willReturn(true);
-    ResultActions resultActions = mockMvc.perform(post("/users/signup")
+    ResultActions resultActions = mockMvc.perform(post(USER_API_URI + "/signup")
         .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsBytes(signupRequestDto))
+        .content(objectMapper.writeValueAsString(SIGNUP_REQUEST_DTO))
         .with(csrf()));
 
-    resultActions.andExpect(status().isOk());
+    resultActions.andExpect(status().isCreated());
 
     resultActions.andDo(document("usercontroller/signup",
         getDocumentRequest(),
@@ -87,31 +96,27 @@ class UserControllerTest {
             fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
             fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
             fieldWithPath("region").type(JsonFieldType.STRING).description("지역")
-        ),
-        responseFields(
-            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
         )
     ));
 
   }
 
+
   @Test
   @WithMockUser
+  @DisplayName("로그인 성공시 200반환")
   void login() throws Exception {
-    LoginRequestDto loginRequestDto = LoginRequestDto.builder()
-        .username("username")
-        .password("Xxxx11234")
-        .build();
 
-    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.SUCCESS);
+//    doNothing().when(userService).login(any(), LOGIN_REQUEST_DTO);
 
     ResultActions resultActions = mockMvc.perform(
-        post("/users/login").contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsBytes(loginRequestDto))
-            .with(csrf())).andExpect(status().isOk());
+            post(USER_API_URI + "/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(LOGIN_REQUEST_DTO))
+                .with(csrf()))
+        .andExpect(status().isOk());
 
-    resultActions.andExpect(status().isOk())
+    resultActions
         .andDo(document("usercontroller/login",
             getDocumentRequest(),
             getDocumentResponse(),
@@ -129,26 +134,177 @@ class UserControllerTest {
   }
 
   @Test
-  void logout() {
+  @WithMockUser
+  @DisplayName("로그아웃 성공시 200반환")
+  void logout() throws Exception {
+    doNothing().when(userService).logout(any(), any());
+
+    ResultActions resultActions = mockMvc.perform(
+            post(USER_API_URI + "/logout")
+                .with(csrf()))
+        .andExpect(status().isOk());
+
+    resultActions
+        .andDo(document("usercontroller/logout",
+            getDocumentRequest(),
+            getDocumentResponse(),
+            responseFields(
+                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+            )
+        ));
+
   }
 
   @Test
-  void updateUser() {
+  @WithCustomMockUser
+  @DisplayName("비밀번호 변경 성공시 200 반환")
+  void updateUser() throws Exception {
+    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
+        .getAuthentication().getPrincipal();
+    doNothing().when(userService)
+        .updateUser(userDetails.getUsername(), PASSWORD_UPDATE_REQUEST_DTO);
+    ResultActions resultActions = mockMvc.perform(
+            put(USER_API_URI + "/update/pw")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(PASSWORD_UPDATE_REQUEST_DTO))
+                .with(csrf()))
+        .andExpect(status().isOk());
+
+    resultActions
+        .andDo(document("usercontroller/update-pw",
+            getDocumentRequest(),
+            getDocumentResponse(),
+            requestFields(
+                fieldWithPath("password").type(JsonFieldType.STRING).description("변경되는 비밀번호")
+            ),
+            responseFields(
+                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+            )
+        ));
   }
 
   @Test
-  void updateRegion() {
+  @WithCustomMockUser
+  @DisplayName("지역 업데이트 성공시 200 반환")
+  void updateRegion() throws Exception {
+
+    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
+        .getAuthentication().getPrincipal();
+    doNothing().when(userService)
+        .updateRegion(userDetails.getUsername(), REGION_UPDATE_REQUEST_DTO);
+
+    ResultActions resultActions = mockMvc.perform(
+            put(USER_API_URI + "/update/region")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(REGION_UPDATE_REQUEST_DTO))
+                .with(csrf()))
+        .andExpect(status().isOk());
+
+    resultActions
+        .andDo(document("usercontroller/update-region",
+            getDocumentRequest(),
+            getDocumentResponse(),
+            requestFields(
+                fieldWithPath("region").type(JsonFieldType.STRING).description("변경되는 지역")
+            ),
+            responseFields(
+                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+            )
+        ));
   }
 
   @Test
-  void deleteUser() {
+  @WithCustomMockUser
+  @DisplayName("삭제 성공시 204 반환")
+  void deleteUser() throws Exception {
+    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
+        .getAuthentication().getPrincipal();
+
+    ResultActions resultActions = mockMvc.perform(
+            delete(USER_API_URI + "/{userId}", MEMBER_UNIQUE_ID)
+                .with(csrf()))
+        .andExpect(status().isNoContent());
+
+    resultActions
+        .andDo(document("usercontroller/delete",
+            getDocumentRequest(),
+            getDocumentResponse()
+        ));
   }
 
   @Test
-  void updateProfile() {
+  @WithCustomMockUser
+  void updateProfile() throws Exception {
+    given(userService.showProfile(MEMBER_UNIQUE_ID)).willReturn(PROFILE_RESPONSE_DTO);
+
+    ResultActions resultActions = mockMvc.perform(
+            get(USER_API_URI + "/profile/{userId}", MEMBER_UNIQUE_ID)
+                .with(csrf()))
+        .andExpect(status().isOk());
+
+    resultActions
+        .andDo(document("usercontroller/show-profile",
+            getDocumentRequest(),
+            getDocumentResponse(),
+            responseFields(
+                fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+                fieldWithPath("img_url").type(JsonFieldType.STRING).description("프로필 사진")
+            )
+        ));
   }
 
   @Test
-  void showProfile() {
+  @WithCustomMockUser
+  @DisplayName("유저 프로필 조회")
+  void showProfile() throws Exception {
+    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
+        .getAuthentication().getPrincipal();
+
+    given(userService.getMyProfile(userDetails.getUsername())).willReturn(PROFILE_RESPONSE_DTO);
+
+    ResultActions resultActions = mockMvc.perform(
+            get(USER_API_URI + "/profile")
+                .with(csrf()))
+        .andExpect(status().isOk());
+
+    resultActions
+        .andDo(document("usercontroller/get-my-profile",
+            getDocumentRequest(),
+            getDocumentResponse(),
+            responseFields(
+                fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+                fieldWithPath("img_url").type(JsonFieldType.STRING).description("프로필 사진")
+            )
+        ));
   }
+
+  @Test
+  @WithMockUser
+  @DisplayName("중복 없을 시 200반환")
+  void duplicateCheck() throws Exception {
+
+
+    // UserService의 duplicateCheck 메서드가 호출될 때 반환할 값을 설정합니다.
+    when(userService.duplicateCheck(DUPLICATE_CHECK_REQUEST_DTO)).thenReturn(DUPLICATE_CHECK_RESPONSE_DTO);
+
+    // API 호출을 수행하고 결과를 검증합니다.
+    mockMvc.perform(post(USER_API_URI+"/duplicate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(DUPLICATE_CHECK_REQUEST_DTO))
+            .with(csrf()))
+        .andExpect(status().isOk())
+        // REST Docs를 사용하여 API 문서를 생성합니다.
+        .andDo(document("usercontroller/duplicate",
+            getDocumentRequest(),
+            getDocumentResponse(),
+            requestFields(
+                fieldWithPath("duplicateField").description("중복 체크 필드 이름"),
+                fieldWithPath("content").description("중복 체크 필드 값")
+            )
+        ));
+  }
+
 }

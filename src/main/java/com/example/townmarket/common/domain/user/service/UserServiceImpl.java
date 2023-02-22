@@ -14,8 +14,7 @@ import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
 import com.example.townmarket.common.enums.RoleEnum;
 import com.example.townmarket.common.jwtUtil.JwtUtil;
-import com.example.townmarket.common.redis.converter.TokenDtoToByteArrayConverter;
-import com.example.townmarket.common.redis.dto.TokenDto;
+
 import com.example.townmarket.common.redis.entity.Tokens;
 import com.example.townmarket.common.redis.service.RefreshService;
 import io.jsonwebtoken.Claims;
@@ -40,8 +39,6 @@ public class UserServiceImpl implements UserService {
   private final PasswordEncoder passwordEncoder;
 
   private final RefreshService refreshService;
-
-  private final TokenDtoToByteArrayConverter tokenDtoToByteArrayConverter;
 
   @Override
   @Transactional
@@ -82,8 +79,8 @@ public class UserServiceImpl implements UserService {
     }
     // token 발급
     String accessToken = jwtUtil.createAccessToken(user.getUsername(), user.getRole());
-    String refreshToken = jwtUtil.createRefreshToken(user.getUsername(), user.getRole());
     response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
+    String refreshToken = jwtUtil.createRefreshToken(user.getUsername(), user.getRole());
     response.addHeader(JwtUtil.REFRESH_HEADER, refreshToken);
 
   }
@@ -93,14 +90,10 @@ public class UserServiceImpl implements UserService {
   public void logout(HttpServletRequest request, HttpServletResponse response) {
     String accessToken = jwtUtil.resolveAccessToken(request);
     Claims userInfoFromToken = jwtUtil.getUserInfoFromToken(accessToken);
-    String username = userInfoFromToken.getSubject();
-    User user = findByUsername(username);
     String refreshToken = jwtUtil.resolveRefreshToken(request);
-    TokenDto tokenDto = TokenDto.builder().refreshToken(refreshToken).accessToken(accessToken)
-        .build();
-    byte[] convert = tokenDtoToByteArrayConverter.convert(tokenDto);
-    Tokens tokens = Tokens.builder().tokenDto(convert).id(
-        user.getUsername()).build();
+    String username = userInfoFromToken.getSubject();
+    Tokens tokens = Tokens.builder().token(refreshToken).id(username).build();
+
     // token blacklist 저장
     refreshService.saveBlackList(tokens);
     response.setHeader(JwtUtil.AUTHORIZATION_HEADER, null);
@@ -118,11 +111,9 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public void updateUser(String username, PasswordUpdateRequestDto updateDto) {
     User user = this.findByUsername(username);
-
     if (!user.checkAuthorization(user)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
     }
-
     String password = passwordEncoder.encode(updateDto.getPassword());
     user.updatePassword(password);
     this.userRepository.save(user);

@@ -99,7 +99,6 @@ public class UserController {
       @AuthenticationPrincipal
       UserDetailsImpl userDetails) {
     userService.deleteUser(userId, userDetails.getUsername());
-    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
     return RESPONSE_DELETE;
   }
 
