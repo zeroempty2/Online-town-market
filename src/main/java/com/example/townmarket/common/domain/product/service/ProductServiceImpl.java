@@ -6,9 +6,9 @@ import com.example.townmarket.common.domain.product.dto.ProductResponseDto;
 import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
 import com.example.townmarket.common.domain.user.entity.User;
-import com.example.townmarket.common.dto.PageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
   @Transactional(readOnly = true)
   public ProductResponseDto getProduct(Long productId) {
     Product product = findProductById(productId);
+    isBlock(product);
     return ProductResponseDto.builder()
         .productId(product.getId())
         .productName(product.getProductName())
@@ -49,16 +50,17 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<PagingProductResponse> getProducts(PageDto pageDto) {
+  public Page<PagingProductResponse> getProducts(Pageable pageable) {
 //    Page<Product> products = productRepository.findAll(pageDto.toPageable());
 //    return products.map(PagingProductResponse::new);
-    return productRepository.findAllAndPaging(pageDto.toPageable());
+    return productRepository.findAllAndPaging(pageable);
   }
 
   @Override
   @Transactional
   public void updateProduct(Long productId, ProductRequestDto productDto, Long userId) {
     Product product = findProductById(productId);
+    isBlock(product);
     if (!product.checkProductWriter(userId)) {
       throw new IllegalArgumentException("본인의 상품이 아닙니다");
     }
@@ -69,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
   @Transactional
   public void deleteProduct(Long productId, Long userId) {
     Product product = findProductById(productId);
-
+    isBlock(product);
     if (!product.checkProductWriter(userId)) {
       throw new IllegalArgumentException("본인의 상품이 아닙니다");
     }
@@ -84,5 +86,14 @@ public class ProductServiceImpl implements ProductService {
     );
   }
 
+  @Override
+  public void setBlock(Long productId) {
+    findProductById(productId).setBlock();
+  }
 
+  private void isBlock(Product product) {
+    if (product.isBlock()) {
+      throw new IllegalArgumentException("신고가 누적되어 접근이 제한되었습니다");
+    }
+  }
 }

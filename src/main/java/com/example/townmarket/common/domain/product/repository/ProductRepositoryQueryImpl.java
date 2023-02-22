@@ -27,6 +27,7 @@ public class ProductRepositoryQueryImpl implements ProductRepositoryQuery {
             product.productName
             , product.productPrice))
         .from(product)
+        .where(product.block.eq(false))
         .setHint("org.hibernate.readOnly", true)
         .orderBy(product.createdAt.desc())
         .limit(pageable.getPageSize())

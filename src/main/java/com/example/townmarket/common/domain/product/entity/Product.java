@@ -53,6 +53,8 @@ public class Product extends TimeStamped {
   private ProductCategory productCategory;
   @Column
   private Long interestCount;
+  @Column
+  private boolean block;
 
 
   public enum ProductEnum {
@@ -127,6 +129,10 @@ public class Product extends TimeStamped {
 
   public void minusInterest() {
     this.interestCount--;
+  }
+
+  public void setBlock() {
+    this.block = true;
   }
 
 }

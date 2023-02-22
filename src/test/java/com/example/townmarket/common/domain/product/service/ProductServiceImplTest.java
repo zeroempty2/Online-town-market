@@ -73,7 +73,7 @@ class ProductServiceImplTest {
     when(productRepository.findAll(pageable)).thenReturn(Page.empty());
 
     // when
-    Page<PagingProductResponse> pagingProductResponse = productService.getProducts(pageDto);
+    Page<PagingProductResponse> pagingProductResponse = productService.getProducts(pageable);
 
     // then
     assertThat(pagingProductResponse).isNotNull();
