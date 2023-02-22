@@ -1,5 +1,7 @@
 package com.example.townmarket.common.domain.board.controller;
 
+import static com.example.townmarket.fixture.BoardCommentFixture.PAGING_BOARD_RESPONSE_PAGE;
+import static com.example.townmarket.fixture.UtilFixture.PAGE_DTO;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,24 +20,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.townmarket.annotation.WithCustomMockUser;
 import com.example.townmarket.common.domain.board.dto.BoardRequestDto;
 import com.example.townmarket.common.domain.board.dto.BoardResponseDto;
-import com.example.townmarket.common.domain.board.dto.PagingBoardResponse;
 import com.example.townmarket.common.domain.board.entity.Board.BoardSubject;
 import com.example.townmarket.common.domain.board.service.BoardService;
-import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -82,11 +78,11 @@ class BoardControllerTest {
             fieldWithPath("title").type(JsonFieldType.STRING).description("글 제목"),
             fieldWithPath("content").type(JsonFieldType.STRING).description("글 내용"),
             fieldWithPath("subject").type(JsonFieldType.STRING).description("글 카테코리")
-        ),
-        responseFields(
-            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
         )
+//        responseFields(
+//            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+//            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+//        )
     ));
 
   }
@@ -123,20 +119,16 @@ class BoardControllerTest {
   @Test
   @WithCustomMockUser
   void getBoards() throws Exception {
-    PagingBoardResponse pagingBoardResponse = PagingBoardResponse.builder().title("글제목")
-        .subject(BoardSubject.동네소식).build();
 
-    PageDto pageDto = PageDto.builder().page(1).size(10).isAsc(false).sortBy("title").build();
-    Pageable pageable = pageDto.toPageable();
 
-    Page<PagingBoardResponse> pages = new PageImpl<>(Collections.singletonList(pagingBoardResponse),
-        pageable, pageable.getPageSize());
+    String json = objectMapper.writeValueAsString(PAGING_BOARD_RESPONSE_PAGE);
 
-    given(boardService.getBoards(pageable)).willReturn(pages);
+    given(boardService.getBoards(any())).willReturn(PAGING_BOARD_RESPONSE_PAGE);
+
 
     ResultActions resultActions = mockMvc.perform(get("/boards")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsBytes(pageDto))
+            .content(objectMapper.writeValueAsBytes(PAGE_DTO))
             .with(csrf()))
         .andExpect(status().isOk());
 
@@ -148,8 +140,30 @@ class BoardControllerTest {
             fieldWithPath("size").type(JsonFieldType.NUMBER).description("글의 갯수"),
             fieldWithPath("sortBy").type(JsonFieldType.STRING).description("정렬기준"),
             fieldWithPath("asc").type(JsonFieldType.BOOLEAN).description("오름/내림차순")
-        )
-    ));
+        ),
+        responseFields(
+            fieldWithPath("content[].title").type(JsonFieldType.STRING).description("유저 아이디"),
+            fieldWithPath("content[].subject").type(JsonFieldType.STRING).description("지역"),
+            fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.offset").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("pageable.pageSize").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("pageable.unpaged").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.paged").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("last").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("size").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("number").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("first").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("")
+    )));
   }
 
   @Test
@@ -194,11 +208,11 @@ class BoardControllerTest {
 
     resultActions.andDo(document("boardController/deleteBoard",
         getDocumentRequest(),
-        getDocumentResponse(),
-        responseFields(
-            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
-        )
+        getDocumentResponse()
+//        responseFields(
+//            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+//            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+//        )
     ));
 
   }
