@@ -4,13 +4,12 @@ import com.example.townmarket.common.domain.review.dto.CreateReviewRequestDto;
 import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
 import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
 import com.example.townmarket.common.domain.review.entity.Review;
-import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.domain.review.repository.ReviewRepository;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.service.UserServiceImpl;
+import com.example.townmarket.common.dto.PageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,21 +57,23 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Override
   @Transactional
-  public void updateMyReview(Long reviewId, User user,
+  public void updateMyReview(Long reviewId, Long userId,
       UpdateReviewRequestDto updateReviewRequestDto) {
     Review review = findReviewById(reviewId);
-    reviewWriterCheck(review, user);
+    reviewWriterCheck(review, userId);
+    updateRevieweeGrade(review, review.getGrade(), updateReviewRequestDto.getGrade());
     review.updateReview(updateReviewRequestDto);
-    updateRevieweeGrade(review, updateReviewRequestDto.getGrade());
+
   }
 
   @Override
   @Transactional
-  public void deleteReview(Long reviewId, User user) {
+  public void deleteReview(Long reviewId, Long userId) {
     Review review = findReviewById(reviewId);
     User reviewee = review.getReviewee();
     int grade = -review.getGrade();
-    reviewWriterCheck(review, user);
+    reviewWriterCheck(review, userId);
+
     reviewRepository.deleteById(reviewId);
     setRevieweeGrade(grade, reviewee);
   }
@@ -84,8 +85,8 @@ public class ReviewServiceImpl implements ReviewService {
     );
   }
 
-  public void reviewWriterCheck(Review review, User user) {
-    if (!review.isReviewWriter(user)) {
+  public void reviewWriterCheck(Review review, Long userId) {
+    if (!review.isReviewWriter(userId)) {
       throw new IllegalArgumentException("작성자가 아닙니다");
     }
   }
@@ -95,9 +96,9 @@ public class ReviewServiceImpl implements ReviewService {
     userService.setUserGrade(reviewee, grade, reviewCount);
   }
 
-  private void updateRevieweeGrade(Review review, int updateGrade) {
+  private void updateRevieweeGrade(Review review, int reviewGrade, int updateGrade) {
     User reviewee = review.getReviewee();
-    int grade = review.getGrade() - updateGrade;
+    int grade = reviewGrade - updateGrade;
     userService.updateUserGrade(reviewee, grade);
   }
 }

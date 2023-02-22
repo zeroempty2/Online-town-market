@@ -1,16 +1,10 @@
 package com.example.townmarket.common.domain.review.controller;
 
 
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
-
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -23,23 +17,19 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.townmarket.annotation.WithCustomMockUser;
-import com.example.townmarket.common.domain.review.controller.ReviewController;
+import com.example.townmarket.common.domain.review.dto.CreateReviewRequestDto;
+import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
+import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
+import com.example.townmarket.common.domain.review.service.ReviewServiceImpl;
+import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
-import com.example.townmarket.common.domain.review.dto.CreateReviewRequestDto;
-import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
-import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
-import com.example.townmarket.common.domain.review.service.ReviewServiceImpl;
-import com.example.townmarket.common.domain.user.entity.Profile;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,17 +38,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
-
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -162,7 +147,8 @@ class ReviewControllerTest {
   void showMyReviews() throws Exception {
     PageDto pageDto = PageDto.builder().page(1).size(10).isAsc(false).sortBy("productName").build();
 
-    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
+        .getAuthentication()
         .getPrincipal();
 
     User user = userDetails.getUser();
@@ -177,7 +163,7 @@ class ReviewControllerTest {
     Pageable pageable = pageDto.toPageable();
 
     Page<ReviewResponseDto> reviewResponseDtoPage = new PageImpl<>(
-        Collections.singletonList(reviewResponseDto),pageable,1);
+        Collections.singletonList(reviewResponseDto), pageable, 1);
 
 /***
  * 테스트 코드 내부에 json 파일 - 해당 실제 응답값이 담겨있는 파일-을 읽어와서 해당 willReturn에 넣어주기
@@ -187,7 +173,7 @@ class ReviewControllerTest {
  */
 
 //    given(userDetails.getUser()).willReturn(user);
-    given(reviewService.showMyReviews(pageDto,user)).willReturn(reviewResponseDtoPage);
+    given(reviewService.showMyReviews(pageDto, user)).willReturn(reviewResponseDtoPage);
 
     ResultActions resultActions = mockMvc.perform(get("/reviews")
             .content(objectMapper.writeValueAsBytes(pageDto))
@@ -212,7 +198,7 @@ class ReviewControllerTest {
 //            fieldWithPath("revieweeProfile.nickName").type(JsonFieldType.STRING).description("판매자프로필_닉네임"),
 //            fieldWithPath("revieweeProfile.img_url").type(JsonFieldType.STRING).description("판매자프로필_이미지"),
 //            fieldWithPath("productName").type(JsonFieldType.STRING).description("상품이름"))
-            ));
+    ));
   }
 
 
@@ -221,7 +207,6 @@ class ReviewControllerTest {
   void updateMyReview() throws Exception {
     Long reviewId = 1L;
     UpdateReviewRequestDto updateReviewRequestDto = UpdateReviewRequestDto.builder()
-        .reviewId(1L)
         .reviewContents("reviewContents")
         .grade(1).build();
 

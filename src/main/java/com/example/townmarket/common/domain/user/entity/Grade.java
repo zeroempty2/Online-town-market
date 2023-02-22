@@ -43,8 +43,12 @@ public class Grade {
 
   public void setUserGrade(int grade, int count) {
     this.totalGrade += grade;
-    this.count += count;
-    this.averageGrade = Math.abs(this.totalGrade / this.count);
+    this.count = count;
+    if (this.count != 0) {
+      this.averageGrade = Math.abs(this.totalGrade / this.count);
+    } else {
+      this.averageGrade = 0;
+    }
   }
 
   public void updateUserGrade(int grade) {

@@ -12,10 +12,12 @@ import static com.example.townmarket.fixture.UserFixture.REGION_UPDATE_REQUEST_D
 import static com.example.townmarket.fixture.UserFixture.SIGNUP_REQUEST_DTO;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -77,6 +79,7 @@ class UserControllerTest {
   @WithMockUser
   @DisplayName("회원가입 성공 상태코드 201 반환")
   void signup() throws Exception {
+
 
     doNothing().when(userService).signup(SIGNUP_REQUEST_DTO);
 

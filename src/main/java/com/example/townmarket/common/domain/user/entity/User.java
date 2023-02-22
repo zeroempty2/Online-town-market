@@ -1,6 +1,7 @@
 package com.example.townmarket.common.domain.user.entity;
 
 import com.example.townmarket.common.TimeStamped;
+import com.example.townmarket.common.domain.board.entity.Board;
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.review.entity.Review;
@@ -116,6 +117,10 @@ public class User extends TimeStamped {
   @Builder.Default
   @OneToMany(mappedBy = "reviewee")
   private Set<Review> receiveReviews = new LinkedHashSet<>();
+
+  @Builder.Default
+  @OneToMany(mappedBy = "user")
+  private Set<Board> boards = new LinkedHashSet<>();
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.

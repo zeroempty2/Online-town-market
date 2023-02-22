@@ -4,9 +4,9 @@ import com.example.townmarket.common.domain.product.dto.PagingProductResponse;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
 import com.example.townmarket.common.domain.product.dto.ProductResponseDto;
 import com.example.townmarket.common.domain.product.entity.Product;
-import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
 import com.example.townmarket.common.domain.user.entity.User;
+import com.example.townmarket.common.dto.PageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -50,15 +50,16 @@ public class ProductServiceImpl implements ProductService {
   @Override
   @Transactional(readOnly = true)
   public Page<PagingProductResponse> getProducts(PageDto pageDto) {
-    Page<Product> products = productRepository.findAll(pageDto.toPageable());
-    return products.map(PagingProductResponse::new);
+//    Page<Product> products = productRepository.findAll(pageDto.toPageable());
+//    return products.map(PagingProductResponse::new);
+    return productRepository.findAllAndPaging(pageDto.toPageable());
   }
 
   @Override
   @Transactional
-  public void updateProduct(Long productId, ProductRequestDto productDto, User user) {
+  public void updateProduct(Long productId, ProductRequestDto productDto, Long userId) {
     Product product = findProductById(productId);
-    if (!product.checkProductWriter(user)) {
+    if (!product.checkProductWriter(userId)) {
       throw new IllegalArgumentException("본인의 상품이 아닙니다");
     }
     product.update(productDto);
@@ -66,14 +67,15 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional
-  public void deleteProduct(Long productId, User user) {
+  public void deleteProduct(Long productId, Long userId) {
     Product product = findProductById(productId);
 
-    if (!product.checkProductWriter(user)) {
+    if (!product.checkProductWriter(userId)) {
       throw new IllegalArgumentException("본인의 상품이 아닙니다");
     }
     productRepository.deleteById(product.getId());
   }
+
   @Override
   @Transactional(readOnly = true)
   public Product findProductById(Long productId) {

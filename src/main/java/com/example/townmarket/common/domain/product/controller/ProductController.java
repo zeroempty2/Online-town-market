@@ -74,16 +74,20 @@ public class ProductController {
   public ResponseEntity<StatusResponse> updateProducts(@PathVariable Long productId,
       @RequestBody ProductRequestDto productRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    productService.updateProduct(productId, productRequestDto, userDetails.getUser());
+
+    productService.updateProduct(productId, productRequestDto, userDetails.getUserId());
     return RESPONSE_OK;
+
   }
 
   // 단일 상품 삭제
   @DeleteMapping("/{productId}")
   public ResponseEntity<StatusResponse> deleteProduct(@PathVariable Long productId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    productService.deleteProduct(productId, userDetails.getUser());
+
+    productService.deleteProduct(productId, userDetails.getUserId());
     return RESPONSE_DELETE;
+
   }
 
 }

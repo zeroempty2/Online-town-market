@@ -33,9 +33,18 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
     );
 
+    // 이미 해당 상품에 대한 채팅방이 존재하는 경우
+    if (roomRepository.existsByProductAndUser(product, user)) {
+      throw new RuntimeException("해당 상품에 대한 채팅방이 이미 존재합니다.");
+    }
+
+    if (user.getId().equals(product.getUser().getId())) {
+      throw new RuntimeException("본인의 판매 상품에 채팅방을 개설할 수 없습니다.");
+    }
     ChatRoom chatRooms = new ChatRoom(product, user);
     roomRepository.save(chatRooms);
   }
+
 
   /* 채팅방 보기 */
   @Override
@@ -56,9 +65,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   /*나의 채팅 리스트*/
   @Override
   public ChatRoomListDtailDto myChatList(Long userId) {
-    User user = userRepository.findById(userId).orElseThrow(
-        () -> new RuntimeException("회원을 찾을 수 없습니다.")
-    );
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
     return new ChatRoomListDtailDto(user);
   }

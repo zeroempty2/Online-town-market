@@ -1,6 +1,7 @@
 package com.example.townmarket.common.domain.chat.dto;
 
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
+import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.user.entity.User;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -16,16 +17,30 @@ import lombok.NoArgsConstructor;
 public class ChatRoomListDtailDto {
 
   private long userId;
-  private Set<ChatRoomListDto> list;
+  private Set<ChatRoomListDto> roomList;
 
 
   public ChatRoomListDtailDto(User user) {
     this.userId = user.getId();
-    Set<ChatRoomListDto> roomlist = new LinkedHashSet<>();
-    for (ChatRoom rooms : user.getChatRooms()) {
-      roomlist.add(new ChatRoomListDto(rooms));
+    Set<ChatRoomListDto> roomList = new LinkedHashSet<>();
+    // 판매자인 경우
+    if (!user.getProducts().isEmpty()) {
+      for (Product product : user.getProducts()) {
+        for (ChatRoom chatRoom : product.getChatRooms()) {
+          roomList.add(new ChatRoomListDto(chatRoom, user));
+        }
+      }
     }
-    this.list = roomlist;
+    // 구매자인 경우
+    else {
+      for (ChatRoom chatRoom : user.getChatRooms()) {
+        roomList.add(new ChatRoomListDto(chatRoom, user));
+        if (chatRoom.getProduct().getUser().getId() == user.getId()) {
+          roomList.add(new ChatRoomListDto(chatRoom, chatRoom.getUser()));
+        }
+      }
+    }
+    this.roomList = roomList;
   }
 }
 

@@ -1,21 +1,20 @@
 package com.example.townmarket.common.domain.product.dto;
 
-import com.example.townmarket.common.domain.product.entity.Product;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
+@Getter
 public class PagingProductResponse {
 
   private String productName;
 
-  private Long productPrice;
+  private long productPrice;
 
-  public PagingProductResponse(Product product) {
-    this.productName = product.getProductName();
-    this.productPrice = product.getProductPrice();
+
+  @Builder
+  public PagingProductResponse(String productName, long productPrice) {
+    this.productName = productName;
+    this.productPrice = productPrice;
   }
 }

@@ -4,8 +4,8 @@ import com.example.townmarket.common.domain.product.dto.PagingProductResponse;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
 import com.example.townmarket.common.domain.product.dto.ProductResponseDto;
 import com.example.townmarket.common.domain.product.entity.Product;
-import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.domain.user.entity.User;
+import com.example.townmarket.common.dto.PageDto;
 import org.springframework.data.domain.Page;
 
 public interface ProductService {
@@ -20,10 +20,10 @@ public interface ProductService {
   Page<PagingProductResponse> getProducts(PageDto pageDto);
 
   // 상품 내용 수정
-  void updateProduct(Long productId, ProductRequestDto productDto, User user);
+  void updateProduct(Long productId, ProductRequestDto productDto, Long userId);
 
   // 상품 삭제
-  void deleteProduct(Long productId, User user);
+  void deleteProduct(Long productId, Long userId);
 
   Product findProductById(Long productId);
 }
