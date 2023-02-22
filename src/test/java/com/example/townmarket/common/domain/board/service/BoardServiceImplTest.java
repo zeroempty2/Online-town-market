@@ -2,8 +2,8 @@ package com.example.townmarket.common.domain.board.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.townmarket.common.domain.board.dto.BoardRequestDto;
@@ -79,7 +79,7 @@ class BoardServiceImplTest {
     when(boardRepository.findAll(pageable)).thenReturn(Page.empty());
 
     // when
-    Page<PagingBoardResponse> pagingProductResponse = boardService.getBoards(pageDto);
+    Page<PagingBoardResponse> pagingProductResponse = boardService.getBoards(pageable);
 
     // then
     assertThat(pagingProductResponse).isNotNull();
@@ -112,7 +112,7 @@ class BoardServiceImplTest {
     when(Optional.of(board).get().checkBoardWriter(user)).thenReturn(true);
 
     //when
-    boardService.deleteBoard(board.getId(),user);
+    boardService.deleteBoard(board.getId(), user);
 
     //then
     verify(boardRepository).deleteById(board.getId());

@@ -50,6 +50,7 @@ public class SecurityConfig {
       "/users/search/**",
       "/chatrooms/**",
       "/chatroom/**",
+      "/boards",
       "/users/search/**",
       "profile"};
   private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;

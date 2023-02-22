@@ -5,18 +5,18 @@ import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_CRE
 import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_DELETE;
 import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_OK;
 
-import com.example.townmarket.common.domain.board.dto.BoardResponseDto;
 import com.example.townmarket.common.domain.board.dto.BoardRequestDto;
+import com.example.townmarket.common.domain.board.dto.BoardResponseDto;
 import com.example.townmarket.common.domain.board.dto.PagingBoardResponse;
 import com.example.townmarket.common.domain.board.service.BoardService;
-import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.dto.StatusResponse;
-import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -65,9 +65,11 @@ public class BoardController {
 
   // 게시글 전체 조회
   @GetMapping
-  public ResponseEntity<Page<PagingBoardResponse>> getBoards(@RequestBody PageDto pageDto) {
+  public ResponseEntity<Page<PagingBoardResponse>> getBoards(
+      @PageableDefault(size = 12, sort = "createdAt", direction = Sort.Direction.DESC)
+      Pageable pageable) {
     return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
-        .body(boardService.getBoards(pageDto));
+        .body(boardService.getBoards(pageable));
   }
 
   // 게시물 삭제
