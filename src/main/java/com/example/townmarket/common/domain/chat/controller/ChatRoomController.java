@@ -3,6 +3,7 @@ package com.example.townmarket.common.domain.chat.controller;
 import com.example.townmarket.common.domain.chat.dto.ChatRoomDto;
 import com.example.townmarket.common.domain.chat.dto.ChatRoomListDtailDto;
 import com.example.townmarket.common.domain.chat.service.ChatRoomService;
+import com.example.townmarket.common.domain.user.service.UserService;
 import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatRoomController {
 
   private final ChatRoomService roomService;
+  private final UserService userService;
 
   /* 채팅방 등록 */
   @PostMapping("/chatroom/{productId}")
@@ -45,8 +47,8 @@ public class ChatRoomController {
   public ResponseEntity<ChatRoomListDtailDto> myChatList(
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-    ChatRoomListDtailDto roomList = roomService.myChatList(userDetails.getUserId());
-    return ResponseEntity.status(HttpStatus.OK).body(roomList);
+    roomService.myChatList(userDetails.getUserId());
+    return ResponseEntity.status(HttpStatus.OK).body(roomService.myChatList(userDetails.getUserId()));
   }
 
   /* 채팅방 삭제 */
