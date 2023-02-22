@@ -5,12 +5,12 @@ import com.example.townmarket.common.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.RepositoryDefinition;
 
-
-@Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+@RepositoryDefinition(domainClass = Product.class, idClass = Long.class)
+public interface ProductRepository extends JpaRepository<Product, Long>, ProductRepositoryQuery {
 
   Product findByUser(User sellerName);
+
   Page<Product> findAll(Pageable pageable);
 }

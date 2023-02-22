@@ -68,7 +68,7 @@ public class ProductController {
   public ResponseEntity<StatusResponse> update(@PathVariable Long productId,
       @RequestBody ProductRequestDto productRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    productService.updateProduct(productId, productRequestDto, userDetails.getUser());
+    productService.updateProduct(productId, productRequestDto, userDetails.getUserId());
     return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.SUCCESS));
   }
 
@@ -76,7 +76,7 @@ public class ProductController {
   @DeleteMapping("/{productId}")
   public ResponseEntity<StatusResponse> delete(@PathVariable Long productId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    productService.deleteProduct(productId, userDetails.getUser());
+    productService.deleteProduct(productId, userDetails.getUserId());
     return ResponseEntity.status(HttpStatus.NO_CONTENT)
         .body(StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS));
   }
