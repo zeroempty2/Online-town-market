@@ -3,6 +3,7 @@ package com.example.townmarket.common.domain.product.entity;
 import com.example.townmarket.common.TimeStamped;
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
+import com.example.townmarket.common.domain.trade.entity.Trade;
 import com.example.townmarket.common.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -37,7 +39,7 @@ public class Product extends TimeStamped {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", nullable = false)
+  @Column(name = "product_Id", nullable = false)
   private Long id;
   private String productName;
   private Long productPrice;
@@ -47,6 +49,10 @@ public class Product extends TimeStamped {
   private ProductStatus productStatus;
   @Enumerated(EnumType.STRING)
   private ProductCategory productCategory;
+
+  public void updateProductEnum() {
+    this.productEnum = ProductEnum.판매완료;
+  }
 
 
   public enum ProductEnum {
@@ -89,6 +95,9 @@ public class Product extends TimeStamped {
 
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<ChatRoom> room = new LinkedHashSet<>();
+
+  @OneToOne(mappedBy = "product")
+  private Trade trade;
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
