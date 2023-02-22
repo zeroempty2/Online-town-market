@@ -1,4 +1,4 @@
-package com.example.townmarket.common.domain.address;
+package com.example.townmarket.common.config;
 
 import java.nio.charset.Charset;
 import org.springframework.context.annotation.Bean;

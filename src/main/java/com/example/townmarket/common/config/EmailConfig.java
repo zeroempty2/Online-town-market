@@ -1,4 +1,4 @@
-package com.example.townmarket.common.domain.email;
+package com.example.townmarket.common.config;
 
 import java.util.Properties;
 import org.springframework.beans.factory.annotation.Value;

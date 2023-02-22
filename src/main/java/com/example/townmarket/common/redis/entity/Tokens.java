@@ -16,11 +16,15 @@ public class Tokens {
   @Id
   private String id;
 
-  private byte[] tokenDto;
+  private String refreshToken;
 
   @Builder
-  public Tokens(byte[] tokenDto, String id) {
+  public Tokens(String token, String id) {
     this.id = id;
-    this.tokenDto = tokenDto;
+    this.refreshToken = token;
   }
+  public boolean checkRefreshToken(String token) {
+    return refreshToken.equals(token);
+  }
+
 }

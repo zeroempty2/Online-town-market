@@ -1,5 +1,6 @@
 package com.example.townmarket.common.oauth;
 
+import com.example.townmarket.common.oauth.dto.OAuthDto;
 import java.util.Collections;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;

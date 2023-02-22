@@ -1,4 +1,4 @@
-package com.example.townmarket.common.oauth;
+package com.example.townmarket.common.oauth.dto;
 
 import java.util.HashMap;
 import java.util.Map;
