@@ -97,7 +97,7 @@ class UserServiceImplTest {
 
     // when
     userService.login(servletResponse, requestDto);
-    String token = jwtUtil.createToken(username, user.getRole());
+    String token = jwtUtil.createAccessToken(username, user.getRole());
     servletResponse.addHeader("Authorization", token);
   }
 
