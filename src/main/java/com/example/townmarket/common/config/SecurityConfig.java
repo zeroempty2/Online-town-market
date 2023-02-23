@@ -93,6 +93,7 @@ public class SecurityConfig {
         .requestMatchers("/interest/**").hasAnyRole("MEMBER")
         .requestMatchers("/report/**").hasAnyRole("MEMBER")
         .requestMatchers("/transaction/**").hasAnyRole("MEMBER")
+        .requestMatchers("/review/**").hasAnyRole("MEMBER")
         .anyRequest().authenticated()
         .and().addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService, adminDetailsService),
             UsernamePasswordAuthenticationFilter.class);

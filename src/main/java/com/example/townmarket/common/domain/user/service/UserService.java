@@ -24,7 +24,6 @@ public interface UserService {
   void login(HttpServletResponse response, LoginRequestDto request);
 
 
-
   void updateUser(String username, PasswordUpdateRequestDto updateDto);
 
   void updateRegion(String username, RegionUpdateRequestDto updateDto);
@@ -37,7 +36,6 @@ public interface UserService {
 
   List<User> findAllUser();
 
-  void setUserGrade(User reviewee, int grade, int count);
 
   Page<User> pagingUsers(Pageable pageable);
 
@@ -45,7 +43,6 @@ public interface UserService {
 
   User findByUsername(String username);
 
-  void updateUserGrade(User reviewee, int grade);
 
   boolean existsByEmail(String email);
 
@@ -56,6 +53,8 @@ public interface UserService {
   void logout(HttpServletRequest request, HttpServletResponse response);
 
   void loginOAuth2(String username, RoleEnum role, HttpServletResponse response);
+
+  double getUserAverageGrade(User reviewee);
 }
 
 

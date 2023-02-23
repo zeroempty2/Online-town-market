@@ -1,9 +1,11 @@
 package com.example.townmarket.common.domain.review.service;
 
+import com.example.townmarket.common.domain.product.service.ProductServiceImpl;
 import com.example.townmarket.common.domain.review.dto.CreateReviewRequestDto;
 import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
 import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
 import com.example.townmarket.common.domain.review.entity.Review;
+import com.example.townmarket.common.domain.review.entity.UserGrade;
 import com.example.townmarket.common.domain.review.repository.ReviewRepository;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.service.UserServiceImpl;
@@ -21,6 +23,8 @@ public class ReviewServiceImpl implements ReviewService {
 
   private final ReviewRepository reviewRepository;
   private final UserServiceImpl userService;
+  private final ProductServiceImpl productService;
+  private final UserGradeServiceImpl userGradeService;
 
   @Override
   @Transactional
@@ -29,21 +33,25 @@ public class ReviewServiceImpl implements ReviewService {
       throw new IllegalArgumentException("작성된 리뷰가 있습니다");
     }
     User reviewee = userService.findUserById(createReviewRequestDto.getRevieweeId());
+
     Review review = Review.builder()
-        .grade(createReviewRequestDto.getGrade())
         .reviewContents(createReviewRequestDto.getReviewContents())
-        .reviewee(reviewee)
         .reviewer(reviewer)
-        .productId(createReviewRequestDto.getProductId())
+        .product(productService.findProductById(createReviewRequestDto.getProductId()))
         .build();
     reviewRepository.save(review);
-    setRevieweeGrade(createReviewRequestDto.getGrade(), reviewee);
+
+    UserGrade userGrade = UserGrade.builder()
+        .grade(createReviewRequestDto.getGrade())
+        .review(review)
+        .reviewee(reviewee).build();
+    userGradeService.saveGrade(userGrade);
   }
 
   @Override
   @Transactional(readOnly = true)
   public ReviewResponseDto showSelectReview(Long reviewId) {
-    if (!reviewRepository.existsReviewByProductId(reviewId)) {
+    if (!reviewRepository.existsReviewId(reviewId)) {
       throw new IllegalArgumentException("유효하지 않은 리뷰입니다");
     }
     return reviewRepository.searchByReviewId(reviewId);
@@ -61,21 +69,16 @@ public class ReviewServiceImpl implements ReviewService {
       UpdateReviewRequestDto updateReviewRequestDto) {
     Review review = findReviewById(reviewId);
     reviewWriterCheck(review, userId);
-    updateRevieweeGrade(review, review.getGrade(), updateReviewRequestDto.getGrade());
     review.updateReview(updateReviewRequestDto);
-
+    review.getUserGrade().setGrade(updateReviewRequestDto.getGrade());
   }
 
   @Override
   @Transactional
   public void deleteReview(Long reviewId, Long userId) {
     Review review = findReviewById(reviewId);
-    User reviewee = review.getReviewee();
-    int grade = -review.getGrade();
     reviewWriterCheck(review, userId);
-
     reviewRepository.deleteById(reviewId);
-    setRevieweeGrade(grade, reviewee);
   }
 
   @Override
@@ -91,14 +94,5 @@ public class ReviewServiceImpl implements ReviewService {
     }
   }
 
-  private void setRevieweeGrade(int grade, User reviewee) {
-    int reviewCount = reviewRepository.countByRevieweeId(reviewee.getId());
-    userService.setUserGrade(reviewee, grade, reviewCount);
-  }
 
-  private void updateRevieweeGrade(Review review, int reviewGrade, int updateGrade) {
-    User reviewee = review.getReviewee();
-    int grade = reviewGrade - updateGrade;
-    userService.updateUserGrade(reviewee, grade);
-  }
 }

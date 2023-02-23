@@ -1,18 +1,12 @@
 package com.example.townmarket.common.domain.review.repository;
 
-import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
 import com.example.townmarket.common.domain.review.entity.Review;
-import com.example.townmarket.common.domain.user.entity.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.RepositoryDefinition;
 
 @RepositoryDefinition(domainClass = Review.class, idClass = Long.class)
 public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryQuery {
 
-  int countByRevieweeId(Long revieweeId);
 
   boolean existsReviewByProductId(Long productId);
 

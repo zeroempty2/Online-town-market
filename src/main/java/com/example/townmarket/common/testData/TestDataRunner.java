@@ -6,7 +6,6 @@ import com.example.townmarket.common.domain.product.entity.Product.ProductEnum;
 import com.example.townmarket.common.domain.product.entity.Product.ProductStatus;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
-import com.example.townmarket.common.domain.user.entity.Grade;
 import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
@@ -31,7 +30,6 @@ public class TestDataRunner implements ApplicationRunner {
   @Transactional
   public void run(ApplicationArguments args) throws Exception {
     Profile profile = Profile.builder().nickName("testUser").build();
-    Grade grade = new Grade();
 
     User user = User.builder()
         .username("user")
@@ -39,7 +37,6 @@ public class TestDataRunner implements ApplicationRunner {
         .email("asda11as@gmail.com")
         .role(RoleEnum.MEMBER)
         .profile(profile)
-        .grade(grade)
         .build();
     userRepository.save(user);
 
