@@ -54,11 +54,13 @@ public class ProductController {
         .body(productService.getProduct(productId));
   }
 
+
   //   전체 상품 조회
   @GetMapping
   public ResponseEntity<Page<PagingProductResponse>> getProducts(@ModelAttribute PageDto pageDto) {
     return ResponseEntity.ok()
         .body(productService.getProducts(pageDto));
+
   }
 //  @GetMapping
 //  public ResponseEntity<Page<PagingProductResponse>> getProducts(

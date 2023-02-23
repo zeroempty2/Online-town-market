@@ -128,8 +128,10 @@ class ProductControllerTest {
   @WithCustomMockUser
   void getProducts() throws Exception {
 
+
     Page<PagingProductResponse> productResponseDtos = new PageImpl<>(
         Collections.singletonList(PAGING_PRODUCT_RESPONSE), PAGE_DTO.toPageable(), 1);
+
 
     String json = objectMapper.writeValueAsString(productResponseDtos);
 
@@ -146,14 +148,18 @@ class ProductControllerTest {
         getDocumentResponse(),
         requestFields(
             fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지"),
+
             fieldWithPath("size").type(JsonFieldType.NUMBER).description("글의 갯수"),
             fieldWithPath("keyword").type(JsonFieldType.STRING).description("키워드"),
+
             fieldWithPath("sortBy").type(JsonFieldType.STRING).description("정렬기준"),
             fieldWithPath("asc").type(JsonFieldType.BOOLEAN).description("오름/내림차순")
         ),
         responseFields(
+
             fieldWithPath("content[].productName").type(JsonFieldType.STRING).description("상품 이름"),
             fieldWithPath("content[].productPrice").type(JsonFieldType.NUMBER).description("가격"),
+
             fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description(""),
             fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description(""),
             fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description(""),
