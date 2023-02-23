@@ -20,19 +20,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardServiceImpl implements BoardService {
 
   private final BoardRepository boardRepository;
-  private final ProductRepository productRepository;
+
 
   // 게시글 생성
   @Override
   @Transactional
-  public void createBoard(BoardRequestDto boardRequestDto, User user) {
+  public Board createBoard(BoardRequestDto boardRequestDto, User user) {
     Board board = Board.builder()
         .title(boardRequestDto.getTitle())
         .content(boardRequestDto.getContent())
         .subject(boardRequestDto.getSubject())
         .user(user)
         .build();
-    boardRepository.save(board);
+    return boardRepository.save(board);
   }
 
   // 게시글 수정
