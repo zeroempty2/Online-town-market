@@ -6,6 +6,7 @@ import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.interest.entity.Interest;
 import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.review.entity.Review;
+import com.example.townmarket.common.domain.trade.entity.Trade;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.enums.RoleEnum;
 import jakarta.persistence.CascadeType;
@@ -134,6 +135,15 @@ public class User extends TimeStamped {
   @Builder.Default
   @OneToMany(mappedBy = "user")
   private Set<Interest> interests = new LinkedHashSet<>();
+
+  @Builder.Default
+  @OneToMany(mappedBy = "buyer")
+  private Set<Trade> buyer = new LinkedHashSet<>();
+
+  @Builder.Default
+  @OneToMany(mappedBy = "seller")
+  private Set<Trade> seller = new LinkedHashSet<>();
+
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
