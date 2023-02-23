@@ -1,21 +1,27 @@
 package com.example.townmarket.common.domain.product.controller;
 
 
+import static com.example.townmarket.fixture.ProductFixture.PAGING_PRODUCT_RESPONSE;
+import static com.example.townmarket.fixture.ProductFixture.PRODUCT_ID;
+import static com.example.townmarket.fixture.ProductFixture.PRODUCT_REQUEST_DTO;
+import static com.example.townmarket.fixture.ProductFixture.PRODUCT_RESPONSE_DTO;
+import static com.example.townmarket.fixture.UtilFixture.PAGE_DTO;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.townmarket.annotation.WithCustomMockUser;
+import com.example.townmarket.common.domain.product.controller.ProductController;
 import com.example.townmarket.common.domain.product.dto.PagingProductResponse;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
 import com.example.townmarket.common.domain.product.dto.ProductResponseDto;
@@ -68,20 +74,11 @@ class ProductControllerTest {
   @Test
   @WithCustomMockUser
   void addProduct() throws Exception {
-    ProductRequestDto productRequestDto = ProductRequestDto.builder()
-        .productName("productName")
-        .productPrice(1000)
-        .productStatus(ProductStatus.S)
-        .productCategory(ProductCategory.CAR)
-        .productEnum(ProductEnum.나눔)
-        .build();
-
-    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
 
     ResultActions resultActions = mockMvc.perform(
             post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(productRequestDto))
+                .content(objectMapper.writeValueAsBytes(PRODUCT_REQUEST_DTO))
                 .with(csrf()))
         .andExpect(status().isCreated());
 
@@ -95,10 +92,6 @@ class ProductControllerTest {
             fieldWithPath("productCategory").description(JsonFieldType.OBJECT)
                 .description("상품 카테고리"),
             fieldWithPath("productEnum").description(JsonFieldType.OBJECT).description("상품 거래 상태")
-        ),
-        responseFields(
-            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
         )
     ));
   }
@@ -107,19 +100,9 @@ class ProductControllerTest {
   @WithCustomMockUser
   void getProduct() throws Exception {
 
-    Long productId = 1L;
+    given(productService.getProduct(PRODUCT_ID)).willReturn(PRODUCT_RESPONSE_DTO);
 
-    ProductResponseDto productResponseDto = ProductResponseDto.builder()
-        .productId(1L)
-        .productName("productName")
-        .productPrice(1000)
-        .productStatus(ProductStatus.S)
-        .productCategory(ProductCategory.CAR)
-        .productEnum(ProductEnum.나눔)
-        .build();
-    given(productService.getProduct(productId)).willReturn(productResponseDto);
-
-    ResultActions resultActions = mockMvc.perform(get("/products/{productId}", productId)
+    ResultActions resultActions = mockMvc.perform(get("/products/{productId}", PRODUCT_ID)
         .with(csrf()));
 
     resultActions.andExpect(status().isOk());
@@ -144,43 +127,53 @@ class ProductControllerTest {
   @Test
   @WithCustomMockUser
   void getProducts() throws Exception {
-    PageDto pageDto = PageDto.builder().page(1).size(10).isAsc(false).sortBy("createdAt").build();
-    Pageable pageable = pageDto.toPageable();
-    ProductResponseDto productResponseDto = ProductResponseDto.builder()
-        .productId(1L)
-        .productName("productName")
-        .productPrice(1000)
-        .productStatus(ProductStatus.S)
-        .productCategory(ProductCategory.CAR)
-        .productEnum(ProductEnum.나눔)
-        .build();
-
-    PagingProductResponse pagingProductResponse = PagingProductResponse.builder()
-        .productName("상품이름").productPrice(1000L).build();
 
     Page<PagingProductResponse> productResponseDtos = new PageImpl<>(
-        Collections.singletonList(pagingProductResponse), pageable, 1);
+        Collections.singletonList(PAGING_PRODUCT_RESPONSE), PAGE_DTO.toPageable(), 1);
 
-//    given(productService.getProducts(pageable)).willReturn(productResponseDtos);
-    given(productService.getProducts(pageDto)).willReturn(productResponseDtos);
+    String json = objectMapper.writeValueAsString(productResponseDtos);
+
+    given(productService.getProducts(any())).willReturn(productResponseDtos);
 
     ResultActions resultActions = mockMvc.perform(get("/products")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsBytes(pageDto))
+            .content(objectMapper.writeValueAsString(PAGE_DTO))
             .with(csrf()))
         .andExpect(status().isOk());
+
     resultActions.andDo(document("productController/getProducts",
         getDocumentRequest(),
         getDocumentResponse(),
         requestFields(
             fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지"),
             fieldWithPath("size").type(JsonFieldType.NUMBER).description("글의 갯수"),
-            fieldWithPath("sortBy").type(JsonFieldType.STRING).description("정렬 기준"),
-            fieldWithPath("asc").type(JsonFieldType.BOOLEAN).description("올림/내림차순"))
-//        responseFields(
-//            fieldWithPath("productName").type(JsonFieldType.STRING).description("상품이름"),
-//            fieldWithPath("productPrice").type(JsonFieldType.NUMBER).description("상품가격")
-//        )
+            fieldWithPath("keyword").type(JsonFieldType.STRING).description("키워드"),
+            fieldWithPath("sortBy").type(JsonFieldType.STRING).description("정렬기준"),
+            fieldWithPath("asc").type(JsonFieldType.BOOLEAN).description("오름/내림차순")
+        ),
+        responseFields(
+            fieldWithPath("content[].productName").type(JsonFieldType.STRING).description("상품 이름"),
+            fieldWithPath("content[].productPrice").type(JsonFieldType.NUMBER).description("가격"),
+            fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.offset").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("pageable.pageSize").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("pageable.unpaged").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.paged").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("last").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("size").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("number").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("first").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("")
+        )
     ));
 
   }
@@ -235,11 +228,9 @@ class ProductControllerTest {
         .andExpect(status().isNoContent());
     StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
     resultActions.andDo(document("productController/deleteProduct",
-        getDocumentResponse(),
-        responseFields(
-            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
-        )
+        getDocumentRequest(),
+        getDocumentResponse()
+
     ));
   }
 }
