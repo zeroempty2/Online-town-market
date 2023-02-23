@@ -3,12 +3,12 @@ package com.example.townmarket.common.domain.product.dto;
 import com.example.townmarket.common.domain.product.entity.Product.ProductCategory;
 import com.example.townmarket.common.domain.product.entity.Product.ProductEnum;
 import com.example.townmarket.common.domain.product.entity.Product.ProductStatus;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class ProductRequestDto {
 
   private String productName;

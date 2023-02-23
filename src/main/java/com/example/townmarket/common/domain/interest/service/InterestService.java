@@ -3,8 +3,8 @@ package com.example.townmarket.common.domain.interest.service;
 import com.example.townmarket.common.domain.interest.dto.InterestPagingResponseDto;
 import com.example.townmarket.common.domain.interest.dto.InterestRequestDto;
 import com.example.townmarket.common.domain.user.entity.User;
+import com.example.townmarket.common.dto.PageDto;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 public interface InterestService {
 
@@ -12,5 +12,5 @@ public interface InterestService {
 
   void deleteInterest(Long userId, Long productId);
 
-  Page<InterestPagingResponseDto> showMyInterestProducts(User user, Pageable pageable);
+  Page<InterestPagingResponseDto> showMyInterestProducts(User user, PageDto pageDto);
 }

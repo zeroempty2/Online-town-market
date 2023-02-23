@@ -8,4 +8,6 @@ public interface ProductRepositoryQuery {
 
   Page<PagingProductResponse> findAllAndPaging(Pageable pageable);
 
+  Page<PagingProductResponse> searchByKeyword(String keyword, Pageable pageable);
+
 }
