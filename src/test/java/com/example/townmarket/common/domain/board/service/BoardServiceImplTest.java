@@ -1,8 +1,10 @@
 package com.example.townmarket.common.domain.board.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -12,7 +14,6 @@ import com.example.townmarket.common.domain.board.dto.PagingBoardResponse;
 import com.example.townmarket.common.domain.board.entity.Board;
 import com.example.townmarket.common.domain.board.repository.BoardRepository;
 import com.example.townmarket.common.domain.user.entity.User;
-import com.example.townmarket.common.dto.PageDto;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,15 +39,25 @@ class BoardServiceImplTest {
     BoardRequestDto requestDto = BoardRequestDto.builder()
         .title("title1")
         .content("content1")
+        .subject(Board.BoardSubject.공지사항)
         .build();
 
     User user = mock(User.class);
 
-    //when
-    boardService.createBoard(requestDto, user);
+    Board board = Board.builder()
+        .title(requestDto.getTitle())
+        .content(requestDto.getContent())
+        .subject(Board.BoardSubject.공지사항)
+        .build();
 
-    //then
-    verify(boardRepository).save(isA(Board.class));
+    given(boardRepository.save(any())).willReturn(board);
+
+    //when
+    Board savedBoard = boardService.createBoard(requestDto, user);
+
+    // then
+    assertThat(savedBoard.getTitle()).isEqualTo(requestDto.getTitle());
+    assertThat(savedBoard.getContent()).isEqualTo(requestDto.getContent());
 
   }
 
@@ -55,17 +66,29 @@ class BoardServiceImplTest {
   void updateBoard() {
     // given
     User user = mock(User.class);
-    Board board = mock(Board.class);
-    BoardRequestDto boardRequestDto = mock(BoardRequestDto.class);
+    Board board = Board.builder()
+        .title("test-title")
+        .content("test-content")
+        .subject(Board.BoardSubject.동네소식)
+        .user(user)
+        .build();
+
+    BoardRequestDto boardRequestDto = BoardRequestDto.builder()
+        .title("after-title")
+        .content("after-content")
+        .subject(Board.BoardSubject.공지사항)
+        .build();
 
     when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
-    when(Optional.of(board).get().checkBoardWriter(user)).thenReturn(true);
 
     // when
     boardService.updateBoard(board.getId(), boardRequestDto, user);
 
     // then
-    verify(board).update(boardRequestDto);
+    assertThat(board.getTitle()).isEqualTo(boardRequestDto.getTitle());
+    assertThat(board.getContent()).isEqualTo(boardRequestDto.getContent());
+    assertThat(board.getSubject()).isEqualTo(boardRequestDto.getSubject());
+
   }
 
   @Test
@@ -73,9 +96,7 @@ class BoardServiceImplTest {
   void getBoards() {
     // given
     Pageable pageable = mock(Pageable.class);
-    PageDto pageDto = mock(PageDto.class);
 
-    when(pageDto.toPageable()).thenReturn(pageable);
     when(boardRepository.findAll(pageable)).thenReturn(Page.empty());
 
     // when
@@ -88,9 +109,12 @@ class BoardServiceImplTest {
   @Test
   @DisplayName("게시글 단건 조회 테스트")
   void getBoard() {
+
     // given
-    BoardRequestDto boardRequest = mock(BoardRequestDto.class);
-    Board board = mock(Board.class);
+    Board board = Board.builder()
+        .title("test-title")
+        .content("test-content")
+        .build();
 
     when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
 
@@ -98,7 +122,8 @@ class BoardServiceImplTest {
     BoardResponseDto boardResponse = boardService.getBoard(board.getId());
 
     // then
-    assertThat(boardResponse.getContent()).isEqualTo(boardRequest.getContent());
+    assertThat(boardResponse.getContent()).isEqualTo(board.getContent());
+    assertThat(boardResponse.getTitle()).isEqualTo(board.getTitle());
   }
 
   @Test
@@ -112,10 +137,10 @@ class BoardServiceImplTest {
     when(Optional.of(board).get().checkBoardWriter(user)).thenReturn(true);
 
     //when
-    boardService.deleteBoard(board.getId(), user);
+    boardService.deleteBoard(board.getId(),user);
 
     //then
-    verify(boardRepository).deleteById(board.getId());
+    verify(boardRepository, times(1)).deleteById(board.getId());
 
   }
 }

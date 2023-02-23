@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface BoardService {
 
-  void createBoard(BoardRequestDto boardRequestDto, User user);
+  Board createBoard(BoardRequestDto boardRequestDto, User user);
 
   void updateBoard(Long boardId, BoardRequestDto boardRequestDto, User user);
 
