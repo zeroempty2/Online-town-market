@@ -1,16 +1,13 @@
 package com.example.townmarket.common.domain.interest.service;
 
 import com.example.townmarket.common.domain.interest.dto.InterestPagingResponseDto;
-import com.example.townmarket.common.domain.interest.dto.InterestRequestDto;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.dto.PageDto;
 import org.springframework.data.domain.Page;
 
 public interface InterestService {
 
-  void addInterest(User user, InterestRequestDto interestRequestDto);
-
-  void deleteInterest(Long userId, Long productId);
+  void addInterest(User user, Long product);
 
   Page<InterestPagingResponseDto> showMyInterestProducts(User user, PageDto pageDto);
 }

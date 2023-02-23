@@ -1,11 +1,9 @@
 package com.example.townmarket.common.domain.interest.controller;
 
 import static com.example.townmarket.common.domain.interest.controller.InterestController.INTEREST_URI_API;
-import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_DELETE;
 import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.townmarket.common.domain.interest.dto.InterestPagingResponseDto;
-import com.example.townmarket.common.domain.interest.dto.InterestRequestDto;
 import com.example.townmarket.common.domain.interest.service.InterestService;
 import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.dto.StatusResponse;
@@ -16,12 +14,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,21 +30,14 @@ public class InterestController {
   private final InterestService interestService;
   private final SetHttpHeaders httpHeaders;
 
-  @PostMapping
+  @PostMapping("/{productId}")
   public ResponseEntity<StatusResponse> addInterest(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @RequestBody InterestRequestDto interestRequestDto) {
-    interestService.addInterest(userDetails.getUser(), interestRequestDto);
+      @PathVariable Long productId) {
+    interestService.addInterest(userDetails.getUser(), productId);
     return RESPONSE_OK;
   }
 
-  @DeleteMapping("/{interestId}")
-  public ResponseEntity<StatusResponse> deleteInterest(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @PathVariable Long interestId) {
-    interestService.deleteInterest(userDetails.getUserId(), interestId);
-    return RESPONSE_DELETE;
-  }
 
   @GetMapping("/list")
   @ResponseBody
