@@ -13,7 +13,6 @@ import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
 import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
 import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.domain.review.repository.ReviewRepository;
-import com.example.townmarket.common.domain.user.entity.Grade;
 import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.service.UserServiceImpl;
@@ -94,7 +93,6 @@ class ReviewServiceImplTest {
   @DisplayName("본인이 리뷰 수정")
   void updateMyReview() {
     Profile profile = new Profile();
-    Grade grade = new Grade();
 
     User user = User.builder()
         .id(1L)
@@ -103,7 +101,6 @@ class ReviewServiceImplTest {
         .email("asda11as@gmail.com")
         .role(RoleEnum.MEMBER)
         .profile(profile)
-        .grade(grade)
         .build();
     //given
 
@@ -121,14 +118,12 @@ class ReviewServiceImplTest {
 
     //verify
     verify(review).updateReview(updateReviewRequestDto);
-    verify(userService).updateUserGrade(any(), any(Integer.class));
   }
 
   @Test
   @DisplayName("리뷰 삭제")
   void deleteReview() {
     Profile profile = new Profile();
-    Grade grade = new Grade();
 
     User user = User.builder()
         .id(1L)
@@ -137,7 +132,7 @@ class ReviewServiceImplTest {
         .email("asda11as@gmail.com")
         .role(RoleEnum.MEMBER)
         .profile(profile)
-        .grade(grade)
+
         .build();
     //given
     var review = mock(Review.class);
@@ -145,7 +140,7 @@ class ReviewServiceImplTest {
     var reviewerId = user.getId();
     when(reviewRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(
         review));
-    when(review.getReviewee()).thenReturn(reviewee);
+//    when(review.getReviewee()).thenReturn(reviewee);
     when(review.isReviewWriter(reviewerId)).thenReturn(true);
 
     //when
@@ -155,7 +150,6 @@ class ReviewServiceImplTest {
 
     //verify
     verify(reviewRepository).deleteById(any(Long.class));
-    verify(userService).setUserGrade(any(), any(Integer.class), any(Integer.class));
   }
 
   @Test

@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface ReviewRepositoryQuery {
 
+  boolean existsReviewId(Long reviewId);
+
   ReviewResponseDto searchByReviewId(Long reviewId);
 
   Page<ReviewResponseDto> searchByUserAndPaging(User reviewer, Pageable pageable);

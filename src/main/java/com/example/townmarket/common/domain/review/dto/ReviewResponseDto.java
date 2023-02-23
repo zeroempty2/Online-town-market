@@ -1,20 +1,22 @@
 package com.example.townmarket.common.domain.review.dto;
 
-import com.example.townmarket.common.domain.user.entity.Profile;
-
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 @Builder
 public class ReviewResponseDto {
 
-  private int grade;
+  private Long reviewId;
   private String reviewContents;
-  private Profile reviewerProfile;
-  private Profile revieweeProfile;
   private String productName;
+  private int grade;
 
+  public ReviewResponseDto(Long reviewId, String reviewContents, String productName,
+      int grade) {
+    this.reviewId = reviewId;
+    this.reviewContents = reviewContents;
+    this.productName = productName;
+    this.grade = grade;
+  }
 }

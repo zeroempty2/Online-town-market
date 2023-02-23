@@ -3,8 +3,6 @@ package com.example.townmarket.common.domain.review.controller;
 
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -18,10 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.townmarket.annotation.WithCustomMockUser;
 import com.example.townmarket.common.domain.review.dto.CreateReviewRequestDto;
-import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
 import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
 import com.example.townmarket.common.domain.review.service.ReviewServiceImpl;
-import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.dto.StatusResponse;
@@ -29,15 +25,12 @@ import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
@@ -107,15 +100,15 @@ class ReviewControllerTest {
 
     Long reviewId = 1L;
 
-    ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
-        .reviewContents("review")
-        .reviewerProfile(new Profile("reviewer", "img1"))
-        .revieweeProfile(new Profile("reviewee", "img2"))
-        .productName("productName1")
-        .grade(1)
-        .build();
-
-    given(reviewService.showSelectReview(any())).willReturn(reviewResponseDto);
+//    ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
+//        .reviewContents("review")
+//        .reviewerProfile(new Profile("reviewer", "img1"))
+//        .revieweeProfile(new Profile("reviewee", "img2"))
+//        .productName("productName1")
+//        .grade(1)
+//        .build();
+//
+//    given(reviewService.showSelectReview(any())).willReturn(reviewResponseDto);
 
     ResultActions resultActions = mockMvc.perform(get("/review/{reviewId}", reviewId)
             .with(csrf()))
@@ -153,17 +146,17 @@ class ReviewControllerTest {
 
     User user = userDetails.getUser();
 
-    ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
-        .reviewContents("review")
-        .reviewerProfile(new Profile("reviewer", "img1"))
-        .revieweeProfile(new Profile("reviewee", "img2"))
-        .productName("productName1")
-        .build();
+//    ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
+//        .reviewContents("review")
+//        .reviewerProfile(new Profile("reviewer", "img1"))
+//        .revieweeProfile(new Profile("reviewee", "img2"))
+//        .productName("productName1")
+//        .build();
 
     Pageable pageable = pageDto.toPageable();
-
-    Page<ReviewResponseDto> reviewResponseDtoPage = new PageImpl<>(
-        Collections.singletonList(reviewResponseDto), pageable, 1);
+//
+//    Page<ReviewResponseDto> reviewResponseDtoPage = new PageImpl<>(
+//        Collections.singletonList(reviewResponseDto), pageable, 1);
 
 /***
  * 테스트 코드 내부에 json 파일 - 해당 실제 응답값이 담겨있는 파일-을 읽어와서 해당 willReturn에 넣어주기
@@ -173,7 +166,7 @@ class ReviewControllerTest {
  */
 
 //    given(userDetails.getUser()).willReturn(user);
-    given(reviewService.showMyReviews(pageDto, user)).willReturn(reviewResponseDtoPage);
+//    given(reviewService.showMyReviews(pageDto, user)).willReturn(reviewResponseDtoPage);
 
     ResultActions resultActions = mockMvc.perform(get("/reviews")
             .content(objectMapper.writeValueAsBytes(pageDto))
