@@ -18,18 +18,19 @@ public class ChatMessageServiceImpl implements ChatMessageService {
   /**
    * 채팅 생성
    */
+  @Override
   public void createChat(ChatMessageDto message) {
 
     ChatRoom room = roomRepository.findById(message.getRoomId()).orElseThrow(
         () -> new IllegalArgumentException("채팅방이 존재하지 않습니다.")
     );
+    ChatMessage chatMessage = messageRepository.findAllByOrderBySendDateMessageAsc();
 
     if (message.getProductId() != room.getProduct().getId()) {
       throw new IllegalArgumentException("해당 상품의 채팅방이 존재하지 않습니다.");
     } else {
-      ChatMessage messages = new ChatMessage(message.getSender(), message.getReceiver(),
-          message.getMessage(), room);
-      messageRepository.save(messages);
+      chatMessage = new ChatMessage(message.getSender(), message.getReceiver(), message.getMessage(), room);
+      messageRepository.save(chatMessage);
     }
   }
 }

@@ -21,7 +21,7 @@ public class ChatRoomDto {
 
   private ProductEnum productEnum;
 
-  private Set<ChatMessageDto> message;
+  private Set<ChatMessageDto> messageList;
 
   public ChatRoomDto(ChatRoom room) {
     this.productPrice = room.getProduct().getProductPrice();
@@ -31,6 +31,6 @@ public class ChatRoomDto {
     for (ChatMessage messages : room.getMessage()) {
       messageList.add(new ChatMessageDto(messages));
     }
-    this.message = messageList;
+    this.messageList = messageList;
   }
 }

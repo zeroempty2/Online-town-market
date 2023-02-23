@@ -52,9 +52,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     User user = userRepository.findByUsername(username).orElseThrow(
         () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
     );
-    ChatRoom room = roomRepository.findById(roomId).orElseThrow(
-        () -> new IllegalArgumentException("이미 삭제된 채팅방 입니다.")
-    );
+    ChatRoom room = roomRepository.findAllByOrderByIdDesc();
+
+    if (!roomId.equals(room.getId())) {
+      throw new RuntimeException("채팅방이 존재하지 않습니다.");
+    }
 
     if (user.checkAuthorization(user)) {
       return new ChatRoomDto(room);
