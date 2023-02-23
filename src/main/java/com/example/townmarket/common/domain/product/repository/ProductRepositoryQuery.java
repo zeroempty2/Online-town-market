@@ -10,4 +10,5 @@ public interface ProductRepositoryQuery {
 
   Page<PagingProductResponse> searchByKeyword(String keyword, Pageable pageable);
 
+
 }

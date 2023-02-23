@@ -5,6 +5,7 @@ import com.example.townmarket.common.domain.board.dto.BoardRequestDto;
 import com.example.townmarket.common.domain.comment.entity.Comment;
 import com.example.townmarket.common.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,6 +13,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.LinkedHashSet;
@@ -30,6 +32,7 @@ public class Board extends TimeStamped {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "board_id")
   private Long id;
 
   private String title;
@@ -59,9 +62,10 @@ public class Board extends TimeStamped {
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   private Set<Comment> comments = new LinkedHashSet<>();
 
   /**
