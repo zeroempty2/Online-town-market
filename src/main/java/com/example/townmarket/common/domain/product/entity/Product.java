@@ -3,6 +3,7 @@ package com.example.townmarket.common.domain.product.entity;
 import com.example.townmarket.common.TimeStamped;
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
+import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.domain.trade.entity.Trade;
 import com.example.townmarket.common.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
@@ -54,8 +55,6 @@ public class Product extends TimeStamped {
   @Enumerated(EnumType.STRING)
   private ProductCategory productCategory;
   @Column
-  private Long interestCount;
-  @Column
   private boolean block;
 
   public void updateProductEnum() {
@@ -87,7 +86,6 @@ public class Product extends TimeStamped {
     this.productEnum = productEnum;
     this.productCategory = productCategory;
     this.user = user;
-    this.interestCount = 0L;
   }
 
   @Builder
@@ -107,6 +105,10 @@ public class Product extends TimeStamped {
 
   @OneToOne(mappedBy = "product")
   private Trade trade;
+
+  @OneToOne(fetch = FetchType.LAZY, mappedBy = "product")
+  @JoinColumn(name = "review_id")
+  private Review review;
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -134,14 +136,6 @@ public class Product extends TimeStamped {
 
   public boolean checkProductEnum(ProductEnum productEnum) {
     return productEnum.equals(ProductEnum.판매완료);
-  }
-
-  public void plusInterest() {
-    this.interestCount++;
-  }
-
-  public void minusInterest() {
-    this.interestCount--;
   }
 
   public void setBlock() {

@@ -10,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Comment extends TimeStamped {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "comment_id")
   private Long id;
 
   @Column(columnDefinition = "TEXT", nullable = false)
@@ -48,9 +50,11 @@ public class Comment extends TimeStamped {
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "writer_id")
   private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "board_id")
   private Board board;
 
   /**

@@ -56,6 +56,7 @@ public class ProductRepositoryQueryImpl implements ProductRepositoryQuery {
     return PageableExecutionUtils.getPage(pagingProductResponse, pageable, () -> totalSize);
   }
 
+
   private JPAQuery<Long> countQuery() {
     return jpaQueryFactory.select(Wildcard.count)
         .from(product);
