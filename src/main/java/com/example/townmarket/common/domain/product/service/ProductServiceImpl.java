@@ -6,9 +6,9 @@ import com.example.townmarket.common.domain.product.dto.ProductResponseDto;
 import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
 import com.example.townmarket.common.domain.user.entity.User;
+import com.example.townmarket.common.dto.PageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,10 +50,10 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<PagingProductResponse> getProducts(Pageable pageable) {
+  public Page<PagingProductResponse> getProducts(PageDto pageDto) {
 //    Page<Product> products = productRepository.findAll(pageDto.toPageable());
 //    return products.map(PagingProductResponse::new);
-    return productRepository.findAllAndPaging(pageable);
+    return productRepository.findAllAndPaging(pageDto.toPageable());
   }
 
   @Override
@@ -89,6 +89,11 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public void setBlock(Long productId) {
     findProductById(productId).setBlock();
+  }
+
+  @Override
+  public Page<PagingProductResponse> searchProductsByKeyword(PageDto pageDto) {
+    return productRepository.searchByKeyword(pageDto.getKeyword(), pageDto.toPageable());
   }
 
   private void isBlock(Product product) {

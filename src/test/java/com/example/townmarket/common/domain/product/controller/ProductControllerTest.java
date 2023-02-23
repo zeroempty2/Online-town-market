@@ -161,7 +161,8 @@ class ProductControllerTest {
     Page<PagingProductResponse> productResponseDtos = new PageImpl<>(
         Collections.singletonList(pagingProductResponse), pageable, 1);
 
-    given(productService.getProducts(pageable)).willReturn(productResponseDtos);
+//    given(productService.getProducts(pageable)).willReturn(productResponseDtos);
+    given(productService.getProducts(pageDto)).willReturn(productResponseDtos);
 
     ResultActions resultActions = mockMvc.perform(get("/products")
             .contentType(MediaType.APPLICATION_JSON)

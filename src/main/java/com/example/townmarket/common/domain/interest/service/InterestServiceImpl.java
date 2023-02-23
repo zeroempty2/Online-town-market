@@ -6,9 +6,9 @@ import com.example.townmarket.common.domain.interest.entity.Interest;
 import com.example.townmarket.common.domain.interest.repository.InterestRepository;
 import com.example.townmarket.common.domain.product.service.ProductServiceImpl;
 import com.example.townmarket.common.domain.user.entity.User;
+import com.example.townmarket.common.dto.PageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +50,7 @@ public class InterestServiceImpl implements InterestService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<InterestPagingResponseDto> showMyInterestProducts(User user, Pageable pageable) {
-    return interestRepository.searchInterestIndexByUser(user, pageable);
+  public Page<InterestPagingResponseDto> showMyInterestProducts(User user, PageDto pageDto) {
+    return interestRepository.searchInterestIndexByUser(user, pageDto.toPageable());
   }
 }

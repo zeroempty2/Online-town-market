@@ -38,6 +38,24 @@ public class ProductRepositoryQueryImpl implements ProductRepositoryQuery {
     return PageableExecutionUtils.getPage(pagingProductResponse, pageable, () -> totalSize);
   }
 
+  @Override
+  public Page<PagingProductResponse> searchByKeyword(String keyword, Pageable pageable) {
+    List<PagingProductResponse> pagingProductResponse = jpaQueryFactory
+        .select(Projections.constructor(PagingProductResponse.class,
+            product.productName
+            , product.productPrice))
+        .from(product)
+        .where(product.block.eq(false), product.productName.contains(keyword))
+        .setHint("org.hibernate.readOnly", true)
+        .orderBy(product.createdAt.desc())
+        .limit(pageable.getPageSize())
+        .offset(pageable.getOffset())
+        .fetch();
+    long totalSize = countQuery().fetch().get(0);
+
+    return PageableExecutionUtils.getPage(pagingProductResponse, pageable, () -> totalSize);
+  }
+
   private JPAQuery<Long> countQuery() {
     return jpaQueryFactory.select(Wildcard.count)
         .from(product);
