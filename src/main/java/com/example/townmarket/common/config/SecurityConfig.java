@@ -92,6 +92,7 @@ public class SecurityConfig {
         .requestMatchers("/admin/users").hasAnyRole("TOP_MANAGER", "MIDDLE_MANAGER")
         .requestMatchers("/interest/**").hasAnyRole("MEMBER")
         .requestMatchers("/report/**").hasAnyRole("MEMBER")
+        .requestMatchers("/transaction/**").hasAnyRole("MEMBER")
         .anyRequest().authenticated()
         .and().addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService, adminDetailsService),
             UsernamePasswordAuthenticationFilter.class);
