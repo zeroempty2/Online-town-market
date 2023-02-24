@@ -23,10 +23,6 @@ include::{snippets}/reviewController/createReview/http-response.adoc[]
 include::{snippets}/reviewController/createReview/request-body.adoc[]
 include::{snippets}/reviewController/createReview/request-fields.adoc[]
 
-** RESPONSE - BODY
-
-include::{snippets}/reviewController/createReview/response-body.adoc[]
-include::{snippets}/reviewController/createReview/response-fields.adoc[]
 
 ---
 ---
@@ -44,12 +40,7 @@ include::{snippets}/reviewController/deleteMyReview/http-response.adoc[]
 ** REQUEST - BODY
 
 include::{snippets}/reviewController/deleteMyReview/request-body.adoc[]
-// include::{snippets}/reviewController/deleteMyReview/request-fields.adoc[]
 
-** RESPONSE - BODY
-
-include::{snippets}/reviewController/deleteMyReview/response-body.adoc[]
-include::{snippets}/reviewController/deleteMyReview/response-fields.adoc[]
 
 ---
 ---
@@ -72,7 +63,7 @@ include::{snippets}/reviewController/showMyReviews/request-fields.adoc[]
 ** RESPONSE - BODY
 
 include::{snippets}/reviewController/showMyReviews/response-body.adoc[]
-// include::{snippets}/reviewController/showMyReviews/response-fields.adoc[]
+include::{snippets}/reviewController/showMyReviews/response-fields.adoc[]
 
 ---
 ---
@@ -94,7 +85,7 @@ include::{snippets}/reviewController/showSelectReview/request-body.adoc[]
 ** RESPONSE - BODY
 
 include::{snippets}/reviewController/showSelectReview/response-body.adoc[]
-// include::{snippets}/reviewController/showMyReviews/response-fields.adoc[]
+include::{snippets}/reviewController/showMyReviews/response-fields.adoc[]
 
 ---
 ---

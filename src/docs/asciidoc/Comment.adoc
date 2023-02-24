@@ -23,10 +23,6 @@ include::{snippets}/commentController/createComment/http-response.adoc[]
 include::{snippets}/commentController/createComment/request-body.adoc[]
 include::{snippets}/commentController/createComment/request-fields.adoc[]
 
-** RESPONSE - BODY
-
-include::{snippets}/commentController/createComment/response-body.adoc[]
-include::{snippets}/commentController/createComment/response-fields.adoc[]
 
 ---
 ---
@@ -44,23 +40,12 @@ include::{snippets}/commentController/deleteComment/http-response.adoc[]
 ** REQUEST - BODY
 
 include::{snippets}/commentController/deleteComment/request-body.adoc[]
-// include::{snippets}/commentController/deleteComment/request-fields.adoc[]
-
-** RESPONSE - BODY
-
-include::{snippets}/commentController/deleteComment/response-body.adoc[]
-include::{snippets}/commentController/deleteComment/response-fields.adoc[]
-
-** RESPONSE - BODY
-
-include::{snippets}/reviewController/deleteMyReview/response-body.adoc[]
-include::{snippets}/reviewController/deleteMyReview/response-fields.adoc[]
 
 ---
 ---
 
 
-*updtateComment*
+*updateComment*
 ** REQUEST
 
 include::{snippets}/commentController/updateComment/http-request.adoc[]

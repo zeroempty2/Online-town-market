@@ -23,10 +23,6 @@ include::{snippets}/boardController/createBoard/http-response.adoc[]
 include::{snippets}/boardController/createBoard/request-body.adoc[]
 include::{snippets}/boardController/createBoard/request-fields.adoc[]
 
-** RESPONSE - BODY
-
-include::{snippets}/boardController/createBoard/response-body.adoc[]
-include::{snippets}/boardController/createBoard/response-fields.adoc[]
 
 ---
 ---
@@ -46,10 +42,6 @@ include::{snippets}/boardController/deleteBoard/http-response.adoc[]
 include::{snippets}/boardController/deleteBoard/request-body.adoc[]
 // include::{snippets}/boardController/deleteBoard/request-fields.adoc[]
 
-** RESPONSE - BODY
-
-include::{snippets}/boardController/deleteBoard/response-body.adoc[]
-include::{snippets}/boardController/deleteBoard/response-fields.adoc[]
 
 ---
 ---
@@ -73,7 +65,7 @@ include::{snippets}/boardController/getBoards/request-fields.adoc[]
 ** RESPONSE - BODY
 
 include::{snippets}/boardController/getBoards/response-body.adoc[]
-// include::{snippets}/boardController/getBoards/response-fields.adoc[]
+include::{snippets}/boardController/getBoards/response-fields.adoc[]
 
 ---
 ---
@@ -86,11 +78,6 @@ include::{snippets}/boardController/getBoard/http-request.adoc[]
 ** RESPONSE
 
 include::{snippets}/boardController/getBoard/http-response.adoc[]
-
-** REQUEST - BODY
-
-include::{snippets}/boardController/getBoard/request-body.adoc[]
-// include::{snippets}/boardController/deleteBoard/request-fields.adoc[]
 
 ** RESPONSE - BODY
 
