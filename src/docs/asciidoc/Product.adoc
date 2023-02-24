@@ -23,10 +23,7 @@ include::{snippets}/productController/addProduct/http-response.adoc[]
 include::{snippets}/productController/addProduct/request-body.adoc[]
 include::{snippets}/productController/addProduct/request-fields.adoc[]
 
-** RESPONSE - BODY
 
-include::{snippets}/productController/addProduct/response-body.adoc[]
-include::{snippets}/productController/addProduct/response-fields.adoc[]
 
 ---
 ---
@@ -44,12 +41,7 @@ include::{snippets}/productController/deleteProduct/http-response.adoc[]
 ** REQUEST - BODY
 
 include::{snippets}/productController/deleteProduct/request-body.adoc[]
-// include::{snippets}/productController/deleteProduct/request-fields.adoc[]
 
-** RESPONSE - BODY
-
-include::{snippets}/productController/deleteProduct/response-body.adoc[]
-include::{snippets}/productController/deleteProduct/response-fields.adoc[]
 
 ---
 ---
@@ -94,7 +86,7 @@ include::{snippets}/productController/getProducts/request-fields.adoc[]
 ** RESPONSE - BODY
 
 include::{snippets}/productController/getProducts/response-body.adoc[]
-// include::{snippets}/productController/getProducts/response-fields.adoc[]
+include::{snippets}/productController/getProducts/response-fields.adoc[]
 
 ---
 ---

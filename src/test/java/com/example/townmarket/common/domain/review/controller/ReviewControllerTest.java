@@ -1,8 +1,17 @@
 package com.example.townmarket.common.domain.review.controller;
 
 
+import static com.example.townmarket.fixture.ReviewFixture.CREATE_REVIEW_REQUEST_DTO;
+import static com.example.townmarket.fixture.ReviewFixture.REVIEW_ID;
+import static com.example.townmarket.fixture.ReviewFixture.REVIEW_RESPONSE_DTO;
+import static com.example.townmarket.fixture.ReviewFixture.REVIEW_RESPONSE_DTO_PAGE;
+import static com.example.townmarket.fixture.ReviewFixture.UPDATE_REVIEW_REQUEST_DTO;
+import static com.example.townmarket.fixture.UserFixture.USER1;
+import static com.example.townmarket.fixture.UtilFixture.PAGE_DTO;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -16,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.townmarket.annotation.WithCustomMockUser;
 import com.example.townmarket.common.domain.review.dto.CreateReviewRequestDto;
+import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
 import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
 import com.example.townmarket.common.domain.review.service.ReviewServiceImpl;
 import com.example.townmarket.common.domain.user.entity.User;
@@ -62,18 +72,9 @@ class ReviewControllerTest {
   @Test
   @WithCustomMockUser
   void createReview() throws Exception {
-    CreateReviewRequestDto createReviewRequestDto = CreateReviewRequestDto.builder()
-        .revieweeId(1L)
-        .grade(1)
-        .productId(1L)
-        .reviewContents("reviewContents")
-        .build();
-
-    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS);
-
     ResultActions resultActions = mockMvc.perform(post("/review")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsBytes(createReviewRequestDto))
+            .content(objectMapper.writeValueAsBytes(CREATE_REVIEW_REQUEST_DTO))
             .accept(MediaType.APPLICATION_JSON)
             .with(csrf()))
         .andExpect(status().isCreated());
@@ -86,10 +87,6 @@ class ReviewControllerTest {
             fieldWithPath("grade").type(JsonFieldType.NUMBER).description("평가_점수"),
             fieldWithPath("productId").type(JsonFieldType.NUMBER).description("상품_ID"),
             fieldWithPath("reviewContents").type(JsonFieldType.STRING).description("리뷰_내용")
-        ),
-        responseFields(
-            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-            fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
         )
     ));
   }
@@ -98,19 +95,9 @@ class ReviewControllerTest {
   @WithCustomMockUser
   void showSelectReview() throws Exception {
 
-    Long reviewId = 1L;
+    given(reviewService.showSelectReview(any())).willReturn(REVIEW_RESPONSE_DTO);
 
-//    ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
-//        .reviewContents("review")
-//        .reviewerProfile(new Profile("reviewer", "img1"))
-//        .revieweeProfile(new Profile("reviewee", "img2"))
-//        .productName("productName1")
-//        .grade(1)
-//        .build();
-//
-//    given(reviewService.showSelectReview(any())).willReturn(reviewResponseDto);
-
-    ResultActions resultActions = mockMvc.perform(get("/review/{reviewId}", reviewId)
+    ResultActions resultActions = mockMvc.perform(get("/review/{reviewId}", REVIEW_ID)
             .with(csrf()))
         .andExpect(status().isOk());
 
@@ -118,19 +105,13 @@ class ReviewControllerTest {
         getDocumentRequest(),
         getDocumentResponse(),
         responseFields(
-            fieldWithPath("reviewContents").type(JsonFieldType.STRING).description("리뷰내용"),
-//            fieldWithPath("reviewerProfile").type(JsonFieldType.OBJECT).description("리뷰작성자_프로필"),
-            fieldWithPath("reviewerProfile.nickName").type(JsonFieldType.STRING)
-                .description("리뷰작성자_프로필_닉네임"),
-            fieldWithPath("reviewerProfile.img_url").type(JsonFieldType.STRING)
+            fieldWithPath("reviewId").type(JsonFieldType.NUMBER)
+                .description("리뷰 Id"),
+            fieldWithPath("productName").type(JsonFieldType.STRING).description("상품 이름"),
+            fieldWithPath("reviewContents").type(JsonFieldType.STRING)
                 .description("리뷰작성자_프로필_이미지"),
-//            fieldWithPath("revieweeProfile").type(JsonFieldType.OBJECT).description("판매자_프로필"),
-            fieldWithPath("revieweeProfile.nickName").type(JsonFieldType.STRING)
-                .description("판매자프로필_닉네임"),
-            fieldWithPath("revieweeProfile.img_url").type(JsonFieldType.STRING)
-                .description("판매자프로필_이미지"),
-            fieldWithPath("productName").type(JsonFieldType.STRING).description("상품이름"),
-            fieldWithPath("grade").type(JsonFieldType.NUMBER).description("별점")
+            fieldWithPath("grade").type(JsonFieldType.NUMBER)
+                .description("평점")
         )
     ));
   }
@@ -138,25 +119,6 @@ class ReviewControllerTest {
   @Test
   @WithCustomMockUser
   void showMyReviews() throws Exception {
-    PageDto pageDto = PageDto.builder().page(1).size(10).isAsc(false).sortBy("productName").build();
-
-    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
-        .getAuthentication()
-        .getPrincipal();
-
-    User user = userDetails.getUser();
-
-//    ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
-//        .reviewContents("review")
-//        .reviewerProfile(new Profile("reviewer", "img1"))
-//        .revieweeProfile(new Profile("reviewee", "img2"))
-//        .productName("productName1")
-//        .build();
-
-    Pageable pageable = pageDto.toPageable();
-//
-//    Page<ReviewResponseDto> reviewResponseDtoPage = new PageImpl<>(
-//        Collections.singletonList(reviewResponseDto), pageable, 1);
 
 /***
  * 테스트 코드 내부에 json 파일 - 해당 실제 응답값이 담겨있는 파일-을 읽어와서 해당 willReturn에 넣어주기
@@ -165,11 +127,12 @@ class ReviewControllerTest {
  * 파일을 객체 클래스로? 아니면 해당 json 응답값을 string으로 변환 후 응답값에 넣어주기
  */
 
-//    given(userDetails.getUser()).willReturn(user);
-//    given(reviewService.showMyReviews(pageDto, user)).willReturn(reviewResponseDtoPage);
+    String json = objectMapper.writeValueAsString(REVIEW_RESPONSE_DTO_PAGE);
+    given(reviewService.showMyReviews(any(),any())).willReturn(REVIEW_RESPONSE_DTO_PAGE);
 
-    ResultActions resultActions = mockMvc.perform(get("/reviews")
-            .content(objectMapper.writeValueAsBytes(pageDto))
+
+    ResultActions resultActions = mockMvc.perform(get("/review/my")
+            .content(objectMapper.writeValueAsBytes(PAGE_DTO))
             .with(csrf()))
         .andExpect(status().isOk());
 
@@ -179,46 +142,55 @@ class ReviewControllerTest {
         requestFields(
             fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지"),
             fieldWithPath("size").type(JsonFieldType.NUMBER).description("글의 갯수"),
+            fieldWithPath("keyword").type(JsonFieldType.STRING).description("키워드"),
             fieldWithPath("sortBy").type(JsonFieldType.STRING).description("리뷰내용"),
             fieldWithPath("asc").type(JsonFieldType.BOOLEAN).description("리뷰내용")
-        )
-//        responseFields(
-//            fieldWithPath("reviewContents").type(JsonFieldType.STRING).description("리뷰내용"),
-//            fieldWithPath("reviewerProfile").type(JsonFieldType.OBJECT).description("리뷰작성자_프로필"),
-//            fieldWithPath("reviewerProfile.nickName").type(JsonFieldType.STRING).description("리뷰작성자_프로필_닉네임"),
-//            fieldWithPath("reviewerProfile.img_url").type(JsonFieldType.STRING).description("리뷰작성자_프로필_이미지"),
-//            fieldWithPath("revieweeProfile").type(JsonFieldType.OBJECT).description("판매자_프로필"),
-//            fieldWithPath("revieweeProfile.nickName").type(JsonFieldType.STRING).description("판매자프로필_닉네임"),
-//            fieldWithPath("revieweeProfile.img_url").type(JsonFieldType.STRING).description("판매자프로필_이미지"),
-//            fieldWithPath("productName").type(JsonFieldType.STRING).description("상품이름"))
-    ));
+        ),
+        responseFields(
+
+            fieldWithPath("content[].reviewId").type(JsonFieldType.NUMBER).description("리뷰 id"),
+            fieldWithPath("content[].productName").type(JsonFieldType.STRING).description("상품이름"),
+            fieldWithPath("content[].reviewContents").type(JsonFieldType.STRING).description("리뷰 내용"),
+            fieldWithPath("content[].grade").type(JsonFieldType.NUMBER).description("평점"),
+
+            fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.offset").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("pageable.pageSize").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("pageable.unpaged").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.paged").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("last").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("size").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("number").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("first").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("")
+        )));
   }
 
 
   @Test
   @WithCustomMockUser
   void updateMyReview() throws Exception {
-    Long reviewId = 1L;
-    UpdateReviewRequestDto updateReviewRequestDto = UpdateReviewRequestDto.builder()
-        .reviewContents("reviewContents")
-        .grade(1).build();
 
-//    given(reviewService.updateMyReview(reviewId,any(),updateReviewRequestDto)).willReturn()
-
-    ResultActions resultActions = mockMvc.perform(patch("/reviews/update/{reviewId}", reviewId)
+    ResultActions resultActions = mockMvc.perform(patch("/review/update/{reviewId}", REVIEW_ID)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsBytes(updateReviewRequestDto))
+            .content(objectMapper.writeValueAsBytes(UPDATE_REVIEW_REQUEST_DTO))
             .accept(MediaType.APPLICATION_JSON)
             .with(csrf()))
         .andExpect(status().isOk());
-
-    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.SUCCESS);
 
     resultActions.andDo(document("reviewController/updateMyReview",
         getDocumentRequest(),
         getDocumentResponse(),
         requestFields(
-            fieldWithPath("reviewId").type(JsonFieldType.NUMBER).description("리뷰 작성자"),
             fieldWithPath("reviewContents").type(JsonFieldType.STRING).description("리뷰 내용"),
             fieldWithPath("grade").type(JsonFieldType.NUMBER).description("평점")
         ),
@@ -232,18 +204,11 @@ class ReviewControllerTest {
   @Test
   @WithCustomMockUser
   void deleteMyReview() throws Exception {
-    Long reviewId = 1L;
-    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
-    ResultActions resultActions = mockMvc.perform(delete("/reviews/delete/{reviewId}", reviewId)
+    ResultActions resultActions = mockMvc.perform(delete("/review/delete/{reviewId}", REVIEW_ID)
             .with(csrf()))
         .andExpect(status().isNoContent());
     resultActions.andDo(document("reviewController/deleteMyReview",
         getDocumentRequest(),
-        getDocumentResponse(),
-        responseFields(
-            fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태코드"),
-            fieldWithPath("message").type(JsonFieldType.STRING).description("메시지")
-        )));
-
+        getDocumentResponse()));
   }
 }

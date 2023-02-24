@@ -157,6 +157,7 @@ class ProductControllerTest {
         ),
         responseFields(
 
+            fieldWithPath("content[].productId").type(JsonFieldType.NUMBER).description("상품 아이디"),
             fieldWithPath("content[].productName").type(JsonFieldType.STRING).description("상품 이름"),
             fieldWithPath("content[].productPrice").type(JsonFieldType.NUMBER).description("가격"),
 

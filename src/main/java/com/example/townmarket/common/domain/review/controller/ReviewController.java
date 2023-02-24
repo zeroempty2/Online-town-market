@@ -77,7 +77,7 @@ public class ReviewController {
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     reviewService.deleteReview(reviewId, userDetails.getUserId());
-    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
+//    StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
     return RESPONSE_DELETE;
   }
 

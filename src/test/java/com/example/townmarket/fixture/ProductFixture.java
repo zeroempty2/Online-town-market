@@ -27,7 +27,7 @@ public class ProductFixture {
       .productEnum(ProductEnum.나눔)
       .build();
 
-  public static final PagingProductResponse PAGING_PRODUCT_RESPONSE = PagingProductResponse.builder()
+  public static final PagingProductResponse PAGING_PRODUCT_RESPONSE = PagingProductResponse.builder().productId(1L)
       .productName("상품이름").productPrice(1000L).build();
 
 
