@@ -1,12 +1,10 @@
 package com.example.townmarket.common.domain.interest.controller;
 
 import static com.example.townmarket.common.domain.interest.controller.InterestController.INTEREST_URI_API;
-import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.townmarket.common.domain.interest.dto.InterestPagingResponseDto;
 import com.example.townmarket.common.domain.interest.service.InterestService;
 import com.example.townmarket.common.dto.PageDto;
-import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +29,11 @@ public class InterestController {
   private final SetHttpHeaders httpHeaders;
 
   @PostMapping("/{productId}")
-  public ResponseEntity<StatusResponse> addInterest(
+  public ResponseEntity<Boolean> addInterest(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable Long productId) {
-    interestService.addInterest(userDetails.getUser(), productId);
-    return RESPONSE_OK;
+    boolean isCancle = interestService.addInterest(userDetails.getUser(), productId);
+    return ResponseEntity.ok().body(isCancle);
   }
 
 

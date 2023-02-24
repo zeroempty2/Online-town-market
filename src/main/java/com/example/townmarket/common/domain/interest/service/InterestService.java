@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 
 public interface InterestService {
 
-  void addInterest(User user, Long product);
+  boolean addInterest(User user, Long product);
 
   Page<InterestPagingResponseDto> showMyInterestProducts(User user, PageDto pageDto);
 }

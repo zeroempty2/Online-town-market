@@ -44,7 +44,7 @@ public class Interest extends TimeStamped {
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "users_id")
+  @JoinColumn(name = "user_id")
   private User user;
 
   /**

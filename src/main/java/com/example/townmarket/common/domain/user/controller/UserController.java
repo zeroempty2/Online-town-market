@@ -13,16 +13,12 @@ import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
+import com.example.townmarket.common.domain.user.dto.UserInfoResponseDto;
 import com.example.townmarket.common.domain.user.service.UserService;
 import com.example.townmarket.common.dto.StatusResponse;
-import com.example.townmarket.common.enums.ResponseMessages;
-import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.security.UserDetailsImpl;
-
-import jakarta.servlet.http.HttpServletRequest;
-
 import com.example.townmarket.common.util.SetHttpHeaders;
-
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -71,8 +67,9 @@ public class UserController {
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<StatusResponse> logout(HttpServletRequest request,HttpServletResponse response) {
-    userService.logout(request,response);
+  public ResponseEntity<StatusResponse> logout(HttpServletRequest request,
+      HttpServletResponse response) {
+    userService.logout(request, response);
     return RESPONSE_OK;
   }
 
@@ -123,4 +120,12 @@ public class UserController {
     return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
         .body(userService.getMyProfile(userDetails.getUsername()));
   }
+
+  @GetMapping("/info")
+  public ResponseEntity<UserInfoResponseDto> getMyInfo(@AuthenticationPrincipal
+  UserDetailsImpl userDetails) {
+    return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
+        .body(userService.getMyInfo(userDetails.getUser()));
+  }
+
 }

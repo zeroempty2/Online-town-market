@@ -10,6 +10,7 @@ public interface UserRepositoryQuery {
 
   Optional<UserInformation> getUserInfoByUsername(String username);
 
+
   ProfileResponseDto getProfileByUsername(String username);
 
 }

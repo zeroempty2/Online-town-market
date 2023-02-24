@@ -8,6 +8,7 @@ import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
+import com.example.townmarket.common.domain.user.dto.UserInfoResponseDto;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.enums.RoleEnum;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +37,7 @@ public interface UserService {
 
   List<User> findAllUser();
 
+  UserInfoResponseDto getMyInfo(User user);
 
   Page<User> pagingUsers(Pageable pageable);
 

@@ -10,6 +10,7 @@ import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
+import com.example.townmarket.common.domain.user.dto.UserInfoResponseDto;
 import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
@@ -168,6 +169,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public List<User> findAllUser() {
     return userRepository.findAll();
+  }
+
+  @Override
+  public UserInfoResponseDto getMyInfo(User user) {
+    return new UserInfoResponseDto(user);
   }
 
   @Override
