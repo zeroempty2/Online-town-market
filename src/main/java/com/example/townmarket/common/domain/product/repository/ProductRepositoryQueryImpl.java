@@ -24,8 +24,9 @@ public class ProductRepositoryQueryImpl implements ProductRepositoryQuery {
   public Page<PagingProductResponse> findAllAndPaging(Pageable pageable) {
     List<PagingProductResponse> pagingProductResponse = jpaQueryFactory
         .select(Projections.constructor(PagingProductResponse.class,
-            product.productName
-            , product.productPrice))
+            product.productName,
+            product.productPrice,
+            product.id))
         .from(product)
         .where(product.block.eq(false))
         .setHint("org.hibernate.readOnly", true)
@@ -42,8 +43,9 @@ public class ProductRepositoryQueryImpl implements ProductRepositoryQuery {
   public Page<PagingProductResponse> searchByKeyword(String keyword, Pageable pageable) {
     List<PagingProductResponse> pagingProductResponse = jpaQueryFactory
         .select(Projections.constructor(PagingProductResponse.class,
-            product.productName
-            , product.productPrice))
+            product.productName,
+            product.productPrice,
+            product.id))
         .from(product)
         .where(product.block.eq(false), product.productName.contains(keyword))
         .setHint("org.hibernate.readOnly", true)
