@@ -20,10 +20,10 @@ public class InterestServiceImpl implements InterestService {
 
   @Override
   @Transactional
-  public void addInterest(User user, Long productId) {
+  public boolean addInterest(User user, Long productId) {
     if (interestRepository.existsByUserIdAndProductId(user.getId(), productId)) {
       interestRepository.deleteByProductId(productId);
-      return;
+      return true;
     }
 
     Interest interest = Interest.builder()
@@ -31,6 +31,7 @@ public class InterestServiceImpl implements InterestService {
         .productId(productId)
         .build();
     interestRepository.save(interest);
+    return false;
   }
 
   @Override

@@ -30,7 +30,7 @@ public class ChatRoom {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "room_id")
+  @Column(name = "chat_room_id")
   private Long id;
 
   @Column(name = "room_name")
@@ -38,7 +38,6 @@ public class ChatRoom {
 
   @Column(nullable = false, name = "seller_id")
   private Long seller;
-
 
 
   /**
@@ -58,15 +57,14 @@ public class ChatRoom {
   @ManyToOne
   @JoinColumn(name = "buyer_id")
   private User user;
-//
+  //
   @ManyToOne
+  @JoinColumn(name = "product_id")
   private Product product;
 
   @Builder.Default
   @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<ChatMessage> message = new LinkedHashSet<>();
-
-
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.

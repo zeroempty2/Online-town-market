@@ -39,6 +39,7 @@ public class SecurityConfig {
       "/js/**",
       "/images/**",
       "/products",
+      "/products/**",
       "/products/search",
       "/login/oauth2/code/google",
       "/login/**",
@@ -94,6 +95,7 @@ public class SecurityConfig {
         .requestMatchers("/report/**").hasAnyRole("MEMBER")
         .requestMatchers("/transaction/**").hasAnyRole("MEMBER")
         .requestMatchers("/review/**").hasAnyRole("MEMBER")
+        .requestMatchers("/users/info").hasAnyRole("MEMBER")
         .anyRequest().authenticated()
         .and().addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService, adminDetailsService),
             UsernamePasswordAuthenticationFilter.class);
