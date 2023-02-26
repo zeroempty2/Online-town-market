@@ -1,8 +1,11 @@
 package com.example.townmarket.common.domain.email.service;
 
+import com.example.townmarket.common.domain.email.entity.EmailVerify;
+import com.example.townmarket.common.domain.email.repository.EmailVerifyRepository;
 import jakarta.mail.Message.RecipientType;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
@@ -16,6 +19,8 @@ public class EmailServiceImpl implements EmailService {
 
   private final JavaMailSender emailSender;
   public String ePw;
+
+  private final EmailVerifyRepository emailVerifyRepository;
 
 
   private MimeMessage createMessage(String to) throws Exception {
@@ -41,7 +46,7 @@ public class EmailServiceImpl implements EmailService {
     System.out.println("보내는 대상 : " + to);
     System.out.println("인증 번호 : " + ePw);
     return message;
-    
+
   }
 
   public String createKey() {
@@ -68,7 +73,7 @@ public class EmailServiceImpl implements EmailService {
   }
 
   @Override
-  public String sendSimpleMessage(String to) throws Exception {
+  public void sendSimpleMessage(String to) throws Exception {
 
     MimeMessage message = createMessage(to);
     try {//예외처리
@@ -77,11 +82,12 @@ public class EmailServiceImpl implements EmailService {
       es.printStackTrace();
       throw new IllegalArgumentException();
     }
-    return ePw;
+    emailVerifyRepository.save(EmailVerify.builder().email(to).code(ePw).build());
+//    return ePw;
   }
 
-//  @Override
-//  public Boolean verifyCode(String code) {
+  @Override
+  public boolean verifyCode(String email, String code) {
 //    boolean result = false;
 //    System.out.println("authCode : " + EmailServiceImpl.ePw);
 //    System.out.println("myCode : " + code);
@@ -91,4 +97,7 @@ public class EmailServiceImpl implements EmailService {
 //    }
 //    return result;
 //  }
+    Optional<EmailVerify> verify = emailVerifyRepository.findById(email);
+    return verify.map(emailVerify -> emailVerify.verifyCheck(code)).orElse(false);
+  }
 }
