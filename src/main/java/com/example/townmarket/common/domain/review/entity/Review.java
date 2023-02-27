@@ -1,8 +1,10 @@
 package com.example.townmarket.common.domain.review.entity;
 
 import com.example.townmarket.common.TimeStamped;
+import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
 import com.example.townmarket.common.domain.user.entity.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,7 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.Max;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,25 +34,18 @@ public class Review extends TimeStamped {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "review_id", nullable = false)
   private Long id;
-  @Column(nullable = false)
-  @Max(5)
-  private int grade;
+
   @Column
   private String reviewContents;
-  @Column
-  private Long productId;
-
 
   /**
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
    */
   @Builder
-  public Review(int grade, String reviewContents, User reviewee, User reviewer, Long productId) {
-    this.grade = grade;
+  public Review(String reviewContents, User reviewer, Product product) {
     this.reviewContents = reviewContents;
-    this.reviewee = reviewee;
     this.reviewer = reviewer;
-    this.productId = productId;
+    this.product = product;
   }
 
   /**
@@ -60,9 +55,13 @@ public class Review extends TimeStamped {
   @JoinColumn(name = "reviewer_id")
   private User reviewer;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "reviewee_id")
-  private User reviewee;
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "product_id")
+  private Product product;
+
+  @OneToOne(fetch = FetchType.EAGER, mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "user_grade_id")
+  private UserGrade userGrade;
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
    */
@@ -75,7 +74,8 @@ public class Review extends TimeStamped {
   }
 
   public void updateReview(UpdateReviewRequestDto updateReviewRequestDto) {
-    this.grade = updateReviewRequestDto.getGrade();
     this.reviewContents = updateReviewRequestDto.getReviewContents();
   }
+
+
 }

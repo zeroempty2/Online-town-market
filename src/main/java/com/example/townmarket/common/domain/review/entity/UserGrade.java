@@ -1,71 +1,62 @@
-package com.example.townmarket.common.domain.chat.entity;
+package com.example.townmarket.common.domain.review.entity;
 
-import com.example.townmarket.common.domain.product.entity.Product;
+
 import com.example.townmarket.common.domain.user.entity.User;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Max;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
+//lombok
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class ChatRoom {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//jpa
+@Entity
+public class UserGrade {
 
   /**
    * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "chat_room_id")
+  @Column(name = "grade_id", nullable = false)
   private Long id;
 
-  @Column(name = "room_name")
-  private String productName;
-
-  @Column(nullable = false, name = "seller_id")
-  private Long seller;
+  @Column
+  @Max(5)
+  private int grade;
 
 
   /**
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
    */
-  public ChatRoom(Product product, User user) {
-    this.productName = product.getProductName();
-    this.seller = product.getUser().getId();
-    this.user = user;
-    this.product = product;
+  @Builder
+  public UserGrade(int grade, User reviewee, Review review) {
+    this.grade = grade;
+    this.reviewee = reviewee;
+    this.review = review;
   }
-
 
   /**
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
-  @ManyToOne
-  @JoinColumn(name = "buyer_id")
-  private User user;
-  //
-  @ManyToOne
-  @JoinColumn(name = "product_id")
-  private Product product;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User reviewee;
 
-  @Builder.Default
-  @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<ChatMessage> message = new LinkedHashSet<>();
-
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "review_id")
+  private Review review;
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
    */
@@ -73,4 +64,7 @@ public class ChatRoom {
   /**
    * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
    */
+  public void setGrade(int grade) {
+    this.grade = grade;
+  }
 }

@@ -1,5 +1,7 @@
 package com.example.townmarket.common.domain.user.service;
 
+import com.example.townmarket.common.domain.review.entity.UserGrade;
+import com.example.townmarket.common.domain.review.service.UserGradeServiceImpl;
 import com.example.townmarket.common.domain.user.dto.DuplicateCheckRequestDto;
 import com.example.townmarket.common.domain.user.dto.DuplicateCheckResponseDto;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
@@ -8,19 +10,19 @@ import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
-import com.example.townmarket.common.domain.user.entity.Grade;
+import com.example.townmarket.common.domain.user.dto.UserInfoResponseDto;
 import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
 import com.example.townmarket.common.enums.RoleEnum;
 import com.example.townmarket.common.jwtUtil.JwtUtil;
-
 import com.example.townmarket.common.redis.entity.Tokens;
 import com.example.townmarket.common.redis.service.RefreshService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,8 +39,8 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final JwtUtil jwtUtil;
   private final PasswordEncoder passwordEncoder;
-
   private final RefreshService refreshService;
+  private final UserGradeServiceImpl userGradeService;
 
   @Override
   @Transactional
@@ -48,7 +50,6 @@ public class UserServiceImpl implements UserService {
     String password = passwordEncoder.encode(request.getPassword());
 
     Profile profile = new Profile(request.getNickname());
-    Grade grade = new Grade();
 
     User user = User.builder()
         .username(username)
@@ -58,7 +59,6 @@ public class UserServiceImpl implements UserService {
         .email(request.getEmail())
         .role(RoleEnum.MEMBER)
         .profile(profile)
-        .grade(grade)
         .build();
 
     userRepository.save(user);
@@ -102,8 +102,14 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void loginOAuth2(String username, RoleEnum role, HttpServletResponse response) {
-    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createAccessToken(username,role));
-    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createRefreshToken(username,role));
+    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createAccessToken(username, role));
+    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createRefreshToken(username, role));
+  }
+
+  @Override
+  public double getUserAverageGrade(User reviewee) {
+    Set<UserGrade> userGrades = userGradeService.findAllByReviewee(reviewee);
+    return reviewee.getUserAverageGrade(userGrades);
   }
 
 
@@ -161,13 +167,13 @@ public class UserServiceImpl implements UserService {
 
 
   @Override
-  public void setUserGrade(User reviewee, int grade, int count) {
-    reviewee.getGrade().setUserGrade(grade, count);
+  public List<User> findAllUser() {
+    return userRepository.findAll();
   }
 
   @Override
-  public List<User> findAllUser() {
-    return userRepository.findAll();
+  public UserInfoResponseDto getMyInfo(User user) {
+    return new UserInfoResponseDto(user);
   }
 
   @Override
@@ -187,11 +193,6 @@ public class UserServiceImpl implements UserService {
   @Override
   public Page<User> pagingUsers(Pageable pageable) {
     return userRepository.findAll(pageable);
-  }
-
-  @Override
-  public void updateUserGrade(User reviewee, int grade) {
-    reviewee.getGrade().updateUserGrade(grade);
   }
 
 

@@ -78,6 +78,7 @@ class AdminControllerTest {
         requestFields(
             fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지"),
             fieldWithPath("size").type(JsonFieldType.NUMBER).description("글의 갯수"),
+            fieldWithPath("keyword").type(JsonFieldType.STRING).description("키워드"),
             fieldWithPath("sortBy").type(JsonFieldType.STRING).description("정렬기준"),
             fieldWithPath("asc").type(JsonFieldType.BOOLEAN).description("오름/내림차순")
         ),

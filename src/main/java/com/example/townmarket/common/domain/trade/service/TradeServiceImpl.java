@@ -27,22 +27,23 @@ public class TradeServiceImpl implements TradeService {
   @Override
   @Transactional
   public Page<PagingTrade> getPurchaseList(User buyer, Pageable pageable) {
-    Page<Trade> tradePage = tradeRepository.findAllByBuyer(pageable, buyer.getId());
-    return tradePage.map(PagingTrade::getBuyList);
+    Page<PagingTrade> tradePage = tradeRepository.findBuyList(pageable, buyer);
+    return tradePage;
   }
 
   @Override
   @Transactional
   public Page<PagingTrade> getSalesList(User seller, Pageable pageable) {
-    Page<Trade> tradePage = tradeRepository.findAllByBuyer(pageable, seller.getId());
-    return tradePage.map(PagingTrade::getSellerList);
+    Page<PagingTrade> tradePage = tradeRepository.findSaleList(pageable, seller);
+    return tradePage;
   }
 
   @Override
   @Transactional
   public Page<PagingTrade> getSalesListOfOther(Long userId, Pageable pageable) {
-    Page<Trade> tradePage = tradeRepository.findAllBySeller(pageable, userId);
-    return tradePage.map(PagingTrade::getSellerList);
+//    Page<Trade> tradePage = tradeRepository.findAllBySeller(pageable, userId);
+//    return tradePage.map(PagingTrade::getSellerList);
+    return null;
   }
 
   @Override

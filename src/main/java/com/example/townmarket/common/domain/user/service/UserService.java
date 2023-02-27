@@ -8,6 +8,7 @@ import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
+import com.example.townmarket.common.domain.user.dto.UserInfoResponseDto;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.enums.RoleEnum;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +25,6 @@ public interface UserService {
   void login(HttpServletResponse response, LoginRequestDto request);
 
 
-
   void updateUser(String username, PasswordUpdateRequestDto updateDto);
 
   void updateRegion(String username, RegionUpdateRequestDto updateDto);
@@ -37,7 +37,7 @@ public interface UserService {
 
   List<User> findAllUser();
 
-  void setUserGrade(User reviewee, int grade, int count);
+  UserInfoResponseDto getMyInfo(User user);
 
   Page<User> pagingUsers(Pageable pageable);
 
@@ -45,7 +45,6 @@ public interface UserService {
 
   User findByUsername(String username);
 
-  void updateUserGrade(User reviewee, int grade);
 
   boolean existsByEmail(String email);
 
@@ -56,6 +55,8 @@ public interface UserService {
   void logout(HttpServletRequest request, HttpServletResponse response);
 
   void loginOAuth2(String username, RoleEnum role, HttpServletResponse response);
+
+  double getUserAverageGrade(User reviewee);
 }
 
 

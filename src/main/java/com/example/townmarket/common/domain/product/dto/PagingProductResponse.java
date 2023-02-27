@@ -11,10 +11,12 @@ public class PagingProductResponse {
 
   private long productPrice;
 
+  private long productId;
 
   @Builder
-  public PagingProductResponse(String productName, long productPrice) {
+  public PagingProductResponse(String productName, long productPrice, long productId) {
     this.productName = productName;
     this.productPrice = productPrice;
+    this.productId = productId;
   }
 }

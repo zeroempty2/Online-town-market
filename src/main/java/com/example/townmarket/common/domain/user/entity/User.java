@@ -6,6 +6,7 @@ import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.interest.entity.Interest;
 import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.review.entity.Review;
+import com.example.townmarket.common.domain.review.entity.UserGrade;
 import com.example.townmarket.common.domain.trade.entity.Trade;
 import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.enums.RoleEnum;
@@ -71,10 +72,6 @@ public class User extends TimeStamped {
   @Enumerated(EnumType.STRING)
   private RoleEnum role;
 
-
-  @Embedded
-  private Grade grade;
-
   @Embedded
   private Profile profile;
 
@@ -84,13 +81,12 @@ public class User extends TimeStamped {
 
   @Builder
   public User(String username, String password, String email, String region,
-      Profile profile, Grade grade) {
+      Profile profile) {
     this.username = username;
     this.password = password;
     this.email = email;
     this.region = region;
     this.profile = profile;
-    this.grade = grade;
   }
 
   @Builder
@@ -101,12 +97,18 @@ public class User extends TimeStamped {
   }
 
   //userdetails용 생성자
-  @Builder
-  public User(Long userId, String username, String password, RoleEnum roleEnum) {
+//  @Builder
+//  public User(Long userId, String username, String password, RoleEnum roleEnum) {
+//    this.id = userId;
+//    this.username = username;
+//    this.password = password;
+//    this.role = roleEnum;
+//  }
+
+  public User(Long userId, String username, Profile profile) {
     this.id = userId;
     this.username = username;
-    this.password = password;
-    this.role = roleEnum;
+    this.profile = profile;
   }
 
 
@@ -126,10 +128,6 @@ public class User extends TimeStamped {
   private Set<Review> sendReviews = new LinkedHashSet<>();
 
   @Builder.Default
-  @OneToMany(mappedBy = "reviewee")
-  private Set<Review> receiveReviews = new LinkedHashSet<>();
-
-  @Builder.Default
   @OneToMany(mappedBy = "user")
   private Set<Board> boards = new LinkedHashSet<>();
   @Builder.Default
@@ -144,7 +142,9 @@ public class User extends TimeStamped {
   @OneToMany(mappedBy = "seller")
   private Set<Trade> seller = new LinkedHashSet<>();
 
-
+  @Builder.Default
+  @OneToMany(mappedBy = "reviewee")
+  private Set<UserGrade> grades = new LinkedHashSet<>();
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
    */
@@ -165,5 +165,9 @@ public class User extends TimeStamped {
     this.region = updateDto.getRegion();
   }
 
+  public double getUserAverageGrade(Set<UserGrade> grades) {
+    long total = grades.stream().mapToInt(UserGrade::getGrade).sum();
+    return Math.abs(total / grades.size());
+  }
 
 }

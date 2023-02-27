@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
+@Setter
 public class PageDto {
 
   int page;
@@ -22,6 +24,8 @@ public class PageDto {
   String sortBy;
 
   boolean isAsc; // boolean은 is를 뺴고 인식
+
+  String keyword;
 
   public Pageable toPageable() {
     if (Objects.isNull(sortBy)) {

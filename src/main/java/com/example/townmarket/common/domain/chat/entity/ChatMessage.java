@@ -29,6 +29,7 @@ public class ChatMessage {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "chat_message_id")
   private Long id;
 
   @Column
@@ -65,7 +66,7 @@ public class ChatMessage {
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
   @ManyToOne
-  @JoinColumn(name = "room_id")
+  @JoinColumn(name = "chat_room_id")
   private ChatRoom room;
 
   /**

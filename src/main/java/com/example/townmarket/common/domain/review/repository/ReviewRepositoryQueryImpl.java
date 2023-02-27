@@ -1,6 +1,5 @@
 package com.example.townmarket.common.domain.review.repository;
 
-import static com.example.townmarket.common.domain.product.entity.QProduct.product;
 import static com.example.townmarket.common.domain.review.entity.QReview.review;
 
 import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
@@ -22,6 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewRepositoryQueryImpl implements ReviewRepositoryQuery {
 
   private final JPAQueryFactory jpaQueryFactory;
+
+  @Override
+  @Transactional(readOnly = true)
+  public boolean existsReviewId(Long reviewId) {
+    return jpaQueryFactory.from(review).where(review.id.eq(reviewId)).select(review.id)
+        .setHint("org.hibernate.readOnly", true).fetchFirst() != null;
+  }
 
   @Override
   @Transactional(readOnly = true)
@@ -47,14 +53,12 @@ public class ReviewRepositoryQueryImpl implements ReviewRepositoryQuery {
 
   private JPAQuery<ReviewResponseDto> query() {
     return jpaQueryFactory.select(Projections.constructor(ReviewResponseDto.class,
-            review.grade,
+            review.id,
             review.reviewContents,
-            review.reviewer.profile.as("reviewerProfile"),
-            review.reviewee.profile.as("revieweeProfile"),
-            product.productName))
+            review.product.productName,
+            review.userGrade.grade
+        ))
         .from(review)
-        .leftJoin(product)
-        .on(review.productId.eq(product.id))
         .setHint("org.hibernate.readOnly", true);
   }
 

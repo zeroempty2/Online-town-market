@@ -31,6 +31,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     } else {
       ChatMessage messageList = new ChatMessage(message.getSender(), message.getReceiver(), message.getMessage(), room);
       messageRepository.save(messageList);
+
     }
   }
 }

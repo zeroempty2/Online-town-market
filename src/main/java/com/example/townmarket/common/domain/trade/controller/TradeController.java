@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/transaction")
+@RequestMapping("/trade")
 public class TradeController {
 
   private final TradeService tradeService;
@@ -35,28 +35,32 @@ public class TradeController {
   // 타인 판매 리스트
 
   @GetMapping("/purchase")
-  public ResponseEntity<Page<PagingTrade>> getPurchaseList(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+  public ResponseEntity<Page<PagingTrade>> getPurchaseList(
+      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     return ResponseEntity.ok().headers(setHttpHeaders.setHeaderTypeJson())
-        .body(tradeService.getPurchaseList(userDetails.getUser(),pageable));
+        .body(tradeService.getPurchaseList(userDetails.getUser(), pageable));
   }
 
   @GetMapping("/sales")
-  public ResponseEntity<Page<PagingTrade>> getSalesList(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+  public ResponseEntity<Page<PagingTrade>> getSalesList(
+      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     return ResponseEntity.ok().headers(setHttpHeaders.setHeaderTypeJson())
-        .body(tradeService.getSalesList(userDetails.getUser(),pageable));
+        .body(tradeService.getSalesList(userDetails.getUser(), pageable));
   }
 
-  @GetMapping("/sales/{userId}")
-  public ResponseEntity<Page<PagingTrade>> getSalesListOfOther(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-      @PathVariable Long userId) {
-    return ResponseEntity.ok().headers(setHttpHeaders.setHeaderTypeJson())
-        .body(tradeService.getSalesListOfOther(userId, pageable));
-  }
+//  @GetMapping("/sales/{userId}")
+//  public ResponseEntity<Page<PagingTrade>> getSalesListOfOther(
+//      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+//      @PathVariable Long userId) {
+//    return ResponseEntity.ok().headers(setHttpHeaders.setHeaderTypeJson())
+//        .body(tradeService.getSalesListOfOther(userId, pageable));
+//  }
 
-  @PostMapping("/createTrade")
-  public ResponseEntity<StatusResponse> createTrade(@RequestBody CreateTradeDto createTrade ,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+  @PostMapping("/create")
+  public ResponseEntity<StatusResponse> createTrade(@RequestBody CreateTradeDto createTrade,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
     tradeService.createTrade(createTrade, userDetails.getUser());
     return RESPONSE_OK;
   }

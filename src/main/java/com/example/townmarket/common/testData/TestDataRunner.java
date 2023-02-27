@@ -6,7 +6,6 @@ import com.example.townmarket.common.domain.product.entity.Product.ProductEnum;
 import com.example.townmarket.common.domain.product.entity.Product.ProductStatus;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
-import com.example.townmarket.common.domain.user.entity.Grade;
 import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
@@ -31,20 +30,18 @@ public class TestDataRunner implements ApplicationRunner {
   @Transactional
   public void run(ApplicationArguments args) throws Exception {
     Profile profile = Profile.builder().nickName("testUser").build();
-    Grade grade = new Grade();
 
     User user = User.builder()
-        .username("user")
+        .username("user1")
         .password("Password!23")
         .email("asda11as@gmail.com")
         .role(RoleEnum.MEMBER)
         .profile(profile)
-        .grade(grade)
         .build();
     userRepository.save(user);
 
     SignupRequestDto user1 = SignupRequestDto.builder()
-        .username("user1")
+        .username("user2")
         .password("Password!23")
         .email("asdaas@gmail.com")
         .nickname("nick1")
@@ -52,7 +49,7 @@ public class TestDataRunner implements ApplicationRunner {
     userService.signup(user1);
 
     SignupRequestDto user2 = SignupRequestDto.builder()
-        .username("user2")
+        .username("user3")
         .password("Password!23")
         .email("asd1aas@gmail.com")
         .nickname("nick12")
