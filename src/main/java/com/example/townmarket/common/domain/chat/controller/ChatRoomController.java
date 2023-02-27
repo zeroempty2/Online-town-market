@@ -2,10 +2,12 @@ package com.example.townmarket.common.domain.chat.controller;
 
 import com.example.townmarket.common.domain.chat.dto.ChatRoomDto;
 import com.example.townmarket.common.domain.chat.dto.ChatRoomListDtailDto;
+import com.example.townmarket.common.domain.chat.dto.ChatRoomResponse;
 import com.example.townmarket.common.domain.chat.service.ChatRoomService;
 import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
+import com.example.townmarket.common.util.SetHttpHeaders;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatRoomController {
 
   private final ChatRoomService roomService;
+  private final SetHttpHeaders httpHeaders;
 
   /* 채팅방 등록 */
   @PostMapping("/chatroom/{productId}")
-  public ResponseEntity<StatusResponse> createRoom(@PathVariable Long productId,
+  public ResponseEntity<ChatRoomResponse> createRoom(@PathVariable Long productId,
       @AuthenticationPrincipal UserDetails userDetails) {
-    roomService.createRoom(productId, userDetails.getUsername());
-    return ResponseEntity.ok().body(StatusResponse.valueOf(ResponseMessages.CREATED_SUCCESS));
+    return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
+        .body(roomService.createRoom(productId, userDetails.getUsername()));
   }
 
   /* 해당 채팅방 보기 */
@@ -46,13 +49,15 @@ public class ChatRoomController {
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
     roomService.myChatList(userDetails.getUserId());
-    return ResponseEntity.status(HttpStatus.OK).body(roomService.myChatList(userDetails.getUserId()));
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(roomService.myChatList(userDetails.getUserId()));
   }
 
   /* 채팅방 삭제 */
   @DeleteMapping("/chatroom/{roomId}")
-  public ResponseEntity<StatusResponse> deleteChat(@PathVariable Long roomId, @AuthenticationPrincipal
-  UserDetailsImpl userDetails) {
+  public ResponseEntity<StatusResponse> deleteChat(@PathVariable Long roomId,
+      @AuthenticationPrincipal
+      UserDetailsImpl userDetails) {
     roomService.deleteChat(roomId, userDetails.getUsername());
     StatusResponse statusResponse = StatusResponse.valueOf(ResponseMessages.DELETE_SUCCESS);
     return new ResponseEntity<>(statusResponse, HttpStatus.NO_CONTENT);

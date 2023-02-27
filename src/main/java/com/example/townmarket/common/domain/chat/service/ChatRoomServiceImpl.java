@@ -2,6 +2,7 @@ package com.example.townmarket.common.domain.chat.service;
 
 import com.example.townmarket.common.domain.chat.dto.ChatRoomDto;
 import com.example.townmarket.common.domain.chat.dto.ChatRoomListDtailDto;
+import com.example.townmarket.common.domain.chat.dto.ChatRoomResponse;
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.chat.repository.ChatRoomRepository;
 import com.example.townmarket.common.domain.product.entity.Product;
@@ -26,7 +27,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   /*채팅방 생성*/
 
   @Override
-  public void createRoom(Long productId, String username) {
+  public ChatRoomResponse createRoom(Long productId, String username) {
     Product product = productRepository.findById(productId).orElseThrow(
         () -> new IllegalArgumentException("상품이 존재하지 않습니다.")
     );
@@ -47,6 +48,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
     ChatRoom chatRooms = new ChatRoom(product, user);
     roomRepository.save(chatRooms);
+    return roomRepository.searchChatRoomByChatRoomId(chatRooms.getId());
   }
 
 
