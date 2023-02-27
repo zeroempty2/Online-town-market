@@ -9,5 +9,5 @@ import org.springframework.data.repository.RepositoryDefinition;
 @RepositoryDefinition(domainClass = ChatRoom.class, idClass = Long.class)
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long>, ChatRoomRepositoryQuery {
 
-  boolean existsByProductAndUser(Product product, User user);
+  boolean existsByProductAndBuyer(Product product, User user);
 }

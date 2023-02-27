@@ -20,15 +20,13 @@ public class ChatRoomRepositoryQueryImpl implements ChatRoomRepositoryQuery {
   public List<ChatRoomResponse> searchChatRoomByUsername(String username) {
     return jpaQueryFactory.select(Projections.constructor(ChatRoomResponse.class,
             chatRoom.product.id,
-            chatRoom.product.user.profile.img_url,
-            chatRoom.product.user.profile.nickName,
-            chatRoom.product.user.region,
+            chatRoom.product.user,
             chatRoom.product.productName,
             chatRoom.id
         )).from(chatRoom)
-        .where(chatRoom.user.username.eq(username))
-        .leftJoin(chatRoom.product).fetchJoin()
-        .leftJoin(product.user).fetchJoin()
+        .where(chatRoom.buyer.username.eq(username))
+        .leftJoin(chatRoom.product)
+        .leftJoin(product.user)
         .setHint("org.hibernate.readOnly", true)
         .fetch();
   }

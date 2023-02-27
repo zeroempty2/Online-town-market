@@ -40,7 +40,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     // 이미 해당 상품에 대한 채팅방이 존재하는 경우
-    if (roomRepository.existsByProductAndUser(product, user)) {
+    if (roomRepository.existsByProductAndBuyer(product, user)) {
       throw new RuntimeException("해당 상품에 대한 채팅방이 이미 존재합니다.");
     }
 

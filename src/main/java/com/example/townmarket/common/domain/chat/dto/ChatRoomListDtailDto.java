@@ -36,7 +36,7 @@ public class ChatRoomListDtailDto {
       for (ChatRoom chatRoom : user.getChatRooms()) {
         roomList.add(new ChatRoomListDto(chatRoom, user));
         if (chatRoom.getProduct().getUser().getId() == user.getId()) {
-          roomList.add(new ChatRoomListDto(chatRoom, chatRoom.getUser()));
+          roomList.add(new ChatRoomListDto(chatRoom, chatRoom.getBuyer()));
         }
       }
     }

@@ -1,5 +1,6 @@
 package com.example.townmarket.common.domain.chat.dto;
 
+import com.example.townmarket.common.domain.user.entity.User;
 import lombok.Getter;
 
 @Getter
@@ -12,12 +13,12 @@ public class ChatRoomResponse {
   private String productName;
   private Long roomId;
 
-  public ChatRoomResponse(Long productId, String profileImg, String nickname, String region,
+  public ChatRoomResponse(Long productId, User user,
       String productName, Long roomId) {
     this.productId = productId;
-    this.profileImg = profileImg;
-    this.nickname = nickname;
-    this.region = region;
+    this.profileImg = user.getProfile().getImg_url();
+    this.nickname = user.getProfile().getNickName();
+    this.region = user.getRegion();
     this.productName = productName;
     this.roomId = roomId;
   }

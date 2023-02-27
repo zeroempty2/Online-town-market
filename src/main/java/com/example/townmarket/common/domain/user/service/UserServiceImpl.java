@@ -48,9 +48,22 @@ public class UserServiceImpl implements UserService {
     String username = request.getUsername();
     String email = request.getEmail();
     String password = passwordEncoder.encode(request.getPassword());
+    if (request.getImg_url() != null) {
+      Profile profile = Profile.builder().nickName(request.getNickname()).img_url(
+          request.getImg_url()).build();
+      User user = User.builder()
+          .username(username)
+          .password(password)
+          .email(email)
+          .region(request.getRegion())
+          .email(request.getEmail())
+          .role(RoleEnum.MEMBER)
+          .profile(profile)
+          .build();
 
+      userRepository.save(user);
+    }
     Profile profile = new Profile(request.getNickname());
-
     User user = User.builder()
         .username(username)
         .password(password)
