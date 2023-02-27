@@ -34,17 +34,17 @@ public class ChatMessage {
   @Column
   private long productId;
 
-  @Column(nullable = false)
+  @Column
   private String sender;
 
-  @Column(nullable = false)
+  @Column
   private String receiver;
 
   @Column(columnDefinition = "TEXT")
   private String message;
 
   @CreatedDate
-  @Column(updatable = false)
+  @Column
   private LocalDateTime sendDate;
 
 
