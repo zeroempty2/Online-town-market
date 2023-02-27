@@ -6,6 +6,7 @@ import static com.example.townmarket.common.domain.product.entity.QProduct.produ
 import com.example.townmarket.common.domain.chat.dto.ChatRoomResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ public class ChatRoomRepositoryQueryImpl implements ChatRoomRepositoryQuery {
 
   @Override
   @Transactional(readOnly = true)
-  public ChatRoomResponse searchChatRoomByChatRoomId(Long chatRoomId) {
+  public List<ChatRoomResponse> searchChatRoomByUsername(String username) {
     return jpaQueryFactory.select(Projections.constructor(ChatRoomResponse.class,
             chatRoom.product.id,
             chatRoom.product.user.profile.img_url,
@@ -25,10 +26,10 @@ public class ChatRoomRepositoryQueryImpl implements ChatRoomRepositoryQuery {
             chatRoom.product.productName,
             chatRoom.id
         )).from(chatRoom)
-        .where(chatRoom.id.eq(chatRoomId))
+        .where(chatRoom.user.username.eq(username))
         .leftJoin(chatRoom.product).fetchJoin()
         .leftJoin(product.user).fetchJoin()
         .setHint("org.hibernate.readOnly", true)
-        .fetchFirst();
+        .fetch();
   }
 }

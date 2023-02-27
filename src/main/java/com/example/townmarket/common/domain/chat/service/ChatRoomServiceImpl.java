@@ -9,6 +9,7 @@ import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   /*채팅방 생성*/
 
   @Override
-  public ChatRoomResponse createRoom(Long productId, String username) {
+  public List<ChatRoomResponse> createRoom(Long productId, String username) {
     Product product = productRepository.findById(productId).orElseThrow(
         () -> new IllegalArgumentException("상품이 존재하지 않습니다.")
     );
@@ -48,7 +49,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
     ChatRoom chatRooms = new ChatRoom(product, user);
     roomRepository.save(chatRooms);
-    return roomRepository.searchChatRoomByChatRoomId(chatRooms.getId());
+    return roomRepository.searchChatRoomByUsername(username);
   }
 
 

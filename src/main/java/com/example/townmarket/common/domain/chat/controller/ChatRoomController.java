@@ -8,6 +8,7 @@ import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class ChatRoomController {
 
   /* 채팅방 등록 */
   @PostMapping("/chatroom/{productId}")
-  public ResponseEntity<ChatRoomResponse> createRoom(@PathVariable Long productId,
+  public ResponseEntity<List<ChatRoomResponse>> createRoom(@PathVariable Long productId,
       @AuthenticationPrincipal UserDetails userDetails) {
     return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
         .body(roomService.createRoom(productId, userDetails.getUsername()));
