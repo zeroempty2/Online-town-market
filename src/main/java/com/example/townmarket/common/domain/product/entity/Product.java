@@ -31,7 +31,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 //lombok
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 //jpa
 @Entity
@@ -78,8 +78,9 @@ public class Product extends TimeStamped {
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
    */
   @Builder
-  public Product(String productName, Long productPrice, ProductStatus productStatus,
+  public Product(Long id, String productName, Long productPrice, ProductStatus productStatus,
       ProductCategory productCategory, ProductEnum productEnum, User user) {
+    this.id = id;
     this.productName = productName;
     this.productPrice = productPrice;
     this.productStatus = productStatus;

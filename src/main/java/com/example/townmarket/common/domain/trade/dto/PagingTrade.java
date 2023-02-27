@@ -12,21 +12,8 @@ public class PagingTrade {
 
   private String productName;
 
-  public static PagingTrade getBuyList(Trade trade){
-    PagingTrade pagingTrade = PagingTrade.builder()
-        .userName(trade.getBuyer().getUsername())
-        .productName(trade.getProduct().getProductName())
-        .build();
-    return pagingTrade;
+  public PagingTrade(String userName, String productName) {
+    this.productName = productName;
+    this.userName = userName;
   }
-
-  public static PagingTrade getSellerList(Trade trade){
-    PagingTrade pagingTrade = PagingTrade.builder()
-        .userName(trade.getSeller().getUsername())
-        .productName(trade.getProduct().getProductName())
-        .build();
-    return pagingTrade;
-  }
-
-
 }

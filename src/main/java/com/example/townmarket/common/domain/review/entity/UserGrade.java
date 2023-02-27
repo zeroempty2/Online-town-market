@@ -67,6 +67,4 @@ public class UserGrade {
   public void setGrade(int grade) {
     this.grade = grade;
   }
-
-
 }

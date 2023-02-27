@@ -76,4 +76,6 @@ public class Review extends TimeStamped {
   public void updateReview(UpdateReviewRequestDto updateReviewRequestDto) {
     this.reviewContents = updateReviewRequestDto.getReviewContents();
   }
+
+
 }

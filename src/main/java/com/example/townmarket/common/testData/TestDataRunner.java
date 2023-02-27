@@ -32,7 +32,7 @@ public class TestDataRunner implements ApplicationRunner {
     Profile profile = Profile.builder().nickName("testUser").build();
 
     User user = User.builder()
-        .username("user")
+        .username("user1")
         .password("Password!23")
         .email("asda11as@gmail.com")
         .role(RoleEnum.MEMBER)
@@ -41,7 +41,7 @@ public class TestDataRunner implements ApplicationRunner {
     userRepository.save(user);
 
     SignupRequestDto user1 = SignupRequestDto.builder()
-        .username("user1")
+        .username("user2")
         .password("Password!23")
         .email("asdaas@gmail.com")
         .nickname("nick1")
@@ -49,7 +49,7 @@ public class TestDataRunner implements ApplicationRunner {
     userService.signup(user1);
 
     SignupRequestDto user2 = SignupRequestDto.builder()
-        .username("user2")
+        .username("user3")
         .password("Password!23")
         .email("asd1aas@gmail.com")
         .nickname("nick12")

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class ChatRoomListDto {
 
   private long roomId;
+  private long productId;
   private String profileImg;
   private String nickname;
   private String region;
@@ -20,6 +21,7 @@ public class ChatRoomListDto {
 
   public ChatRoomListDto(ChatRoom room, User currentUser) {
     this.roomId = room.getId();
+    this.productId = room.getProduct().getId();
     this.productName = room.getProduct().getProductName();
     this.isSeller = room.getProduct().getUser().getId().equals(currentUser.getId()); // 판매자 여부 설정
 
