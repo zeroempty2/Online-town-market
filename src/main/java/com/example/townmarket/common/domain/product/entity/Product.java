@@ -31,7 +31,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 //lombok
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 //jpa
 @Entity
