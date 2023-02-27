@@ -70,7 +70,7 @@ public class ReviewServiceImpl implements ReviewService {
     Review review = findReviewById(reviewId);
     reviewWriterCheck(review, userId);
     review.updateReview(updateReviewRequestDto);
-    review.getUserGrade().updateGrade(updateReviewRequestDto.getGrade());
+    review.getUserGrade().setGrade(updateReviewRequestDto.getGrade());
   }
 
   @Override
