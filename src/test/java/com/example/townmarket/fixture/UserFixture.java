@@ -19,7 +19,8 @@ import org.springframework.data.domain.PageImpl;
 
 public class UserFixture {
 
-  public static final Profile PROFILE= Profile.builder().nickName("nickname").img_url("img_url").build();
+  public static final Profile PROFILE = Profile.builder().nickName("nickname").img_url("img_url")
+      .build();
 
   public static final User USER1 = User.builder()
       .username("username1")
@@ -36,6 +37,7 @@ public class UserFixture {
           .password("Password!2")
           .email("xxx0011@gmail.com")
           .nickname("nickname1")
+          .img_url("asdassdas.com")
           .region("서울")
           .build();
 
@@ -74,12 +76,10 @@ public class UserFixture {
       new PageImpl<>(Collections.singletonList(PAGING_USER_RESPONSE1), PAGE_DTO.toPageable(), 1);
 
 
-
   public static final DuplicateCheckResponseDto DUPLICATE_CHECK_RESPONSE_DTO =
       new DuplicateCheckResponseDto(false);
 
   public static final Long MEMBER_UNIQUE_ID = 1L;
-
 
 
 }

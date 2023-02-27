@@ -1,7 +1,6 @@
 package com.example.townmarket.common.domain.user.controller;
 
 import static com.example.townmarket.common.domain.user.controller.UserController.USER_API_URI;
-import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.townmarket.fixture.UserFixture.DUPLICATE_CHECK_REQUEST_DTO;
 import static com.example.townmarket.fixture.UserFixture.DUPLICATE_CHECK_RESPONSE_DTO;
 import static com.example.townmarket.fixture.UserFixture.LOGIN_REQUEST_DTO;
@@ -12,14 +11,13 @@ import static com.example.townmarket.fixture.UserFixture.REGION_UPDATE_REQUEST_D
 import static com.example.townmarket.fixture.UserFixture.SIGNUP_REQUEST_DTO;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -29,14 +27,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.townmarket.annotation.WithCustomMockUser;
-import com.example.townmarket.common.domain.email.service.EmailService;
-import com.example.townmarket.common.domain.user.dto.DuplicateCheckRequestDto;
-import com.example.townmarket.common.domain.user.dto.DuplicateCheckResponseDto;
-import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
-import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.service.UserService;
-import com.example.townmarket.common.dto.StatusResponse;
-import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,7 +42,6 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -80,7 +70,6 @@ class UserControllerTest {
   @DisplayName("회원가입 성공 상태코드 201 반환")
   void signup() throws Exception {
 
-
     doNothing().when(userService).signup(SIGNUP_REQUEST_DTO);
 
     ResultActions resultActions = mockMvc.perform(post(USER_API_URI + "/signup")
@@ -97,6 +86,7 @@ class UserControllerTest {
             fieldWithPath("username").type(JsonFieldType.STRING).description("유저 이름"),
             fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
             fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+            fieldWithPath("img_url").type(JsonFieldType.STRING).description("프로필 이미지"),
             fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
             fieldWithPath("region").type(JsonFieldType.STRING).description("지역")
         )
@@ -289,12 +279,12 @@ class UserControllerTest {
   @DisplayName("중복 없을 시 200반환")
   void duplicateCheck() throws Exception {
 
-
     // UserService의 duplicateCheck 메서드가 호출될 때 반환할 값을 설정합니다.
-    when(userService.duplicateCheck(DUPLICATE_CHECK_REQUEST_DTO)).thenReturn(DUPLICATE_CHECK_RESPONSE_DTO);
+    when(userService.duplicateCheck(DUPLICATE_CHECK_REQUEST_DTO)).thenReturn(
+        DUPLICATE_CHECK_RESPONSE_DTO);
 
     // API 호출을 수행하고 결과를 검증합니다.
-    mockMvc.perform(post(USER_API_URI+"/duplicate")
+    mockMvc.perform(post(USER_API_URI + "/duplicate")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(DUPLICATE_CHECK_REQUEST_DTO))
             .with(csrf()))
