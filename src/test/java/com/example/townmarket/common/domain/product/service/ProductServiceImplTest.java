@@ -3,6 +3,7 @@ package com.example.townmarket.common.domain.product.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -10,10 +11,14 @@ import com.example.townmarket.common.domain.product.dto.PagingProductResponse;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
 import com.example.townmarket.common.domain.product.dto.ProductResponseDto;
 import com.example.townmarket.common.domain.product.entity.Product;
+import com.example.townmarket.common.domain.product.entity.Product.ProductCategory;
+import com.example.townmarket.common.domain.product.entity.Product.ProductEnum;
+import com.example.townmarket.common.domain.product.entity.Product.ProductStatus;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.dto.PageDto;
 import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +52,7 @@ class ProductServiceImplTest {
   }
 
   @Test
-  @DisplayName("상품 단일 조회 성공")
+  @DisplayName("상품 단건 조회 성공")
   void getProduct() {
     // given
     ProductRequestDto productRequestDto = mock(ProductRequestDto.class);
@@ -63,21 +68,21 @@ class ProductServiceImplTest {
   }
 
   @Test
-  @DisplayName("상품목록 조회")
+  @DisplayName("상품 목록 조회 성공")
   void getProducts() {
-//    // given
-//    Pageable pageable = mock(Pageable.class);
-//    PageDto pageDto = mock(PageDto.class);
-//
-//    when(pageDto.toPageable()).thenReturn(pageable);
-//    when(productRepository.findAll(pageable)).thenReturn(Page.empty());
-//
-//    // when
-////    Page<PagingProductResponse> pagingProductResponse = productService.getProducts(pageable);
-//    Page<PagingProductResponse> pagingProductResponse = productService.getProducts(pageDto);
-//
-//    // then
-//    assertThat(pagingProductResponse).isNotNull();
+// given
+  Pageable pageable = mock(Pageable.class);
+  PageDto pageDto = mock(PageDto.class);
+
+  when(pageDto.toPageable()).thenReturn(pageable);
+  when(productRepository.findAllAndPaging(pageable)).thenReturn(Page.empty()); // 수정된 부분
+
+// when
+   Page<PagingProductResponse> pagingProductResponse = productService.getProducts(pageDto);
+
+// then
+  assertThat(pagingProductResponse).isNotNull();
+
   }
 
   @Test
@@ -85,35 +90,50 @@ class ProductServiceImplTest {
   void updateProduct() {
     // given
     User user = mock(User.class);
-    Product product = mock(Product.class);
-    ProductRequestDto productRequestDto = mock(ProductRequestDto.class);
+    Product product = Product.builder()
+        .productName("earphone")
+        .productPrice(10000L)
+        .productStatus(ProductStatus.S)
+        .productCategory(ProductCategory.IT)
+        .productEnum(ProductEnum.판매_중)
+        .user(user)
+        .build();
+
+    ProductRequestDto productRequestDto = ProductRequestDto.builder()
+        .productName("Americano")
+        .productPrice(5000L)
+        .productStatus(ProductStatus.S)
+        .productCategory(ProductCategory.FOOD)
+        .productEnum(ProductEnum.판매완료)
+        .build();
 
     when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
-    when(Optional.of(product).get().checkProductWriter(isA(Long.class))).thenReturn(true);
 
     // when
-    productService.updateProduct(product.getId(), productRequestDto, isA(Long.class));
+    productService.updateProduct(product.getId(), productRequestDto, user.getId());
 
-    // then
-    verify(product).update(productRequestDto);
+    //then
+    assertThat(product.getProductName()).isEqualTo(productRequestDto.getProductName());
+    assertThat(product.getProductPrice()).isEqualTo(productRequestDto.getProductPrice());
+    assertThat(product.getProductStatus()).isEqualTo(productRequestDto.getProductStatus());
+
   }
-
 
   @Test
   @DisplayName("상품 삭제 성공")
   void deleteProduct() {
-    // given
-//    User user = mock(User.class);
-//    Product product = mock(Product.class);
-//    Long id = mock(Long.class);
-//
-//    when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
-//    when(Optional.of(product).get().checkProductWriter(isA(Long.class))).thenReturn(true);
-//
-//    // when
-//    productService.deleteProduct(product.getId(), isA(Long.class));
-//
-//    // then
-//    verify(productRepository).deleteById(product.getId());
+
+      // given
+      User user = mock(User.class);
+      Product product = mock(Product.class);
+
+      when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+      when(Optional.of(product).get().checkProductWriter(user.getId())).thenReturn(true);
+
+      // when
+      productService.deleteProduct(product.getId(), user.getId());
+      // then
+      verify(productRepository, times(1)).deleteById(product.getId());
+
   }
 }
