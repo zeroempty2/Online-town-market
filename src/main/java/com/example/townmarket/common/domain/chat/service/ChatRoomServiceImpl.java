@@ -24,6 +24,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   private final UserRepository userRepository;
 
   /*채팅방 생성*/
+
   @Override
   public void createRoom(Long productId, String username) {
     Product product = productRepository.findById(productId).orElseThrow(
@@ -32,6 +33,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     User user = userRepository.findByUsername(username).orElseThrow(
         () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
     );
+    if (!user.getUsername().equals(username)) {
+      throw new RuntimeException("권한이 없습니다.");
+    }
 
     // 이미 해당 상품에 대한 채팅방이 존재하는 경우
     if (roomRepository.existsByProductAndUser(product, user)) {
@@ -52,7 +56,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     User user = userRepository.findByUsername(username).orElseThrow(
         () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
     );
-    ChatRoom room = roomRepository.findAllByOrderByIdDesc();
+    ChatRoom room = roomRepository.findById(roomId).orElseThrow(
+        () -> new IllegalArgumentException("이미 삭제된 채팅방 입니다.")
+    );
 
     if (!roomId.equals(room.getId())) {
       throw new RuntimeException("채팅방이 존재하지 않습니다.");

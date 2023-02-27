@@ -28,7 +28,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
   private final String[] permitAllArray = {
-      "/",
+      "/**",
       "/users/**",
       "/users/login/",
       "/users/login2/",
@@ -54,6 +54,7 @@ public class SecurityConfig {
       "/chatroom/**",
       "/boards",
       "/users/search/**",
+      "/ws/**",
       "profile"};
   private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
   private final JwtUtil jwtUtil;
@@ -82,8 +83,8 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf().disable();
-    http.headers().frameOptions().sameOrigin(); // 웹소켓 관련
+    http.csrf().disable().cors();
+//    http.headers().frameOptions().sameOrigin(); // 웹소켓 관련
 
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
