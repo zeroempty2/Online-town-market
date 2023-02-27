@@ -2,12 +2,14 @@ package com.example.townmarket.common.domain.chat.service;
 
 import com.example.townmarket.common.domain.chat.dto.ChatRoomDto;
 import com.example.townmarket.common.domain.chat.dto.ChatRoomListDtailDto;
+import com.example.townmarket.common.domain.chat.dto.ChatRoomResponse;
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.chat.repository.ChatRoomRepository;
 import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   /*채팅방 생성*/
 
   @Override
-  public void createRoom(Long productId, String username) {
+  public List<ChatRoomResponse> createRoom(Long productId, String username) {
     Product product = productRepository.findById(productId).orElseThrow(
         () -> new IllegalArgumentException("상품이 존재하지 않습니다.")
     );
@@ -38,7 +40,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     // 이미 해당 상품에 대한 채팅방이 존재하는 경우
-    if (roomRepository.existsByProductAndUser(product, user)) {
+    if (roomRepository.existsByProductAndBuyer(product, user)) {
       throw new RuntimeException("해당 상품에 대한 채팅방이 이미 존재합니다.");
     }
 
@@ -47,6 +49,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
     ChatRoom chatRooms = new ChatRoom(product, user);
     roomRepository.save(chatRooms);
+    return roomRepository.searchChatRoomByUsername(username);
   }
 
 
@@ -78,7 +81,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     return new ChatRoomListDtailDto(user);
   }
-
 
   /* 채팅방 삭제 */
   @Override

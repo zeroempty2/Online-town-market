@@ -29,7 +29,7 @@ public class TestDataRunner implements ApplicationRunner {
   @Override
   @Transactional
   public void run(ApplicationArguments args) throws Exception {
-    Profile profile = Profile.builder().nickName("testUser").build();
+    Profile profile = new Profile("asdsad");
 
     User user = User.builder()
         .username("user1")

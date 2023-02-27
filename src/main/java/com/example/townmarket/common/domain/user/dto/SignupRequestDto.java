@@ -30,7 +30,7 @@ public class SignupRequestDto {
   @Pattern(regexp = "^[a-zA-Z0-9]{4,12}$", message = "소문자와 숫자를 포함하여 4자 이상 12자 이하로  적어주세요.")
   private String nickname;
 
-
+  private String img_url;
   //  @NotEmpty(message = "거래할 지역의 읍,면,동 까지 적어주세요.")
   private String region;
 

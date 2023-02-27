@@ -120,7 +120,7 @@ public class User extends TimeStamped {
   private Set<Product> products = new LinkedHashSet<>();
 
   @Builder.Default
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<ChatRoom> chatRooms = new LinkedHashSet<>();
 
   @Builder.Default

@@ -43,10 +43,10 @@ public class ChatRoom {
   /**
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
    */
-  public ChatRoom(Product product, User user) {
+  public ChatRoom(Product product, User buyer) {
     this.productName = product.getProductName();
     this.seller = product.getUser().getId();
-    this.user = user;
+    this.buyer = buyer;
     this.product = product;
   }
 
@@ -56,7 +56,7 @@ public class ChatRoom {
    */
   @ManyToOne
   @JoinColumn(name = "buyer_id")
-  private User user;
+  private User buyer;
   //
   @ManyToOne
   @JoinColumn(name = "product_id")

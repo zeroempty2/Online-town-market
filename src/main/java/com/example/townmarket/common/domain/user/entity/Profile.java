@@ -21,7 +21,7 @@ public class Profile {
   private String nickName;
 
   @Column
-  private String img_url;
+  private String img_url = "https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg";
 
   /**
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
@@ -32,7 +32,7 @@ public class Profile {
     this.img_url = img_url;
   }
 
-  @Builder
+
   public Profile(String nickName) {
     this.nickName = nickName;
   }

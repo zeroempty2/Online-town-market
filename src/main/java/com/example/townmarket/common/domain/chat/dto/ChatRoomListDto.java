@@ -27,9 +27,9 @@ public class ChatRoomListDto {
 
     if (isSeller) {
       // 판매자인 경우
-      this.profileImg = room.getUser().getProfile().getImg_url();
-      this.nickname = room.getUser().getProfile().getNickName();
-      this.region = room.getUser().getRegion();
+      this.profileImg = room.getBuyer().getProfile().getImg_url();
+      this.nickname = room.getBuyer().getProfile().getNickName();
+      this.region = room.getBuyer().getRegion();
     } else {
       // 구매자인 경우
       this.profileImg = room.getProduct().getUser().getProfile().getImg_url();
