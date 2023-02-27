@@ -1,9 +1,11 @@
 package com.example.townmarket.common.oauth;
 
 
+import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.enums.RoleEnum;
 import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
+import com.example.townmarket.common.security.UserDetailsImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,36 +32,35 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
-    OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
-    String email = (String) oAuth2User.getAttributes().get("email");
-    String username = (String) oAuth2User.getAttributes().get("name");
+    UserDetailsImpl userDetails = (UserDetailsImpl)authentication.getPrincipal();
 
-    System.out.println(request.getRequestURI());
-    System.out.println(request.getQueryString());
+    User user = userDetails.getUser();
 
-    username = username.toLowerCase();
+    String username = user.getUsername().toLowerCase();
+
+    String email = user.getEmail();
 
     if (userRepository.existsByEmail(email)) {
-      String refreshToken = jwtUtil.createRefreshToken(username, RoleEnum.MEMBER);
-      String accessToken = jwtUtil.createAccessToken(username, RoleEnum.MEMBER);
-      // 프론트 엔드에 전달할 응답 생성
+      String refreshToken = jwtUtil.createRefreshToken(username, user.getRole());
+      String accessToken = jwtUtil.createAccessToken(username, user.getRole());
+//       프론트 엔드에 전달할 응답 생성
 //      Map<Object, Object> data = new HashMap<>();
 //
 //      data.put("username", username);
 //      data.put("accessToken", accessToken);
 //      data.put("refreshToken", refreshToken);
-//
-//      response.setContentType("application/json");
-////      ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(model);
+
+      response.setContentType("application/json");
+//      ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(model);
 //      new ObjectMapper().writeValue(response.getOutputStream(), data);
       String redirectUrl = "http://localhost:5500/index.html";
-      redirectUrl += "?username=" + username + "&role=" + RoleEnum.MEMBER;
+
+      response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
+      response.addHeader(JwtUtil.REFRESH_HEADER, refreshToken);
       response.sendRedirect(redirectUrl);
+
 //      response.sendRedirect("http://localhost:5500/index.html");
-    } else {
-      //패스워드 입력하도록 리다이렉트
-      response.sendRedirect("/users/oauth/password/" + email + "/" + username);
     }
   }
 }
