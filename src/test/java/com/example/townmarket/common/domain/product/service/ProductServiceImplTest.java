@@ -136,4 +136,20 @@ class ProductServiceImplTest {
       verify(productRepository, times(1)).deleteById(product.getId());
 
   }
+  @Test
+  @DisplayName("상품 리포지토리 조회 후 상품 반환 성공 테스트")
+  void findProductById() {
+    //given
+    Product product = mock(Product.class);
+
+    when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+
+    //when
+    Product productResultFindById = productService.findProductById(product.getId());
+
+    //then
+    assertThat(productResultFindById).isEqualTo(product);
+  }
+
 }
+
