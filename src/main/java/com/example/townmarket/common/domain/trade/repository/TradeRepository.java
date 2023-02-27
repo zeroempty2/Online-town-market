@@ -7,10 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TradeRepository extends JpaRepository<Trade, Long> {
+public interface TradeRepository extends JpaRepository<Trade, Long>, TradeRepositoryQuery {
 
-  Page<Trade> findAllBySeller(Pageable pageable, Long sellerId);
+//  Page<Trade> findAllBySeller(Pageable pageable, User Seller);
 
-  Page<Trade> findAllByBuyer(Pageable pageable, Long buyerId);
+  Page<Trade> findAllByBuyer(Pageable pageable, User buyer);
 
 }

@@ -93,7 +93,7 @@ public class SecurityConfig {
         .requestMatchers("/admin/users").hasAnyRole("TOP_MANAGER", "MIDDLE_MANAGER")
         .requestMatchers("/interest/**").hasAnyRole("MEMBER")
         .requestMatchers("/report/**").hasAnyRole("MEMBER")
-        .requestMatchers("/transaction/**").hasAnyRole("MEMBER")
+        .requestMatchers("/trade/**").hasAnyRole("MEMBER")
         .requestMatchers("/review/**").hasAnyRole("MEMBER")
         .requestMatchers("/users/info").hasAnyRole("MEMBER")
         .anyRequest().authenticated()

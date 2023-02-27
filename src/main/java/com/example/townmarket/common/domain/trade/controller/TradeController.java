@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/transaction")
+@RequestMapping("/trade")
 public class TradeController {
 
   private final TradeService tradeService;
@@ -50,13 +50,13 @@ public class TradeController {
         .body(tradeService.getSalesList(userDetails.getUser(), pageable));
   }
 
-  @GetMapping("/sales/{userId}")
-  public ResponseEntity<Page<PagingTrade>> getSalesListOfOther(
-      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-      @PathVariable Long userId) {
-    return ResponseEntity.ok().headers(setHttpHeaders.setHeaderTypeJson())
-        .body(tradeService.getSalesListOfOther(userId, pageable));
-  }
+//  @GetMapping("/sales/{userId}")
+//  public ResponseEntity<Page<PagingTrade>> getSalesListOfOther(
+//      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+//      @PathVariable Long userId) {
+//    return ResponseEntity.ok().headers(setHttpHeaders.setHeaderTypeJson())
+//        .body(tradeService.getSalesListOfOther(userId, pageable));
+//  }
 
   @PostMapping("/create")
   public ResponseEntity<StatusResponse> createTrade(@RequestBody CreateTradeDto createTrade,
