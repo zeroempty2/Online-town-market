@@ -1,7 +1,6 @@
 package com.example.townmarket.common.domain.chat.service;
 
 import com.example.townmarket.common.domain.chat.dto.ChatRoomDto;
-import com.example.townmarket.common.domain.chat.dto.ChatRoomListDtailDto;
 import com.example.townmarket.common.domain.chat.dto.ChatRoomResponse;
 import java.util.List;
 
@@ -13,5 +12,5 @@ public interface ChatRoomService {
 
   ChatRoomDto getChatRoom(Long roomId, String username);
 
-  ChatRoomListDtailDto myChatList(Long userId);
+  List<ChatRoomResponse> myChatList(String username);
 }

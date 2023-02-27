@@ -1,7 +1,6 @@
 package com.example.townmarket.common.domain.chat.service;
 
 import com.example.townmarket.common.domain.chat.dto.ChatRoomDto;
-import com.example.townmarket.common.domain.chat.dto.ChatRoomListDtailDto;
 import com.example.townmarket.common.domain.chat.dto.ChatRoomResponse;
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.chat.repository.ChatRoomRepository;
@@ -75,11 +74,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
   /*나의 채팅 리스트*/
   @Override
-  public ChatRoomListDtailDto myChatList(Long userId) {
-    User user = userRepository.findById(userId)
-        .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
-
-    return new ChatRoomListDtailDto(user);
+  public List<ChatRoomResponse> myChatList(String username) {
+    if (userRepository.existsByUsername(username)) {
+      return roomRepository.searchChatRoomByUsername(username);
+    }
+    throw new IllegalArgumentException("잘못된 입력입니다.");
   }
 
 

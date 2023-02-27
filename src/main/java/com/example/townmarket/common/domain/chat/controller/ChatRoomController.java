@@ -1,7 +1,6 @@
 package com.example.townmarket.common.domain.chat.controller;
 
 import com.example.townmarket.common.domain.chat.dto.ChatRoomDto;
-import com.example.townmarket.common.domain.chat.dto.ChatRoomListDtailDto;
 import com.example.townmarket.common.domain.chat.dto.ChatRoomResponse;
 import com.example.townmarket.common.domain.chat.service.ChatRoomService;
 import com.example.townmarket.common.dto.StatusResponse;
@@ -46,12 +45,11 @@ public class ChatRoomController {
 
   /*나의 채팅 리스트*/
   @GetMapping("/chatrooms")
-  public ResponseEntity<ChatRoomListDtailDto> myChatList(
+  public ResponseEntity<List<ChatRoomResponse>> myChatList(
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-    roomService.myChatList(userDetails.getUserId());
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(roomService.myChatList(userDetails.getUserId()));
+    return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders.setHeaderTypeJson())
+        .body(roomService.myChatList(userDetails.getUsername()));
   }
 
   /* 채팅방 삭제 */
