@@ -92,7 +92,7 @@ class BoardServiceImplTest {
   }
 
   @Test
-  @DisplayName("게시글 목록 불러오기 테스트")
+  @DisplayName("게시글 목록 불러오기 성공 테스트")
   void getBoards() {
     // given
     Pageable pageable = mock(Pageable.class);
@@ -107,7 +107,7 @@ class BoardServiceImplTest {
   }
 
   @Test
-  @DisplayName("게시글 단건 조회 테스트")
+  @DisplayName("게시글 단건 조회 성공 테스트")
   void getBoard() {
 
     // given
@@ -143,4 +143,20 @@ class BoardServiceImplTest {
     verify(boardRepository, times(1)).deleteById(board.getId());
 
   }
+
+  @Test
+  @DisplayName("게시글 리포지토리 조회 후 게시글 반환 성공 테스트")
+  void findBoardById() {
+    //given
+    Board board = mock(Board.class);
+
+    when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));
+
+    //when
+    Board boardResultFindById = boardService.findBoardById(board.getId());
+
+    //then
+    assertThat(boardResultFindById).isEqualTo(board);
+  }
+
 }
