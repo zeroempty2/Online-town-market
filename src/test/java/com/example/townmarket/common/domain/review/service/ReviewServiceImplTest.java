@@ -5,14 +5,20 @@ import static com.example.townmarket.fixture.ReviewFixture.REVIEW_ID;
 import static com.example.townmarket.fixture.ReviewFixture.REVIEW_RESPONSE_DTO_PAGE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.example.townmarket.common.domain.product.service.ProductServiceImpl;
 import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
+import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.domain.review.repository.ReviewRepository;
 import com.example.townmarket.common.domain.user.service.UserServiceImpl;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -75,7 +81,18 @@ class ReviewServiceImplTest {
   }
 
   @Test
+  @DisplayName("리뷰 리포지토리 조회 후 리뷰 반환 성공 테스트")
   void findReviewById() {
+    //given
+    Review review = mock(Review.class);
+
+    when(reviewRepository.findById(review.getId())).thenReturn(Optional.of(review));
+
+    //when
+    Review reviewResultFindById =  reviewService.findReviewById(review.getId());
+
+    //then
+    assertThat(reviewResultFindById).isEqualTo(review);
   }
 
   @Test

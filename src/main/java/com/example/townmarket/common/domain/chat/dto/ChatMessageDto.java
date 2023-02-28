@@ -1,6 +1,11 @@
 package com.example.townmarket.common.domain.chat.dto;
 
+
 import java.time.LocalDateTime;
+
+import com.example.townmarket.common.domain.chat.entity.ChatMessage;
+import lombok.AllArgsConstructor;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
