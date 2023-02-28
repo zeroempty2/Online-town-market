@@ -32,6 +32,7 @@ public class ChatRoomController {
   @PostMapping("/chatroom/{productId}")
   public ResponseEntity<StatusResponse> createRoom(@PathVariable Long productId,
       @AuthenticationPrincipal UserDetails userDetails) {
+    roomService.createRoom(productId, userDetails.getUsername());
     return RESPONSE_CREATED;
   }
 

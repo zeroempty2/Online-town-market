@@ -21,7 +21,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -104,7 +103,7 @@ public class Product extends TimeStamped {
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<ChatRoom> room = new LinkedHashSet<>();
 
-  @OneToOne(mappedBy = "product")
+  @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
   private Trade trade;
 
   @OneToOne(fetch = FetchType.LAZY, mappedBy = "product")

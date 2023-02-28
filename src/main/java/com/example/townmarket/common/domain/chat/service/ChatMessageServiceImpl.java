@@ -1,6 +1,6 @@
 package com.example.townmarket.common.domain.chat.service;
 
-import com.example.townmarket.common.domain.chat.dto.ChatRoomDto;
+import com.example.townmarket.common.domain.chat.dto.ChatMessageDto;
 import com.example.townmarket.common.domain.chat.entity.ChatMessage;
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.chat.repository.ChatMessageRepository;
@@ -21,13 +21,15 @@ public class ChatMessageServiceImpl implements ChatMessageService {
    */
   @Override
   @Transactional
-  public void createChat(ChatRoomDto message) {
+  public ChatMessageDto createChat(ChatMessageDto message, Long roomId) {
 
-    ChatRoom room = roomRepository.findById(message.getRoomId()).orElseThrow(
+    ChatRoom room = roomRepository.findById(roomId).orElseThrow(
         () -> new IllegalArgumentException("채팅방이 존재하지 않습니다.")
     );
     ChatMessage addMessage = new ChatMessage(message.getSender(), message.getReceiver(),
         message.getMessage(), room);
     messageRepository.save(addMessage);
+
+    return message;
   }
 }

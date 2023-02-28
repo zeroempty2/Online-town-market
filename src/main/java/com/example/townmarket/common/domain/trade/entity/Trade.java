@@ -2,7 +2,6 @@ package com.example.townmarket.common.domain.trade.entity;
 
 import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.user.entity.User;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,7 +23,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Trade {
 
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "trade_Id")
   private Long id;
 
@@ -36,7 +36,7 @@ public class Trade {
   @JoinColumn(name = "seller_Id")
   private User seller;
 
-  @OneToOne
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_Id")
   private Product product;
 
