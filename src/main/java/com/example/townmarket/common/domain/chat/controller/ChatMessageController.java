@@ -19,15 +19,10 @@ public class ChatMessageController {
   private final SimpMessagingTemplate messagingTemplate;
 
 
-
-
-
   @CrossOrigin(value = "http://localhost:8080", methods = RequestMethod.GET)
   @MessageMapping("/send") //여기로 전송되면 메서드 호출 -> WebSocketConfig prefixes 에서 적용한건 앞에 생략 || /pub/send
   public ChatMessageDto chatMessage(ChatMessageDto message) {
-
     messageService.createChat(message);
-
     messagingTemplate.convertAndSend(
         "/sub/" + message.getReceiver() + "/product" + message.getProductId(), message);
     return message;
