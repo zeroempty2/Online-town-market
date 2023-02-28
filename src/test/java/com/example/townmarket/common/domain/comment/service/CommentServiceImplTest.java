@@ -3,6 +3,7 @@ package com.example.townmarket.common.domain.comment.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -83,7 +84,7 @@ class CommentServiceImplTest {
     commentService.deleteComment(comment.getId(), user);
 
     // then
-    verify(commentRepository).deleteById(comment.getId());
+    verify(commentRepository, times(1)).deleteById(comment.getId());
 
   }
 
