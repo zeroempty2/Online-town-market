@@ -21,9 +21,9 @@ public class ChatMessageServiceImpl implements ChatMessageService {
    */
   @Override
   @Transactional
-  public void createChat(ChatMessageDto message) {
+  public ChatMessageDto createChat(ChatMessageDto message, Long roomId) {
 
-    ChatRoom room = roomRepository.findById(message.getRoomId()).orElseThrow(
+    ChatRoom room = roomRepository.findById(roomId).orElseThrow(
         () -> new IllegalArgumentException("채팅방이 존재하지 않습니다.")
     );
     if (message.getProductId() != room.getProduct().getId()) {
@@ -32,6 +32,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
       ChatMessage messageList = new ChatMessage(message.getSender(), message.getReceiver(), message.getMessage(), room);
       messageRepository.save(messageList);
 
+      return new ChatMessageDto(messageList);
     }
   }
 }
