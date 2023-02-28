@@ -1,8 +1,8 @@
 package com.example.townmarket.common.domain.chat.service;
 
-import com.example.townmarket.common.domain.chat.dto.ChatMessageDto;
+import com.example.townmarket.common.domain.chat.dto.ChatRoomDto;
 
 public interface ChatMessageService {
 
-  void createChat(ChatMessageDto message);
+  void createChat(ChatRoomDto message);
 }

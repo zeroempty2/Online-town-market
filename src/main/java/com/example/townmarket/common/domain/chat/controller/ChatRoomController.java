@@ -2,13 +2,14 @@ package com.example.townmarket.common.domain.chat.controller;
 
 import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_CREATED;
 
-import com.example.townmarket.common.domain.chat.dto.ChatRoomDto;
-import com.example.townmarket.common.domain.chat.dto.ChatRoomListDtailDto;
+import com.example.townmarket.common.domain.chat.dto.ChatMessageDto;
+import com.example.townmarket.common.domain.chat.dto.ChatRoomResponse;
 import com.example.townmarket.common.domain.chat.service.ChatRoomService;
 import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,21 +37,30 @@ public class ChatRoomController {
 
   /* 해당 채팅방 보기 */
   @GetMapping("/chatrooms/{roomId}")
-  public ResponseEntity<ChatRoomDto> getChatRoom(@PathVariable Long roomId,
+  public ResponseEntity<List<ChatMessageDto>> getChatRoom(@PathVariable Long roomId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-    ChatRoomDto room = roomService.getChatRoom(roomId, userDetails.getUsername());
+    List<ChatMessageDto> room = roomService.getChatRoom(roomId, userDetails.getUsername());
     return ResponseEntity.status(HttpStatus.OK).body(room);
   }
 
   /*나의 채팅 리스트*/
-  @GetMapping("/chatrooms")
-  public ResponseEntity<ChatRoomListDtailDto> myChatList(
+  @GetMapping("/chatroom/buy")
+  public ResponseEntity<List<ChatRoomResponse>> buyChatList(
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-    roomService.myChatList(userDetails.getUserId());
+    roomService.buyChatList(userDetails.getUserId());
     return ResponseEntity.status(HttpStatus.OK)
-        .body(roomService.myChatList(userDetails.getUserId()));
+        .body(roomService.buyChatList(userDetails.getUserId()));
+  }
+
+  @GetMapping("/chatroom/sell")
+  public ResponseEntity<List<ChatRoomResponse>> sellChatList(
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+    roomService.sellChatList(userDetails.getUserId());
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(roomService.sellChatList(userDetails.getUserId()));
   }
 
   /* 채팅방 삭제 */

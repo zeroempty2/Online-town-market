@@ -1,6 +1,6 @@
 package com.example.townmarket.common.domain.chat.controller;
 
-import com.example.townmarket.common.domain.chat.dto.ChatMessageDto;
+import com.example.townmarket.common.domain.chat.dto.ChatRoomDto;
 import com.example.townmarket.common.domain.chat.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class ChatMessageController {
 
   @CrossOrigin(value = "http://localhost:8080", methods = RequestMethod.GET)
   @MessageMapping("/send") //여기로 전송되면 메서드 호출 -> WebSocketConfig prefixes 에서 적용한건 앞에 생략 || /pub/send
-  public ChatMessageDto chatMessage(ChatMessageDto message) {
+  public ChatRoomDto chatMessage(ChatRoomDto message) {
     messageService.createChat(message);
     messagingTemplate.convertAndSend(
         "/sub/" + message.getReceiver() + "/product" + message.getProductId(), message);
