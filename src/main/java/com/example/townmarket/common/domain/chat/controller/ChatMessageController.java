@@ -17,14 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatMessageController {
 
   private final ChatMessageService messageService;
-//  private final SimpMessagingTemplate messagingTemplate;
-
-
-
 
 
   @CrossOrigin(value = "http://localhost:8080", methods = RequestMethod.GET)
-  @MessageMapping("/{roomId}") //여기로 전송되면 메서드 호출 -> WebSocketConfig prefixes 에서 적용한건 앞에 생략 || /pub/send
+  @MessageMapping("/{roomId}")
   @SendTo("/sub/{roomId}")
   public ChatMessageDto chatMessage(@DestinationVariable Long roomId, ChatMessageDto message) {
 
@@ -34,4 +30,5 @@ public class ChatMessageController {
 //        "/sub/" + message.getReceiver() + "/product" + message.getProductId(), message);
     return message;
   }
+
 }

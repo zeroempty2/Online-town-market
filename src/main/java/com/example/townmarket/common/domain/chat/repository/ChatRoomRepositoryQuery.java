@@ -6,4 +6,8 @@ import java.util.List;
 public interface ChatRoomRepositoryQuery {
 
   List<ChatRoomResponse> searchChatRoomByUsername(String username);
+
+  List<ChatRoomResponse> searchChatRoomByproductUsername(String username);
+
+
 }
