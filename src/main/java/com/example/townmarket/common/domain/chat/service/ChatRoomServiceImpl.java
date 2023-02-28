@@ -75,7 +75,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   @Override
   public List<ChatRoomResponse> sellChatList(Long userId) {
     User user = userService.findUserById(userId);
-    return roomRepository.searchChatRoomByproductUsername(user.getUsername());
+    return roomRepository.searchChatRoomBySellerName(user.getUsername());
   }
 
   /* 채팅방 삭제 */

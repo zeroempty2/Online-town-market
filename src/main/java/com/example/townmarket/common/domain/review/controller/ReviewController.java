@@ -11,7 +11,6 @@ import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
 import com.example.townmarket.common.domain.review.service.ReviewServiceImpl;
 import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.dto.StatusResponse;
-import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import lombok.RequiredArgsConstructor;

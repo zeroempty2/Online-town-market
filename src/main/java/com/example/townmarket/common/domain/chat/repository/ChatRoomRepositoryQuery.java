@@ -9,5 +9,6 @@ public interface ChatRoomRepositoryQuery {
 
   List<ChatRoomResponse> searchChatRoomByproductUsername(String username);
 
+  List<ChatRoomResponse> searchChatRoomBySellerName(String username);
 
 }
