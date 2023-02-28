@@ -15,6 +15,7 @@ import com.example.townmarket.common.domain.product.service.ProductServiceImpl;
 import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
 import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.domain.review.repository.ReviewRepository;
+import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.service.UserServiceImpl;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -47,21 +48,26 @@ class ReviewServiceImplTest {
 
 
   @Test
+  @DisplayName("리뷰 생성 성공 테스트")
   void createReview() {
     reviewService.createReview(CREATE_REVIEW_REQUEST_DTO, any());
+
     verify(reviewRepository, times(1)).save(any());
     verify(userGradeService, times(1)).saveGrade(any());
   }
 
   @Test
+  @DisplayName("리뷰 선택 조회 성공 테스트")
   void showSelectReview() {
     given(reviewRepository.existsReviewId(REVIEW_ID)).willReturn(true);
     reviewService.showSelectReview(REVIEW_ID);
+
     verify(reviewRepository, times(1)).searchByReviewId(REVIEW_ID);
 
   }
 
   @Test
+  @DisplayName("내 리뷰 목록 조회 성공 테스트")
   void showMyReviews() {
     given(reviewRepository.searchByUserAndPaging(any(), any())).willReturn(
         REVIEW_RESPONSE_DTO_PAGE);
@@ -70,14 +76,26 @@ class ReviewServiceImplTest {
     Assertions.assertSame(reviewResponseDtos, REVIEW_RESPONSE_DTO_PAGE);
   }
 
-//  @Test
-//  void updateMyReview() {
-//    given(reviewRepository.findById(any())).willReturn(Optional.ofNullable(REVIEW));
-//
-//  }
+  @Test
+  @DisplayName("내 리뷰 업데이트 성공 테스트")
+  void updateMyReview() {
+  }
 
   @Test
+  @DisplayName("리뷰 삭제 성공 테스트")
   void deleteReview() {
+    // given
+    User user = mock(User.class);
+    Review review = mock(Review.class);
+
+    when(reviewRepository.findById(review.getId())).thenReturn(Optional.of(review));
+    when(Optional.of(review).get().isReviewWriter(user.getId())).thenReturn(true);
+
+    //when
+    reviewService.deleteReview(review.getId(), user.getId());
+
+    //then
+    verify(reviewRepository, times(1)).deleteById(review.getId());
   }
 
   @Test
@@ -96,6 +114,7 @@ class ReviewServiceImplTest {
   }
 
   @Test
+  @DisplayName("리뷰 작성자 체크 테스트")
   void reviewWriterCheck() {
   }
 }
