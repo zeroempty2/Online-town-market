@@ -47,4 +47,20 @@ public class ChatRoomRepositoryQueryImpl implements ChatRoomRepositoryQuery {
         .fetch();
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public List<ChatRoomResponse> searchChatRoomBySellerName(String username) {
+    return jpaQueryFactory.select(Projections.constructor(ChatRoomResponse.class,
+            chatRoom.product.id,
+            chatRoom.buyer,
+            chatRoom.product.productName,
+            chatRoom.id
+        )).from(chatRoom)
+        .where(chatRoom.product.user.username.eq(username))
+        .leftJoin(chatRoom.product)
+        .leftJoin(product.user)
+        .setHint("org.hibernate.readOnly", true)
+        .fetch();
+  }
+
 }

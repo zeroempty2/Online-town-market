@@ -3,7 +3,6 @@ package com.example.townmarket.common.domain.product.entity;
 import com.example.townmarket.common.TimeStamped;
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
-import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.domain.trade.entity.Trade;
 import com.example.townmarket.common.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
@@ -105,10 +104,6 @@ public class Product extends TimeStamped {
 
   @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
   private Trade trade;
-
-  @OneToOne(fetch = FetchType.LAZY, mappedBy = "product")
-  @JoinColumn(name = "review_id")
-  private Review review;
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.

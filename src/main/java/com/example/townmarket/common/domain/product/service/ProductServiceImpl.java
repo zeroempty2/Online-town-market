@@ -41,6 +41,7 @@ public class ProductServiceImpl implements ProductService {
         .productId(product.getId())
         .productName(product.getProductName())
         .productPrice(product.getProductPrice())
+        .productEnum(product.getProductEnum())
         .productStatus(product.getProductStatus())
         .productCategory(product.getProductCategory())
         .createdAt(product.getCreatedAt())
