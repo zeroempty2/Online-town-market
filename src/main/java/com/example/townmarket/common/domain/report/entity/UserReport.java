@@ -27,7 +27,7 @@ public class UserReport extends TimeStamped {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_report")
+  @Column(name = "report_id")
   private Long id;
 
   @Enumerated(EnumType.STRING)

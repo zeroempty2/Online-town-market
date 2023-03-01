@@ -1,6 +1,7 @@
 package com.example.townmarket.common.domain.report.controller;
 
 import static com.example.townmarket.common.domain.report.controller.ProductReportController.PRODUCT_REPORT_URI_API;
+import static com.example.townmarket.common.domain.report.controller.UserReportController.USER_REPORT_URI_API;
 import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.townmarket.common.domain.report.dto.ProductReportRequestDto;
@@ -21,14 +22,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(PRODUCT_REPORT_URI_API)
+@RequestMapping(USER_REPORT_URI_API )
 public class UserReportController {
 
-  static final String PRODUCT_REPORT_URI_API = "/report/user";
+  static final String USER_REPORT_URI_API = "/report/user";
   private final UserReportService userReportService;
 
   @PostMapping
-  public ResponseEntity<StatusResponse> reportProduct(
+  public ResponseEntity<StatusResponse> reportUser(
       @RequestBody UserReportRequest userReportRequest, @AuthenticationPrincipal
   UserDetailsImpl userDetails) {
     userReportService.reportUser(userReportRequest, userDetails.getUserId());
