@@ -1,8 +1,10 @@
 package com.example.townmarket.common.domain.trade.repository;
 
+import static com.example.townmarket.common.domain.product.entity.QProduct.product;
 import static com.example.townmarket.common.domain.review.entity.QReview.review;
 import static com.example.townmarket.common.domain.trade.entity.QTrade.trade;
 
+import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.trade.dto.PagingTrade;
 import com.example.townmarket.common.domain.trade.entity.QTrade;
 import com.example.townmarket.common.domain.user.entity.User;
@@ -21,47 +23,47 @@ public class TradeRepositoryQueryImpl implements  TradeRepositoryQuery{
 
   private final JPAQueryFactory jpaQueryFactory;
 
-  private JPAQuery<PagingTrade> buyQuery() {
-    return jpaQueryFactory.select(Projections.constructor(PagingTrade.class,
-            trade.buyer.username,
-            trade.product.productName))
-        .from(trade)
-        .setHint("org.hibernate.readOnly", true);
-  }
-  private JPAQuery<PagingTrade> saleQuery() {
-    return jpaQueryFactory.select(Projections.constructor(PagingTrade.class,
-            trade.seller.username,
-            trade.product.productName))
-        .from(trade)
-        .setHint("org.hibernate.readOnly", true);
-  }
-
-  private JPAQuery<Long> countSellerQuery(User user) {
+  private JPAQuery<Long> sellerCountQuery(User seller) {
     return jpaQueryFactory.select(Wildcard.count)
         .from(trade)
-        .leftJoin(trade.seller)
-        .where(trade.seller.eq(user));
+        .where(trade.seller.eq(seller));
+  }
+
+  private JPAQuery<Long> buyerCountQuery(User buyer) {
+    return jpaQueryFactory.select(Wildcard.count)
+        .from(trade)
+        .where(trade.buyer.eq(buyer));
   }
 
   @Override
   public Page<PagingTrade> findBuyList(Pageable pageable, User buyer) {
-    List<PagingTrade> tradeList = buyQuery()
+    List<PagingTrade> pagingTrades = jpaQueryFactory
+        .select(Projections.constructor(PagingTrade.class,
+            trade.buyer.username,
+            product.productName))
+        .from(trade)
+        .leftJoin(product)
+        .on(trade.productId.eq(product.id))
         .where(trade.buyer.eq(buyer))
-        .offset(pageable.getOffset())
-        .limit(pageable.getPageSize())
         .fetch();
-    long countSellerQuery = countSellerQuery(buyer).fetch().get(0);
-    return PageableExecutionUtils.getPage(tradeList, pageable, () -> countSellerQuery);
+
+    Long totalSize = buyerCountQuery(buyer).fetch().get(0);
+    return PageableExecutionUtils.getPage(pagingTrades,pageable,()->totalSize);
   }
 
   @Override
   public Page<PagingTrade> findSaleList(Pageable pageable, User seller) {
-    List<PagingTrade> tradeList = saleQuery()
+    List<PagingTrade> pagingTrades = jpaQueryFactory
+        .select(Projections.constructor(PagingTrade.class,
+            trade.seller.username,
+            product.productName))
+        .from(trade)
+        .leftJoin(product)
+        .on(trade.productId.eq(product.id))
         .where(trade.seller.eq(seller))
-        .offset(pageable.getOffset())
-        .limit(pageable.getPageSize())
         .fetch();
-    long countSellerQuery = countSellerQuery(seller).fetch().get(0);
-    return PageableExecutionUtils.getPage(tradeList, pageable, () -> countSellerQuery);
+
+    Long totalSize = sellerCountQuery(seller).fetch().get(0);
+    return PageableExecutionUtils.getPage(pagingTrades,pageable,()->totalSize);
   }
 }

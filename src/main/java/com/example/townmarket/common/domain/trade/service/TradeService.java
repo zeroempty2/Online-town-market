@@ -13,7 +13,7 @@ public interface TradeService {
   Page<PagingTrade> getSalesList(User user, Pageable pageable);
 
 
-  Page<PagingTrade> getSalesListOfOther(Long userId, Pageable pageable);
+//  Page<PagingTrade> getSalesListOfOther(Long userId, Pageable pageable);
 
   void createTrade(CreateTradeDto createTrade, User user);
 }

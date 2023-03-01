@@ -36,14 +36,12 @@ public class Trade {
   @JoinColumn(name = "seller_Id")
   private User seller;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "product_Id")
-  private Product product;
+  private Long productId;
 
-  public Trade(User buyer, User seller, Product product) {
+  public Trade(User buyer, User seller, Long productId) {
     this.buyer = buyer;
     this.seller = seller;
-    this.product = product;
+    this.productId = productId;
   }
 }
 
