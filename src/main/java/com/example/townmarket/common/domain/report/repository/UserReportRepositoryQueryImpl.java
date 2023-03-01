@@ -5,6 +5,7 @@ import static com.example.townmarket.common.domain.product.entity.QProduct.produ
 import static com.example.townmarket.common.domain.report.entity.QUserReport.userReport;
 
 import com.example.townmarket.common.domain.report.dto.PagingUserReportResponse;
+import com.example.townmarket.common.domain.trade.entity.QTrade;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -38,6 +39,6 @@ public class UserReportRepositoryQueryImpl implements UserReportRepositoryQuery{
 
   private JPAQuery<Long> countQuery() {
     return jpaQueryFactory.select(Wildcard.count)
-        .from(product);
+        .from(userReport);
   }
 }
