@@ -2,6 +2,7 @@ package com.example.townmarket.common.domain.product.entity;
 
 import com.example.townmarket.common.TimeStamped;
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
+import com.example.townmarket.common.domain.interest.entity.Interest;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
 import com.example.townmarket.common.domain.trade.entity.Trade;
 import com.example.townmarket.common.domain.user.entity.User;
@@ -46,6 +47,7 @@ public class Product extends TimeStamped {
   private Long id;
   private String productName;
   private Long productPrice;
+  private String productContents;
   @Enumerated(EnumType.STRING)
   private ProductEnum productEnum;
   @Enumerated(EnumType.STRING)
@@ -78,11 +80,13 @@ public class Product extends TimeStamped {
    */
   @Builder
   public Product(Long id, String productName, Long productPrice, ProductStatus productStatus,
+      String productContents,
       ProductCategory productCategory, ProductEnum productEnum, User user) {
     this.id = id;
     this.productName = productName;
     this.productPrice = productPrice;
     this.productStatus = productStatus;
+    this.productContents = productContents;
     this.productEnum = productEnum;
     this.productCategory = productCategory;
     this.user = user;
@@ -104,6 +108,8 @@ public class Product extends TimeStamped {
   private Set<ChatRoom> room = new LinkedHashSet<>();
 
 
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Interest> interest = new LinkedHashSet<>();
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
    */

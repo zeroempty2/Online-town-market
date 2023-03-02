@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public double getUserAverageGrade(User reviewee) {
     Set<UserGrade> userGrades = userGradeService.findAllByReviewee(reviewee);
-    return reviewee.getUserAverageGrade(userGrades);
+    return reviewee.getUserAverageGrade();
   }
 
 
