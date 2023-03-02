@@ -29,4 +29,6 @@ public class ProductResponseDto {
 
   private LocalDateTime modifiedAt;
 
+  private Long viewCount;
+
 }

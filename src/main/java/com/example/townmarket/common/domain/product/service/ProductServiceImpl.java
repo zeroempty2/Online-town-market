@@ -33,10 +33,11 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @Transactional
   public ProductResponseDto getProduct(Long productId) {
     Product product = findProductById(productId);
     isBlock(product);
+    product.updateView();
     return ProductResponseDto.builder()
         .productId(product.getId())
         .productName(product.getProductName())
@@ -46,6 +47,7 @@ public class ProductServiceImpl implements ProductService {
         .productCategory(product.getProductCategory())
         .createdAt(product.getCreatedAt())
         .modifiedAt(product.getModifiedAt())
+        .viewCount(product.getViewCount())
         .build();
   }
 

@@ -59,6 +59,7 @@ public class Product extends TimeStamped {
     this.productEnum = ProductEnum.판매완료;
   }
 
+  private Long viewCount = 0L;
 
   public enum ProductEnum {
     나눔, 나눔_완료, 판매_중, 예약, 판매완료
@@ -137,5 +138,8 @@ public class Product extends TimeStamped {
     this.block = true;
   }
 
+  public void updateView() {
+    this.viewCount += 1L;
+  }
 
 }
