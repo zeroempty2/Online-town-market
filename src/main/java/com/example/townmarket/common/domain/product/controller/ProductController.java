@@ -47,6 +47,13 @@ public class ProductController {
     return RESPONSE_CREATED;
   }
 
+  @GetMapping("/check/{productId}")
+  public ResponseEntity<Boolean> checkMyProduct(@PathVariable Long productId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
+        .body(productService.checkMyProduct(productId, userDetails.getUser()));
+  }
+
   // 단일 상품 조회
   @GetMapping("/{productId}")
   public ResponseEntity<ProductResponseDto> getProduct(@PathVariable Long productId) {
