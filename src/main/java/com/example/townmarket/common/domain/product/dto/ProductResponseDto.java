@@ -1,8 +1,10 @@
 package com.example.townmarket.common.domain.product.dto;
 
+import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.product.entity.Product.ProductCategory;
 import com.example.townmarket.common.domain.product.entity.Product.ProductEnum;
 import com.example.townmarket.common.domain.product.entity.Product.ProductStatus;
+import com.example.townmarket.common.domain.user.entity.User;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,5 +32,46 @@ public class ProductResponseDto {
   private LocalDateTime modifiedAt;
 
   private Long viewCount;
+  String productContents;
+  private String nickName;
+  private String img;
+  private String region;
+  private double userGrade;
+  private Long interest;
 
+  public static ProductResponseDto valueOf(Product product) {
+    return new ProductResponseDto(product.getId(),
+        product.getProductName(),
+        product.getProductPrice(),
+        product.getProductStatus(),
+        product.getProductCategory(),
+        product.getProductEnum(),
+        product.getCreatedAt(),
+        product.getModifiedAt(),
+        product.getViewCount(),
+        product.getProductContents(),
+        product.getUser().getProfile().getNickName(),
+        product.getUser().getProfile().getImg_url(),
+        product.getUser().getRegion(),
+        product.getUser().getUserAverageGrade(),
+        (long) product.getInterest().size());
+  }
+
+  public ProductResponseDto(Product product, User user) {
+    this.productId = product.getId();
+    this.productName = product.getProductName();
+    this.productPrice = product.getProductPrice();
+    this.productStatus = product.getProductStatus();
+    this.productCategory = product.getProductCategory();
+    this.productEnum = product.getProductEnum();
+    this.createdAt = product.getCreatedAt();
+    this.modifiedAt = product.getModifiedAt();
+    this.viewCount = product.getViewCount();
+    this.productContents = product.getProductContents();
+    this.nickName = user.getProfile().getNickName();
+    this.img = user.getProfile().getImg_url();
+    this.region = user.getRegion();
+    this.userGrade = user.getUserAverageGrade();
+    this.interest = (long) product.getInterest().size();
+  }
 }

@@ -10,4 +10,6 @@ public interface InterestService {
   boolean addInterest(User user, Long product);
 
   Page<InterestPagingResponseDto> showMyInterestProducts(User user, PageDto pageDto);
+
+  boolean checkInterest(User user, Long productId);
 }

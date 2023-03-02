@@ -18,6 +18,7 @@ public class ProductServiceImpl implements ProductService {
 
   private final ProductRepository productRepository;
 
+
   @Override
   @Transactional
   public void addProduct(User user, ProductRequestDto productRequestDto) {
@@ -26,6 +27,7 @@ public class ProductServiceImpl implements ProductService {
         .productPrice(productRequestDto.getProductPrice())
         .productStatus(productRequestDto.getProductStatus())
         .productCategory(productRequestDto.getProductCategory())
+        .productContents(productRequestDto.getProductContents())
         .productEnum(productRequestDto.getProductEnum())
         .user(user)
         .build();
@@ -35,20 +37,10 @@ public class ProductServiceImpl implements ProductService {
   @Override
   @Transactional
   public ProductResponseDto getProduct(Long productId) {
-    Product product = findProductById(productId);
+    Product product = productRepository.getProductAndSellerProfileByProductIdAndCountView(
+        productId);
     isBlock(product);
-    product.updateView();
-    return ProductResponseDto.builder()
-        .productId(product.getId())
-        .productName(product.getProductName())
-        .productPrice(product.getProductPrice())
-        .productEnum(product.getProductEnum())
-        .productStatus(product.getProductStatus())
-        .productCategory(product.getProductCategory())
-        .createdAt(product.getCreatedAt())
-        .modifiedAt(product.getModifiedAt())
-        .viewCount(product.getViewCount())
-        .build();
+    return ProductResponseDto.valueOf(product);
   }
 
   @Override
@@ -97,6 +89,11 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public Page<PagingProductResponse> searchProductsByKeyword(PageDto pageDto) {
     return productRepository.searchByKeyword(pageDto.getKeyword(), pageDto.toPageable());
+  }
+
+  @Override
+  public boolean checkMyProduct(Long productId, User user) {
+    return productRepository.existsByIdAndUser(productId, user);
   }
 
   private void isBlock(Product product) {
