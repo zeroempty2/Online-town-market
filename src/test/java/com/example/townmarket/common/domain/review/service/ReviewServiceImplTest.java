@@ -3,6 +3,8 @@ package com.example.townmarket.common.domain.review.service;
 import static com.example.townmarket.fixture.ReviewFixture.CREATE_REVIEW_REQUEST_DTO;
 import static com.example.townmarket.fixture.ReviewFixture.REVIEW_ID;
 import static com.example.townmarket.fixture.ReviewFixture.REVIEW_RESPONSE_DTO_PAGE;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -116,5 +118,14 @@ class ReviewServiceImplTest {
   @Test
   @DisplayName("리뷰 작성자 체크 테스트")
   void reviewWriterCheck() {
+      // Given
+      Review review = mock(Review.class);
+      when(review.isReviewWriter(1L)).thenReturn(true);
+      when(review.isReviewWriter(2L)).thenThrow(IllegalArgumentException.class);
+
+      // When & Then
+      assertDoesNotThrow(() -> review.isReviewWriter(1L));
+      assertThrows(IllegalArgumentException.class, () -> review.isReviewWriter(2L));
+
   }
 }
