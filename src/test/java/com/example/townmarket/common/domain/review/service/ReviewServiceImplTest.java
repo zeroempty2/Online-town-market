@@ -15,7 +15,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.example.townmarket.common.domain.product.service.ProductServiceImpl;
 import com.example.townmarket.common.domain.review.dto.ReviewResponseDto;
+import com.example.townmarket.common.domain.review.dto.UpdateReviewRequestDto;
 import com.example.townmarket.common.domain.review.entity.Review;
+import com.example.townmarket.common.domain.review.entity.UserGrade;
 import com.example.townmarket.common.domain.review.repository.ReviewRepository;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.service.UserServiceImpl;
@@ -81,6 +83,27 @@ class ReviewServiceImplTest {
   @Test
   @DisplayName("내 리뷰 업데이트 성공 테스트")
   void updateMyReview() {
+    //given
+    Long reviewId = 1L;
+    Long userId = 2L;
+    Review review = Review.builder()
+        .reviewContents("origin")
+        .reviewer(new User(userId, null, null))
+        .userGrade(new UserGrade(0, null, null))
+        .build();
+
+    UpdateReviewRequestDto updateReviewRequestDto = UpdateReviewRequestDto.builder()
+        .reviewContents("update")
+        .grade(5)
+        .build();
+
+    when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
+
+    // when
+    reviewService.updateMyReview(reviewId, userId, updateReviewRequestDto);
+
+    // then
+    assertThat(review.getReviewContents()).isEqualTo(updateReviewRequestDto.getReviewContents());
   }
 
   @Test
