@@ -42,10 +42,11 @@ public class Review extends TimeStamped {
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
    */
   @Builder
-  public Review(String reviewContents, User reviewer, Product product) {
+  public Review(String reviewContents, User reviewer, Product product, UserGrade userGrade) {
     this.reviewContents = reviewContents;
     this.reviewer = reviewer;
     this.product = product;
+    this.userGrade = userGrade;
   }
 
   /**
