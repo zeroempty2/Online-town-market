@@ -165,9 +165,14 @@ public class User extends TimeStamped {
     this.region = updateDto.getRegion();
   }
 
-  public double getUserAverageGrade(Set<UserGrade> grades) {
+  public double getUserAverageGrade() {
+    Set<UserGrade> grades = this.grades;
     long total = grades.stream().mapToInt(UserGrade::getGrade).sum();
+    if (total == 0) {
+      return 0;
+    }
     return Math.abs(total / grades.size());
   }
+
 
 }

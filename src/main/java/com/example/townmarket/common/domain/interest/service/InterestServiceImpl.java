@@ -3,6 +3,7 @@ package com.example.townmarket.common.domain.interest.service;
 import com.example.townmarket.common.domain.interest.dto.InterestPagingResponseDto;
 import com.example.townmarket.common.domain.interest.entity.Interest;
 import com.example.townmarket.common.domain.interest.repository.InterestRepository;
+import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.product.service.ProductServiceImpl;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.dto.PageDto;
@@ -21,14 +22,15 @@ public class InterestServiceImpl implements InterestService {
   @Override
   @Transactional
   public boolean addInterest(User user, Long productId) {
-    if (interestRepository.existsByUserIdAndProductId(user.getId(), productId)) {
+    Product product = productService.findProductById(productId);
+    if (checkInterestByProduct(user, product)) {
       interestRepository.deleteByProductId(productId);
       return true;
     }
 
     Interest interest = Interest.builder()
         .user(user)
-        .productId(productId)
+        .product(productService.findProductById(productId))
         .build();
     interestRepository.save(interest);
     return false;
@@ -39,4 +41,17 @@ public class InterestServiceImpl implements InterestService {
   public Page<InterestPagingResponseDto> showMyInterestProducts(User user, PageDto pageDto) {
     return interestRepository.searchInterestIndexByUser(user, pageDto.toPageable());
   }
+
+  @Override
+  public boolean checkInterest(User user, Long productId) {
+    Product product = productService.findProductById(productId);
+    return interestRepository.existsByUserAndProduct(user,
+        product);
+  }
+
+  private boolean checkInterestByProduct(User user, Product product) {
+    return interestRepository.existsByUserAndProduct(user,
+        product);
+  }
+
 }

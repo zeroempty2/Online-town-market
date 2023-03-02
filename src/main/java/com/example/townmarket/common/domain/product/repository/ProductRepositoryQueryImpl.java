@@ -1,8 +1,10 @@
 package com.example.townmarket.common.domain.product.repository;
 
+import static com.example.townmarket.common.domain.interest.entity.QInterest.interest;
 import static com.example.townmarket.common.domain.product.entity.QProduct.product;
 
 import com.example.townmarket.common.domain.product.dto.PagingProductResponse;
+import com.example.townmarket.common.domain.product.entity.Product;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -58,6 +60,35 @@ public class ProductRepositoryQueryImpl implements ProductRepositoryQuery {
     return PageableExecutionUtils.getPage(pagingProductResponse, pageable, () -> totalSize);
   }
 
+  @Override
+  @Transactional
+  public Product getProductAndSellerProfileByProductIdAndCountView(Long productId) {
+    jpaQueryFactory.update(product)
+        .set(product.viewCount, product.viewCount.add(1L))
+        .where(product.id.eq(productId))
+        .execute();
+    return jpaQueryFactory.select(product)
+        .from(product)
+        .where(product.id.eq(productId))
+        .leftJoin(product.user).fetchJoin()
+        .leftJoin(product.interest).fetchJoin()
+        .fetchOne();
+
+//    return jpaQueryFactory.select(
+//            Projections.constructor(ProductResponseDto.class,
+//                product,
+//                product.user))
+//        .from(product)
+//        .where(product.block.eq(false), product.id.eq(productId))
+//        .fetchOne();
+  }
+
+  @Override
+  public Long InterestCount(Product product) {
+    return jpaQueryFactory.select(Wildcard.count)
+        .from(interest)
+        .where(interest.product.eq(product)).fetchOne();
+  }
 
   private JPAQuery<Long> countQuery() {
     return jpaQueryFactory.select(Wildcard.count)
