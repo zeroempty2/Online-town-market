@@ -171,5 +171,31 @@ class ProductServiceImplTest {
     assertThat(pagingProductResponses).isNotNull();
 
   }
+
+  @Test
+  @DisplayName("사용자 차단 성공 테스트")
+  void setBlock() {
+    //given
+    Long productId = 1L;
+    User user = mock(User.class);
+    Product product = Product.builder()
+        .id(productId)
+        .productName("earphone")
+        .productPrice(10000L)
+        .productStatus(ProductStatus.S)
+        .productCategory(ProductCategory.IT)
+        .productEnum(ProductEnum.판매_중)
+        .user(user)
+        .build();
+
+
+    when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+    // when
+    productService.setBlock(productId);
+
+    //then
+    verify(productRepository, times(1)).findById(any());
+  }
 }
 
