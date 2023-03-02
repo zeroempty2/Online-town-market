@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 public class UserReportRequest {
 
-  private Long reportedUserId;
+  private String reportedUserName;
 
   private ReportEnum reportEnum;
 
