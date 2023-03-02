@@ -33,14 +33,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   public void createRoom(Long productId, String username) {
     Product product = productService.findProductById(productId);
     User user = userService.findByUsername(username);
-//     이미 해당 상품에 대한 채팅방이 존재하는 경우 -> 처리해줄 필요 없음
-    if (roomRepository.existsByProductAndBuyer(product, user)) {
-      throw new RuntimeException("해당 상품에 대한 채팅방이 이미 존재합니다.");
-    }
-
-    if (user.getId().equals(product.getUser().getId())) {
-      throw new RuntimeException("본인의 판매 상품에 채팅방을 개설할 수 없습니다.");
-    } //-> 처리 필요없음 - 프론트에서 처리
     ChatRoom chatRooms = new ChatRoom(product, user);
     roomRepository.save(chatRooms);
 //    return roomRepository.searchChatRoomByUsername(username);
@@ -76,6 +68,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
   public List<ChatRoomResponse> sellChatList(Long userId) {
     User user = userService.findUserById(userId);
     return roomRepository.searchChatRoomBySellerName(user.getUsername());
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public boolean checkRoom(Long productId, User user) {
+    return roomRepository.existsByProductAndBuyer(productService.findProductById(productId), user);
   }
 
   /* 채팅방 삭제 */

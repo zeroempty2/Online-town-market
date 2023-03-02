@@ -36,6 +36,13 @@ public class ChatRoomController {
     return RESPONSE_CREATED;
   }
 
+  @GetMapping("chatroom/check/{productId}")
+  public ResponseEntity<Boolean> checkRoom(@PathVariable Long productId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
+        .body(roomService.checkRoom(productId, userDetails.getUser()));
+  }
+
   /* 해당 채팅방 보기 */
   @GetMapping("/chatrooms/{roomId}")
   public ResponseEntity<List<ChatMessageDto>> getChatRoom(@PathVariable Long roomId,
