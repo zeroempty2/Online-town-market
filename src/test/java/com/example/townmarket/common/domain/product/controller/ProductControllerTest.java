@@ -10,26 +10,24 @@ import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentReques
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.townmarket.annotation.WithCustomMockUser;
-import com.example.townmarket.common.domain.product.controller.ProductController;
 import com.example.townmarket.common.domain.product.dto.PagingProductResponse;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
-import com.example.townmarket.common.domain.product.dto.ProductResponseDto;
 import com.example.townmarket.common.domain.product.entity.Product.ProductCategory;
 import com.example.townmarket.common.domain.product.entity.Product.ProductEnum;
 import com.example.townmarket.common.domain.product.entity.Product.ProductStatus;
 import com.example.townmarket.common.domain.product.service.ProductService;
-import com.example.townmarket.common.dto.PageDto;
 import com.example.townmarket.common.dto.StatusResponse;
 import com.example.townmarket.common.enums.ResponseMessages;
 import com.example.townmarket.common.util.SetHttpHeaders;
@@ -43,7 +41,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -114,6 +111,7 @@ class ProductControllerTest {
             fieldWithPath("modifiedAt").description(JsonFieldType.OBJECT).description("수정일자"),
             fieldWithPath("productId").description(JsonFieldType.NUMBER).description("상품명"),
             fieldWithPath("productName").description(JsonFieldType.STRING).description("상품명"),
+            fieldWithPath("viewCount").description(JsonFieldType.NUMBER).description("조회수"),
             fieldWithPath("productPrice").description(JsonFieldType.NUMBER).description("상품가격"),
             fieldWithPath("productStatus").description(JsonFieldType.OBJECT).description("상품상태"),
             fieldWithPath("productCategory").description(JsonFieldType.OBJECT)
@@ -128,10 +126,8 @@ class ProductControllerTest {
   @WithCustomMockUser
   void getProducts() throws Exception {
 
-
     Page<PagingProductResponse> productResponseDtos = new PageImpl<>(
         Collections.singletonList(PAGING_PRODUCT_RESPONSE), PAGE_DTO.toPageable(), 1);
-
 
     String json = objectMapper.writeValueAsString(productResponseDtos);
 
