@@ -38,13 +38,13 @@ public class TradeServiceImpl implements TradeService {
     return tradePage;
   }
 
-  @Override
-  @Transactional
-  public Page<PagingTrade> getSalesListOfOther(Long userId, Pageable pageable) {
-//    Page<Trade> tradePage = tradeRepository.findAllBySeller(pageable, userId);
-//    return tradePage.map(PagingTrade::getSellerList);
-    return null;
-  }
+//  @Override
+//  @Transactional
+//  public Page<PagingTrade> getSalesListOfOther(Long userId, Pageable pageable) {
+////    Page<Trade> tradePage = tradeRepository.findAllBySeller(pageable, userId);
+////    return tradePage.map(PagingTrade::getSellerList);
+//    return null;
+//  }
 
   @Override
   @Transactional
@@ -53,7 +53,7 @@ public class TradeServiceImpl implements TradeService {
     if(!product.checkProductEnum(product.getProductEnum())) {
       product.updateProductEnum();
       User buyer = findByUserId(createTrade);
-      Trade trade = Trade.builder().buyer(buyer).seller(seller).product(product).build();
+      Trade trade = Trade.builder().buyer(buyer).seller(seller).productId(product.getId()).build();
       tradeRepository.save(trade);
     }
     else {

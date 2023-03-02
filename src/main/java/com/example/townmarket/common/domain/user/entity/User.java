@@ -5,6 +5,7 @@ import com.example.townmarket.common.domain.board.entity.Board;
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.interest.entity.Interest;
 import com.example.townmarket.common.domain.product.entity.Product;
+import com.example.townmarket.common.domain.report.entity.UserReport;
 import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.domain.review.entity.UserGrade;
 import com.example.townmarket.common.domain.trade.entity.Trade;
@@ -145,6 +146,9 @@ public class User extends TimeStamped {
   @Builder.Default
   @OneToMany(mappedBy = "reviewee")
   private Set<UserGrade> grades = new LinkedHashSet<>();
+  @Builder.Default
+  @OneToMany(mappedBy = "reportedUser")
+  private Set<UserReport> reports = new LinkedHashSet<>();
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
    */

@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.townmarket.admin.controller.AdminController;
 import com.example.townmarket.admin.service.AdminServiceImpl;
 import com.example.townmarket.annotation.WithCustomMockAdmin;
+import com.example.townmarket.common.domain.report.sevice.UserReportService;
 import com.example.townmarket.common.globalException.ExceptionController;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,6 +54,9 @@ class AdminControllerTest {
   ExceptionController exceptionController;
   @MockBean
   AdminServiceImpl adminService;
+  @MockBean
+  UserReportService userReportService;
+
   @MockBean
   SetHttpHeaders httpHeaders;
 

@@ -1,47 +1,49 @@
-package com.example.townmarket.common.domain.trade.entity;
+package com.example.townmarket.common.domain.report.entity;
 
-import com.example.townmarket.common.domain.product.entity.Product;
+
+import com.example.townmarket.common.TimeStamped;
 import com.example.townmarket.common.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Builder
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Trade {
+public class UserReport extends TimeStamped {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "trade_Id")
+  @Column(name = "report_id")
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "buyer_Id")
-  private User buyer;
+  @Enumerated(EnumType.STRING)
+  private ReportEnum reportEnum;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "seller_Id")
-  private User seller;
+  @Column(nullable = false)
+  private String reason;
 
-  private Long productId;
+  @Column(nullable = false)
+  private Long reporterId;
 
-  public Trade(User buyer, User seller, Long productId) {
-    this.buyer = buyer;
-    this.seller = seller;
-    this.productId = productId;
+  public enum ReportEnum{
+    비매너, 욕설, 기타
   }
-}
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "reported_id")
+  private User reportedUser;
+}
