@@ -26,6 +26,7 @@ public class ProductReportServiceImpl implements ProductReportService {
         .reportUserId(userId)
         .reason(productReportRequestDto.getReason())
         .productId(productReportRequestDto.getProductId())
+        .reportEnum(productReportRequestDto.getReportEnum())
         .build();
     productReportRepository.save(productReport);
     if (productReportRepository.countByProductId(productReportRequestDto.getProductId()) > 15) {
