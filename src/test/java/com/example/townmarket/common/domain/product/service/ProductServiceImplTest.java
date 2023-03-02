@@ -1,6 +1,8 @@
 package com.example.townmarket.common.domain.product.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -151,5 +153,23 @@ class ProductServiceImplTest {
     assertThat(productResultFindById).isEqualTo(product);
   }
 
+  @Test
+  @DisplayName("상품 키워드로 검색하기 테스트")
+  void searchProductsByKeyword() {
+    // given
+    PageDto pageDto = mock(PageDto.class);
+    Pageable pageRequest = mock(Pageable.class);
+
+    when(pageDto.toPageable()).thenReturn(pageRequest);
+    when(pageDto.getKeyword()).thenReturn("food");
+    when(productRepository.searchByKeyword(eq("food"), any(Pageable.class))).thenReturn(Page.empty());
+
+    //when
+    Page<PagingProductResponse> pagingProductResponses = productService.searchProductsByKeyword(pageDto);
+
+    //then
+    assertThat(pagingProductResponses).isNotNull();
+
+  }
 }
 
