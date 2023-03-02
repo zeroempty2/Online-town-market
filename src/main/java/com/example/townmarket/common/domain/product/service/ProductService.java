@@ -30,4 +30,6 @@ public interface ProductService {
   void setBlock(Long productId);
 
   Page<PagingProductResponse> searchProductsByKeyword(PageDto pageDto);
+
+  boolean checkMyProduct(Long productId, User user);
 }

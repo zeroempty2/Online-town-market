@@ -16,17 +16,19 @@ public class ProductRequestDto {
   private long productPrice;
 
   private ProductStatus productStatus;
-
+  private String productContents;
   private ProductCategory productCategory;
 
   private ProductEnum productEnum;
 
   @Builder
   public ProductRequestDto(String productName, long productPrice, ProductStatus productStatus,
+      String productContents,
       ProductCategory productCategory, ProductEnum productEnum) {
     this.productName = productName;
     this.productPrice = productPrice;
     this.productStatus = productStatus;
+    this.productContents = productContents;
     this.productCategory = productCategory;
     this.productEnum = productEnum;
   }
