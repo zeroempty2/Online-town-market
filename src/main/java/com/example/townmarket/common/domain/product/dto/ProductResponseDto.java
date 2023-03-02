@@ -16,6 +16,7 @@ import lombok.Getter;
 public class ProductResponseDto {
 
   private long productId;
+  private long sellerId;
 
   private String productName;
 
@@ -41,6 +42,7 @@ public class ProductResponseDto {
 
   public static ProductResponseDto valueOf(Product product) {
     return new ProductResponseDto(product.getId(),
+        product.getUser().getId(),
         product.getProductName(),
         product.getProductPrice(),
         product.getProductStatus(),
@@ -59,6 +61,7 @@ public class ProductResponseDto {
 
   public ProductResponseDto(Product product, User user) {
     this.productId = product.getId();
+    this.sellerId = product.getUser().getId();
     this.productName = product.getProductName();
     this.productPrice = product.getProductPrice();
     this.productStatus = product.getProductStatus();
