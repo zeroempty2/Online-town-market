@@ -20,7 +20,7 @@ public class UserReportServiceImpl implements UserReportService {
 
   @Override
   public void reportUser(UserReportRequest userReportRequest, Long userId) {
-    User reported = userService.findUserById(userReportRequest.getReportedUserId());
+    User reported = userService.findByUsername(userReportRequest.getReportedUserName());
     if (userReportRepository.existsByReporterIdAndReportedUser(userId, reported)) {
       throw new IllegalArgumentException("중복 신고는 금지되어있습니다");
     }
