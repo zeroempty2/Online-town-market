@@ -7,6 +7,7 @@ import lombok.Getter;
 public class ChatRoomResponse {
 
   private Long productId;
+  private Long buyerId;
   private String profileImg;
   private String nickname;
   private String region;
@@ -16,6 +17,7 @@ public class ChatRoomResponse {
   public ChatRoomResponse(Long productId, User user,
       String productName, Long roomId) {
     this.productId = productId;
+    this.buyerId = user.getId();
     this.profileImg = user.getProfile().getImg_url();
     this.nickname = user.getProfile().getNickName();
     this.region = user.getRegion();
