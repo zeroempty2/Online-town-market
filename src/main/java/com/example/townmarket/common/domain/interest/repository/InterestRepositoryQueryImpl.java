@@ -1,17 +1,15 @@
 package com.example.townmarket.common.domain.interest.repository;
 
 import static com.example.townmarket.common.domain.interest.entity.QInterest.interest;
-import static com.example.townmarket.common.domain.product.entity.QProduct.product;
 
 import com.example.townmarket.common.domain.interest.dto.InterestPagingResponseDto;
+import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +23,12 @@ public class InterestRepositoryQueryImpl implements InterestRepositoryQuery {
 
   @Override
   @Transactional(readOnly = true)
-  public boolean existsByUserIdAndProductId(Long userId, Long productId) {
+  public boolean existsByUserAndProduct(User user, Product product) {
     return jpaQueryFactory.from(interest)
-        .where(interest.user.id.eq(userId), interest.productId.eq(productId))
-        .select(interest.user.id, interest.productId)
+        .where(interest.user.eq(user), interest.product.eq(product))
+        .select(interest.user, interest.product)
+        .leftJoin(interest.product)
+        .leftJoin(interest.user)
         .setHint("org.hibernate.readOnly", true)
         .fetchFirst() != null;
   }
@@ -47,14 +47,14 @@ public class InterestRepositoryQueryImpl implements InterestRepositoryQuery {
     return PageableExecutionUtils.getPage(interestPagingResponseDto, pageable, () -> totalSize);
   }
 
+
   private JPAQuery<InterestPagingResponseDto> query(User user) {
     return jpaQueryFactory.select(Projections.constructor(InterestPagingResponseDto.class,
-            product.productName,
-            product.productPrice,
-            product.id))
+            interest.product.productName,
+            interest.product.productPrice,
+            interest.product.id))
         .from(interest)
-        .leftJoin(product)
-        .on(product.id.eq(interest.productId))
+        .leftJoin(interest.product)
         .where(interest.user.eq(user));
   }
 
@@ -64,7 +64,4 @@ public class InterestRepositoryQueryImpl implements InterestRepositoryQuery {
         .where(interest.user.eq(user));
   }
 
-  private BooleanExpression interestUserEq(User user) {
-    return Objects.nonNull(user) ? interest.user.eq(user) : null;
-  }
 }

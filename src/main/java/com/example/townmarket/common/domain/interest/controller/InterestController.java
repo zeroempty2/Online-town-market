@@ -47,4 +47,11 @@ public class InterestController {
         .body(interestService.showMyInterestProducts(userDetails.getUser(), pageDto));
   }
 
+  @GetMapping("/check/{productId}")
+  @ResponseBody
+  public ResponseEntity<Boolean> checkInterest(
+      @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long productId) {
+    return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
+        .body(interestService.checkInterest(userDetails.getUser(), productId));
+  }
 }
