@@ -44,6 +44,7 @@ public class ProductFixture {
       .region("지역")
       .userGrade(5.0)
       .interest(1L)
+      .sellerId(2L)
       .build();
 
   public static final PagingProductResponse PAGING_PRODUCT_RESPONSE = PagingProductResponse.builder()

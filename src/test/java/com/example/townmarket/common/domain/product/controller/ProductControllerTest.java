@@ -119,6 +119,7 @@ class ProductControllerTest {
                 .description("상품 카테고리"),
             fieldWithPath("productContents").description(JsonFieldType.STRING).description("상품 설명"),
             fieldWithPath("viewCount").description(JsonFieldType.NUMBER).description("조회수"),
+            fieldWithPath("sellerId").description(JsonFieldType.NUMBER).description("판매자 아이디"),
             fieldWithPath("productEnum").description(JsonFieldType.OBJECT).description("상품 거래 상태"),
             fieldWithPath("nickName").description(JsonFieldType.STRING).description("판매자 닉네임"),
             fieldWithPath("img").description(JsonFieldType.STRING).description("판매자 프로필 이미지"),
