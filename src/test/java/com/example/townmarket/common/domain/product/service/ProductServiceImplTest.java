@@ -17,10 +17,10 @@ import com.example.townmarket.common.domain.product.entity.Product.ProductCatego
 import com.example.townmarket.common.domain.product.entity.Product.ProductEnum;
 import com.example.townmarket.common.domain.product.entity.Product.ProductStatus;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
+import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.dto.PageDto;
 import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -59,8 +59,13 @@ class ProductServiceImplTest {
     // given
     ProductRequestDto productRequestDto = mock(ProductRequestDto.class);
     Product product = mock(Product.class);
-
-    when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+    User user = mock(User.class);
+    Profile profile = mock(Profile.class);
+    when(product.getUser()).thenReturn(user);
+    when(user.getProfile()).thenReturn(profile);
+    when(product.isBlocked()).thenReturn(false);
+    when(productRepository.getProductAndSellerProfileByProductIdAndCountView(
+        product.getId())).thenReturn(product);
 
     // when
     ProductResponseDto productResponse = productService.getProduct(product.getId());
@@ -73,17 +78,17 @@ class ProductServiceImplTest {
   @DisplayName("상품 목록 조회 성공")
   void getProducts() {
 // given
-  Pageable pageable = mock(Pageable.class);
-  PageDto pageDto = mock(PageDto.class);
+    Pageable pageable = mock(Pageable.class);
+    PageDto pageDto = mock(PageDto.class);
 
-  when(pageDto.toPageable()).thenReturn(pageable);
-  when(productRepository.findAllAndPaging(pageable)).thenReturn(Page.empty()); // 수정된 부분
+    when(pageDto.toPageable()).thenReturn(pageable);
+    when(productRepository.findAllAndPaging(pageable)).thenReturn(Page.empty()); // 수정된 부분
 
 // when
-   Page<PagingProductResponse> pagingProductResponse = productService.getProducts(pageDto);
+    Page<PagingProductResponse> pagingProductResponse = productService.getProducts(pageDto);
 
 // then
-  assertThat(pagingProductResponse).isNotNull();
+    assertThat(pagingProductResponse).isNotNull();
 
   }
 
@@ -125,19 +130,20 @@ class ProductServiceImplTest {
   @DisplayName("상품 삭제 성공")
   void deleteProduct() {
 
-      // given
-      User user = mock(User.class);
-      Product product = mock(Product.class);
+    // given
+    User user = mock(User.class);
+    Product product = mock(Product.class);
 
-      when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
-      when(Optional.of(product).get().checkProductWriter(user.getId())).thenReturn(true);
+    when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+    when(Optional.of(product).get().checkProductWriter(user.getId())).thenReturn(true);
 
-      // when
-      productService.deleteProduct(product.getId(), user.getId());
-      // then
-      verify(productRepository, times(1)).deleteById(product.getId());
+    // when
+    productService.deleteProduct(product.getId(), user.getId());
+    // then
+    verify(productRepository, times(1)).deleteById(product.getId());
 
   }
+
   @Test
   @DisplayName("상품 리포지토리 조회 후 상품 반환 성공 테스트")
   void findProductById() {
@@ -162,10 +168,12 @@ class ProductServiceImplTest {
 
     when(pageDto.toPageable()).thenReturn(pageRequest);
     when(pageDto.getKeyword()).thenReturn("food");
-    when(productRepository.searchByKeyword(eq("food"), any(Pageable.class))).thenReturn(Page.empty());
+    when(productRepository.searchByKeyword(eq("food"), any(Pageable.class))).thenReturn(
+        Page.empty());
 
     //when
-    Page<PagingProductResponse> pagingProductResponses = productService.searchProductsByKeyword(pageDto);
+    Page<PagingProductResponse> pagingProductResponses = productService.searchProductsByKeyword(
+        pageDto);
 
     //then
     assertThat(pagingProductResponses).isNotNull();

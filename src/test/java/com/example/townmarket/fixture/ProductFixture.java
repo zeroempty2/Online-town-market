@@ -27,6 +27,7 @@ public class ProductFixture {
       .productStatus(ProductStatus.S)
       .productCategory(ProductCategory.CAR)
       .productEnum(ProductEnum.나눔)
+      .productContents("맥북팝니다")
       .build();
 
   public static final ProductResponseDto PRODUCT_RESPONSE_DTO = ProductResponseDto.builder()
@@ -36,9 +37,17 @@ public class ProductFixture {
       .productStatus(ProductStatus.S)
       .productCategory(ProductCategory.CAR)
       .productEnum(ProductEnum.나눔)
+      .productContents("맥북팝니다")
+      .viewCount(1L)
+      .nickName("nickname")
+      .img("profileImg")
+      .region("지역")
+      .userGrade(5.0)
+      .interest(1L)
       .build();
 
-  public static final PagingProductResponse PAGING_PRODUCT_RESPONSE = PagingProductResponse.builder().productId(1L)
+  public static final PagingProductResponse PAGING_PRODUCT_RESPONSE = PagingProductResponse.builder()
+      .productId(1L)
       .productName("상품이름").productPrice(1000L).build();
 
 

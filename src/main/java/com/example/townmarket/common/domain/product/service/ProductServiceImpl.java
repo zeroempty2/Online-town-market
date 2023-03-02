@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   private void isBlock(Product product) {
-    if (product.isBlock()) {
+    if (product.isBlocked()) {
       throw new IllegalArgumentException("신고가 누적되어 접근이 제한되었습니다");
     }
   }

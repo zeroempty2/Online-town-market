@@ -88,6 +88,7 @@ class ProductControllerTest {
             fieldWithPath("productStatus").description(JsonFieldType.OBJECT).description("상품상태"),
             fieldWithPath("productCategory").description(JsonFieldType.OBJECT)
                 .description("상품 카테고리"),
+            fieldWithPath("productContents").description(JsonFieldType.STRING).description("상품 설명"),
             fieldWithPath("productEnum").description(JsonFieldType.OBJECT).description("상품 거래 상태")
         )
     ));
@@ -116,10 +117,15 @@ class ProductControllerTest {
             fieldWithPath("productStatus").description(JsonFieldType.OBJECT).description("상품상태"),
             fieldWithPath("productCategory").description(JsonFieldType.OBJECT)
                 .description("상품 카테고리"),
-            fieldWithPath("productEnum").description(JsonFieldType.OBJECT).description("상품 거래 상태")
+            fieldWithPath("productContents").description(JsonFieldType.STRING).description("상품 설명"),
+            fieldWithPath("viewCount").description(JsonFieldType.NUMBER).description("조회수"),
+            fieldWithPath("productEnum").description(JsonFieldType.OBJECT).description("상품 거래 상태"),
+            fieldWithPath("nickName").description(JsonFieldType.STRING).description("판매자 닉네임"),
+            fieldWithPath("img").description(JsonFieldType.STRING).description("판매자 프로필 이미지"),
+            fieldWithPath("region").description(JsonFieldType.STRING).description("판매자 지역"),
+            fieldWithPath("userGrade").description(JsonFieldType.STRING).description("판매자 평점"),
+            fieldWithPath("interest").description(JsonFieldType.STRING).description("관심")
         )));
-
-
   }
 
   @Test
@@ -212,7 +218,8 @@ class ProductControllerTest {
                 .description("상품 카테고리"),
             fieldWithPath("productEnum").description(JsonFieldType.OBJECT).description("거래 상태")
                 .description("상품 카테고리"),
-            fieldWithPath("productEnum").description(JsonFieldType.OBJECT).description("상품 거래 상태")
+            fieldWithPath("productEnum").description(JsonFieldType.OBJECT).description("상품 거래 상태"),
+            fieldWithPath("productContents").description(JsonFieldType.OBJECT).description("상품 설명")
         ),
         responseFields(
             fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
