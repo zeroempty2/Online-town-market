@@ -137,7 +137,7 @@ public class Product extends TimeStamped {
   }
 
   public boolean isBlocked() {
-    return this.block = true;
+    return this.block;
   }
 
   public void setBlock() {
