@@ -4,7 +4,6 @@ import com.example.townmarket.common.TimeStamped;
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.interest.entity.Interest;
 import com.example.townmarket.common.domain.product.dto.ProductRequestDto;
-import com.example.townmarket.common.domain.trade.entity.Trade;
 import com.example.townmarket.common.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,7 +17,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -136,6 +134,10 @@ public class Product extends TimeStamped {
 
   public boolean checkProductEnum(ProductEnum productEnum) {
     return productEnum.equals(ProductEnum.판매완료);
+  }
+
+  public boolean isBlocked() {
+    return this.block;
   }
 
   public void setBlock() {
