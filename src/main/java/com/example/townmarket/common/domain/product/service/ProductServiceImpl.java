@@ -29,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
         .productCategory(productRequestDto.getProductCategory())
         .productContents(productRequestDto.getProductContents())
         .productEnum(productRequestDto.getProductEnum())
+        .productImg(productRequestDto.getProductImg())
         .user(user)
         .build();
     productRepository.save(product);

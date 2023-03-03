@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductRequestDto {
 
+  private String productImg;
+
   private String productName;
 
   private long productPrice;
@@ -22,9 +24,10 @@ public class ProductRequestDto {
   private ProductEnum productEnum;
 
   @Builder
-  public ProductRequestDto(String productName, long productPrice, ProductStatus productStatus,
+  public ProductRequestDto(String productImg, String productName, long productPrice, ProductStatus productStatus,
       String productContents,
       ProductCategory productCategory, ProductEnum productEnum) {
+    this.productImg = productImg;
     this.productName = productName;
     this.productPrice = productPrice;
     this.productStatus = productStatus;

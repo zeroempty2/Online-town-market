@@ -28,6 +28,8 @@ public class ProductResponseDto {
 
   private ProductEnum productEnum;
 
+  private String productImg;
+
   private LocalDateTime createdAt;
 
   private LocalDateTime modifiedAt;
@@ -48,6 +50,7 @@ public class ProductResponseDto {
         product.getProductStatus(),
         product.getProductCategory(),
         product.getProductEnum(),
+        product.getProductImg(),
         product.getCreatedAt(),
         product.getModifiedAt(),
         product.getViewCount(),
@@ -67,6 +70,7 @@ public class ProductResponseDto {
     this.productStatus = product.getProductStatus();
     this.productCategory = product.getProductCategory();
     this.productEnum = product.getProductEnum();
+    this.productImg = product.getProductImg();
     this.createdAt = product.getCreatedAt();
     this.modifiedAt = product.getModifiedAt();
     this.viewCount = product.getViewCount();

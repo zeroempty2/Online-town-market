@@ -46,6 +46,8 @@ public class Product extends TimeStamped {
   private String productName;
   private Long productPrice;
   private String productContents;
+
+  private String productImg;
   @Enumerated(EnumType.STRING)
   private ProductEnum productEnum;
   @Enumerated(EnumType.STRING)
@@ -79,7 +81,7 @@ public class Product extends TimeStamped {
   @Builder
   public Product(Long id, String productName, Long productPrice, ProductStatus productStatus,
       String productContents,
-      ProductCategory productCategory, ProductEnum productEnum, User user) {
+      ProductCategory productCategory, ProductEnum productEnum, String productImg, User user) {
     this.id = id;
     this.productName = productName;
     this.productPrice = productPrice;
@@ -87,6 +89,7 @@ public class Product extends TimeStamped {
     this.productContents = productContents;
     this.productEnum = productEnum;
     this.productCategory = productCategory;
+    this.productImg = productImg;
     this.user = user;
   }
 
