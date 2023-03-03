@@ -5,11 +5,13 @@ import lombok.Getter;
 @Getter
 public class InterestPagingResponseDto {
 
+  private String productImg;
   private String productName;
   private Long productPrice;
   private Long productId;
 
-  public InterestPagingResponseDto(String productName, Long productPrice, Long productId) {
+  public InterestPagingResponseDto(String productImg, String productName, Long productPrice, Long productId) {
+    this.productImg = productImg;
     this.productName = productName;
     this.productPrice = productPrice;
     this.productId = productId;

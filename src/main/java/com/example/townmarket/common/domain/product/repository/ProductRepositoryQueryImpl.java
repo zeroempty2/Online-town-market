@@ -26,6 +26,7 @@ public class ProductRepositoryQueryImpl implements ProductRepositoryQuery {
   public Page<PagingProductResponse> findAllAndPaging(Pageable pageable) {
     List<PagingProductResponse> pagingProductResponse = jpaQueryFactory
         .select(Projections.constructor(PagingProductResponse.class,
+            product.productImg,
             product.productName,
             product.productPrice,
             product.id))
