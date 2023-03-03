@@ -30,3 +30,26 @@ include::{snippets}/adminController/viewAllUser/response-fields.adoc[]
 
 ---
 ---
+
+*viewAllReportedUser*
+
+** REQUEST
+
+include::{snippets}/adminController/viewAllReportUser/http-request.adoc[]
+
+** RESPONSE
+
+include::{snippets}/adminController/viewAllReportUser/http-response.adoc[]
+
+** REQUEST - BODY
+
+include::{snippets}/adminController/viewAllReportUser/request-body.adoc[]
+include::{snippets}/adminController/viewAllReportUser/request-fields.adoc[]
+
+** RESPONSE - BODY
+
+include::{snippets}/adminController/viewAllReportUser/response-body.adoc[]
+include::{snippets}/adminController/viewAllReportUser/response-fields.adoc[]
+
+---
+---

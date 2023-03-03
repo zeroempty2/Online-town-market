@@ -1,6 +1,7 @@
 package com.example.townmarket.common.domain.admin.controller;
 
 
+import static com.example.townmarket.fixture.ReportFixture.PAGING_USER_REPORT_RESPONSE_LIST;
 import static com.example.townmarket.fixture.UserFixture.PAGING_USER_RESPONSE1;
 import static com.example.townmarket.fixture.UserFixture.PAGING_USER_RESPONSES;
 import static com.example.townmarket.fixture.UtilFixture.PAGE_DTO;
@@ -22,6 +23,7 @@ import com.example.townmarket.annotation.WithCustomMockAdmin;
 import com.example.townmarket.common.domain.report.sevice.UserReportService;
 import com.example.townmarket.common.globalException.ExceptionController;
 import com.example.townmarket.common.util.SetHttpHeaders;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -126,4 +128,73 @@ class AdminControllerTest {
     ));
 
   }
+
+  @Test
+  @WithCustomMockAdmin
+  @DisplayName("신고 당한 유저 리스트 조회")
+  void viewAllReportedUser() throws Exception {
+    Pageable pageable = PAGE_DTO.toPageable();
+
+    String json = objectMapper.writeValueAsString(PAGING_USER_REPORT_RESPONSE_LIST);
+
+    given(userReportService.viewAllReportedUser(any())).willReturn(
+        PAGING_USER_REPORT_RESPONSE_LIST);
+
+    ResultActions resultActions = mockMvc.perform(get("/admin/report/user")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(PAGE_DTO))
+            .with(csrf()))
+        .andExpect(status().isOk());
+
+    resultActions.andDo(document("adminController/viewAllReportUser",
+        getDocumentRequest(),
+        getDocumentResponse(),
+        requestFields(
+            fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지"),
+            fieldWithPath("size").type(JsonFieldType.NUMBER).description("글의 갯수"),
+            fieldWithPath("keyword").type(JsonFieldType.STRING).description("키워드"),
+            fieldWithPath("sortBy").type(JsonFieldType.STRING).description("정렬기준"),
+            fieldWithPath("asc").type(JsonFieldType.BOOLEAN).description("오름/내림차순")
+        ),
+        responseFields(
+            fieldWithPath("content[].reportedName").type(JsonFieldType.STRING).description("신고당한 유저아이디"),
+            fieldWithPath("content[].reason").type(JsonFieldType.STRING).description("이유"),
+            fieldWithPath("content[].reportEnum").type(JsonFieldType.STRING).description("신고 사유"),
+            fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.offset").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("pageable.pageSize").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("pageable.unpaged").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("pageable.paged").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("last").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("size").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("number").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("first").type(JsonFieldType.BOOLEAN).description(""),
+            fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description(""),
+            fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("")
+
+//            fieldWithPath("pageable").ignored(),
+//            fieldWithPath("last").ignored(),
+//            fieldWithPath("totalPages").ignored(),
+//            fieldWithPath("totalElements").ignored(),
+//            fieldWithPath("size").ignored(),
+//            fieldWithPath("number").ignored(),
+//            fieldWithPath("sort").ignored(),
+//            fieldWithPath("first").ignored(),
+//            fieldWithPath("numberOfElements").ignored(),
+//            fieldWithPath("empty").ignored()
+//        )
+        )
+    ));
+
+
+  }
+
 }

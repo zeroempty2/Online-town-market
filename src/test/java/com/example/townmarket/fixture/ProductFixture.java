@@ -19,6 +19,7 @@ public class ProductFixture {
       .productCategory(ProductCategory.CAR)
       .productEnum(ProductEnum.나눔)
       .user(USER1)
+      .productImg("productImg")
       .build();
 
   public static final ProductRequestDto PRODUCT_REQUEST_DTO = ProductRequestDto.builder()
@@ -27,6 +28,7 @@ public class ProductFixture {
       .productStatus(ProductStatus.S)
       .productCategory(ProductCategory.CAR)
       .productEnum(ProductEnum.나눔)
+      .productImg("productImg")
       .productContents("맥북팝니다")
       .build();
 
@@ -38,6 +40,7 @@ public class ProductFixture {
       .productCategory(ProductCategory.CAR)
       .productEnum(ProductEnum.나눔)
       .productContents("맥북팝니다")
+      .productImg("productImg")
       .viewCount(1L)
       .nickName("nickname")
       .img("profileImg")

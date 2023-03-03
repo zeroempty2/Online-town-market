@@ -2,6 +2,7 @@ package com.example.townmarket.common.domain.report.controller;
 
 import static com.example.townmarket.common.domain.report.controller.ProductReportController.PRODUCT_REPORT_URI_API;
 import static com.example.townmarket.common.domain.report.controller.UserReportController.USER_REPORT_URI_API;
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.townmarket.common.domain.report.dto.ProductReportRequestDto;
@@ -33,6 +34,6 @@ public class UserReportController {
       @RequestBody UserReportRequest userReportRequest, @AuthenticationPrincipal
   UserDetailsImpl userDetails) {
     userReportService.reportUser(userReportRequest, userDetails.getUserId());
-    return RESPONSE_OK;
+    return RESPONSE_CREATED;
   }
 }
