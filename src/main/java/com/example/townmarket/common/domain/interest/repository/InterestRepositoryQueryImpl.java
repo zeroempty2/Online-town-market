@@ -50,6 +50,7 @@ public class InterestRepositoryQueryImpl implements InterestRepositoryQuery {
 
   private JPAQuery<InterestPagingResponseDto> query(User user) {
     return jpaQueryFactory.select(Projections.constructor(InterestPagingResponseDto.class,
+            interest.product.productImg,
             interest.product.productName,
             interest.product.productPrice,
             interest.product.id))
