@@ -39,7 +39,7 @@ public class TradeRepositoryQueryImpl implements  TradeRepositoryQuery{
   public Page<PagingTrade> findBuyList(Pageable pageable, User buyer) {
     List<PagingTrade> pagingTrades = jpaQueryFactory
         .select(Projections.constructor(PagingTrade.class,
-            trade.buyer.username,
+            trade.seller.username,
             product.productName))
         .from(trade)
         .leftJoin(product)
@@ -55,7 +55,7 @@ public class TradeRepositoryQueryImpl implements  TradeRepositoryQuery{
   public Page<PagingTrade> findSaleList(Pageable pageable, User seller) {
     List<PagingTrade> pagingTrades = jpaQueryFactory
         .select(Projections.constructor(PagingTrade.class,
-            trade.seller.username,
+            trade.buyer.username,
             product.productName))
         .from(trade)
         .leftJoin(product)
