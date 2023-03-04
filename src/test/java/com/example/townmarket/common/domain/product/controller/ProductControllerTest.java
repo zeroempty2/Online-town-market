@@ -86,6 +86,7 @@ class ProductControllerTest {
             fieldWithPath("productName").description(JsonFieldType.STRING).description("상품명"),
             fieldWithPath("productPrice").description(JsonFieldType.NUMBER).description("상품가격"),
             fieldWithPath("productStatus").description(JsonFieldType.OBJECT).description("상품상태"),
+            fieldWithPath("productImg").description(JsonFieldType.STRING).description("상품이미지"),
             fieldWithPath("productCategory").description(JsonFieldType.OBJECT)
                 .description("상품 카테고리"),
             fieldWithPath("productContents").description(JsonFieldType.STRING).description("상품 설명"),
@@ -113,6 +114,8 @@ class ProductControllerTest {
             fieldWithPath("productId").description(JsonFieldType.NUMBER).description("상품명"),
             fieldWithPath("productName").description(JsonFieldType.STRING).description("상품명"),
             fieldWithPath("viewCount").description(JsonFieldType.NUMBER).description("조회수"),
+            fieldWithPath("productImg").description(JsonFieldType.STRING).description("상품이미지"),
+
             fieldWithPath("productPrice").description(JsonFieldType.NUMBER).description("상품가격"),
             fieldWithPath("productStatus").description(JsonFieldType.OBJECT).description("상품상태"),
             fieldWithPath("productCategory").description(JsonFieldType.OBJECT)
@@ -215,6 +218,8 @@ class ProductControllerTest {
             fieldWithPath("productName").description(JsonFieldType.STRING).description("상품명"),
             fieldWithPath("productPrice").description(JsonFieldType.NUMBER).description("상품가격"),
             fieldWithPath("productStatus").description(JsonFieldType.OBJECT).description("상품상태"),
+            fieldWithPath("productImg").description(JsonFieldType.STRING).description("상품이미지"),
+
             fieldWithPath("productCategory").description(JsonFieldType.OBJECT)
                 .description("상품 카테고리"),
             fieldWithPath("productEnum").description(JsonFieldType.OBJECT).description("거래 상태")

@@ -1,16 +1,17 @@
-package com.example.townmarket.common.domain.admin.controller;
+package com.example.townmarket.common.domain.trade.controller;
 
-
-import static com.example.townmarket.fixture.ReportFixture.PAGING_USER_REPORT_RESPONSE_LIST;
-import static com.example.townmarket.fixture.UserFixture.PAGING_USER_RESPONSE1;
+import static com.example.townmarket.fixture.TradeFixture.CREATE_TRADE_DTO;
+import static com.example.townmarket.fixture.TradeFixture.PAGING_TRADE_PAGE;
 import static com.example.townmarket.fixture.UserFixture.PAGING_USER_RESPONSES;
 import static com.example.townmarket.fixture.UtilFixture.PAGE_DTO;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -19,66 +20,60 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.townmarket.admin.controller.AdminController;
 import com.example.townmarket.admin.service.AdminServiceImpl;
-import com.example.townmarket.annotation.WithCustomMockAdmin;
+import com.example.townmarket.annotation.WithCustomMockUser;
 import com.example.townmarket.common.domain.report.sevice.UserReportService;
+import com.example.townmarket.common.domain.trade.service.TradeService;
 import com.example.townmarket.common.globalException.ExceptionController;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
-@WebMvcTest(controllers = AdminController.class)
+@WebMvcTest(controllers = TradeController.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
-class AdminControllerTest {
+class TradeControllerTest {
 
   @Autowired
   MockMvc mockMvc;
   @Autowired
   ObjectMapper objectMapper;
+
   @MockBean
-  ExceptionController exceptionController;
-  @MockBean
-  AdminServiceImpl adminService;
-  @MockBean
-  UserReportService userReportService;
+  TradeService tradeService;
 
   @MockBean
   SetHttpHeaders httpHeaders;
 
   @Test
-  @DisplayName("유저 목록 조회")
-  @WithCustomMockAdmin
-  void viewAllUser() throws Exception {
-    Pageable pageable = PAGE_DTO.toPageable();
-    // 직렬화
-    String json = objectMapper.writeValueAsString(PAGING_USER_RESPONSES);
+  @WithCustomMockUser
+  void getPurchaseList() throws Exception {
 
-    given(adminService.viewAllUser(any())).willReturn(PAGING_USER_RESPONSES);
+    String json = objectMapper.writeValueAsString(PAGING_TRADE_PAGE);
+
+    given(tradeService.getPurchaseList(any(),any())).willReturn(PAGING_TRADE_PAGE);
 
     //when
-    ResultActions resultActions = mockMvc.perform(get("/admin/users")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(PAGE_DTO))
-        .with(csrf()))
+    ResultActions resultActions = mockMvc.perform(get("/trade/purchase")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(PAGE_DTO))
+            .with(csrf()))
         .andExpect(status().isOk());
-    resultActions.andDo(document("adminController/viewAllUser",
+    resultActions.andDo(document("tradeController/getPurchaseList",
         getDocumentRequest(),
         getDocumentResponse(),
         requestFields(
@@ -89,10 +84,8 @@ class AdminControllerTest {
             fieldWithPath("asc").type(JsonFieldType.BOOLEAN).description("오름/내림차순")
         ),
         responseFields(
-            fieldWithPath("content[].username").type(JsonFieldType.STRING).description("유저 아이디"),
-            fieldWithPath("content[].region").type(JsonFieldType.STRING).description("지역"),
-            fieldWithPath("content[].profile.nickName").type(JsonFieldType.STRING).description("프로필 닉네임"),
-            fieldWithPath("content[].profile.img_url").type(JsonFieldType.STRING).description("프로필 이미지 URL"),
+            fieldWithPath("content[].userName").type(JsonFieldType.STRING).description("유저 이름"),
+            fieldWithPath("content[].productName").type(JsonFieldType.STRING).description("상품이름"),
             fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description(""),
             fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description(""),
             fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description(""),
@@ -113,40 +106,26 @@ class AdminControllerTest {
             fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description(""),
             fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("")
 
-//            fieldWithPath("pageable").ignored(),
-//            fieldWithPath("last").ignored(),
-//            fieldWithPath("totalPages").ignored(),
-//            fieldWithPath("totalElements").ignored(),
-//            fieldWithPath("size").ignored(),
-//            fieldWithPath("number").ignored(),
-//            fieldWithPath("sort").ignored(),
-//            fieldWithPath("first").ignored(),
-//            fieldWithPath("numberOfElements").ignored(),
-//            fieldWithPath("empty").ignored()
-//        )
         )
     ));
 
   }
 
   @Test
-  @WithCustomMockAdmin
-  @DisplayName("신고 당한 유저 리스트 조회")
-  void viewAllReportedUser() throws Exception {
-    Pageable pageable = PAGE_DTO.toPageable();
+  @WithCustomMockUser
+  void getSalesList() throws Exception {
 
-    String json = objectMapper.writeValueAsString(PAGING_USER_REPORT_RESPONSE_LIST);
+    String json = objectMapper.writeValueAsString(PAGING_TRADE_PAGE);
 
-    given(userReportService.viewAllReportedUser(any())).willReturn(
-        PAGING_USER_REPORT_RESPONSE_LIST);
+    given(tradeService.getSalesList(any(),any())).willReturn(PAGING_TRADE_PAGE);
 
-    ResultActions resultActions = mockMvc.perform(get("/admin/report/user")
+    //when
+    ResultActions resultActions = mockMvc.perform(get("/trade/sales")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(PAGE_DTO))
             .with(csrf()))
         .andExpect(status().isOk());
-
-    resultActions.andDo(document("adminController/viewAllReportUser",
+    resultActions.andDo(document("tradeController/getSalesList",
         getDocumentRequest(),
         getDocumentResponse(),
         requestFields(
@@ -157,9 +136,8 @@ class AdminControllerTest {
             fieldWithPath("asc").type(JsonFieldType.BOOLEAN).description("오름/내림차순")
         ),
         responseFields(
-            fieldWithPath("content[].reportedName").type(JsonFieldType.STRING).description("신고당한 유저아이디"),
-            fieldWithPath("content[].reason").type(JsonFieldType.STRING).description("이유"),
-            fieldWithPath("content[].reportEnum").type(JsonFieldType.STRING).description("신고 사유"),
+            fieldWithPath("content[].userName").type(JsonFieldType.STRING).description("유저 이름"),
+            fieldWithPath("content[].productName").type(JsonFieldType.STRING).description("상품이름"),
             fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description(""),
             fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description(""),
             fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description(""),
@@ -180,21 +158,26 @@ class AdminControllerTest {
             fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description(""),
             fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("")
 
-//            fieldWithPath("pageable").ignored(),
-//            fieldWithPath("last").ignored(),
-//            fieldWithPath("totalPages").ignored(),
-//            fieldWithPath("totalElements").ignored(),
-//            fieldWithPath("size").ignored(),
-//            fieldWithPath("number").ignored(),
-//            fieldWithPath("sort").ignored(),
-//            fieldWithPath("first").ignored(),
-//            fieldWithPath("numberOfElements").ignored(),
-//            fieldWithPath("empty").ignored()
-//        )
         )
     ));
-
-
   }
 
+  @Test
+  @WithCustomMockUser
+  void createTrade() throws Exception {
+
+    ResultActions resultActions = mockMvc.perform(post("/trade/create")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(CREATE_TRADE_DTO))
+            .with(csrf()))
+        .andExpect(status().isCreated());
+    resultActions.andDo(document("tradeController/createTrade",
+        getDocumentRequest(),
+        getDocumentResponse(),
+        requestFields(
+            fieldWithPath("productId").type(JsonFieldType.NUMBER).description("상품 아이디"),
+            fieldWithPath("buyerId").type(JsonFieldType.NUMBER).description("구매자 아이디")
+
+        )));
+  }
 }

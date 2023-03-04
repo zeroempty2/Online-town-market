@@ -1,5 +1,6 @@
 package com.example.townmarket.common.domain.trade.controller;
 
+import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.townmarket.common.domain.trade.dto.CreateTradeDto;
@@ -62,7 +63,7 @@ public class TradeController {
   public ResponseEntity<StatusResponse> createTrade(@RequestBody CreateTradeDto createTrade,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     tradeService.createTrade(createTrade, userDetails.getUser());
-    return RESPONSE_OK;
+    return RESPONSE_CREATED;
   }
 
 

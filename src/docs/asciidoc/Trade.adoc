@@ -1,0 +1,71 @@
+// 예시
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== TRADE
+---
+---
+
+*getPurchaseList*
+
+** REQUEST
+
+include::{snippets}/tradeController/getPurchaseList/http-request.adoc[]
+
+** RESPONSE
+
+include::{snippets}/tradeController/getPurchaseList/http-response.adoc[]
+
+** REQUEST - BODY
+
+include::{snippets}/tradeController/getPurchaseList/request-body.adoc[]
+include::{snippets}/tradeController/getPurchaseList/request-fields.adoc[]
+
+** RESPONSE - BODY
+
+include::{snippets}/tradeController/getPurchaseList/response-body.adoc[]
+include::{snippets}/tradeController/getPurchaseList/response-fields.adoc[]
+
+
+---
+---
+
+*getSalesList*
+
+** REQUEST
+
+include::{snippets}/tradeController/getSalesList/http-request.adoc[]
+
+** RESPONSE
+
+include::{snippets}/tradeController/getSalesList/http-response.adoc[]
+
+** REQUEST - BODY
+
+include::{snippets}/tradeController/getSalesList/request-body.adoc[]
+include::{snippets}/tradeController/getSalesList/request-fields.adoc[]
+
+** RESPONSE - BODY
+
+include::{snippets}/tradeController/getSalesList/response-body.adoc[]
+include::{snippets}/tradeController/getSalesList/response-fields.adoc[]
+
+---
+---
+
+*createTrade*
+
+** REQUEST
+
+include::{snippets}/tradeController/createTrade/http-request.adoc[]
+
+** RESPONSE
+
+include::{snippets}/tradeController/createTrade/http-response.adoc[]
+
+** REQUEST - BODY
+
+include::{snippets}/tradeController/createTrade/request-body.adoc[]
+include::{snippets}/tradeController/createTrade/request-fields.adoc[]
+
