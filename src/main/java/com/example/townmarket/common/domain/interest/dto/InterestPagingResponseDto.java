@@ -1,8 +1,10 @@
 package com.example.townmarket.common.domain.interest.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class InterestPagingResponseDto {
 
   private String productImg;
