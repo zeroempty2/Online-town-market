@@ -1,11 +1,10 @@
 package com.example.townmarket.common.domain.address.service;
 
-import com.example.townmarket.common.domain.address.dto.AddressDTO;
+import com.example.townmarket.common.domain.address.dto.AddressResponseDto;
 
 public interface AddressService {
 
-  AddressDTO getXY(String query);
+  AddressResponseDto getAddress(double x, double y, Long userId);
 
-  String getAddress(double x, double y);
 
 }
