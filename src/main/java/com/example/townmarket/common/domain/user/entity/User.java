@@ -1,6 +1,7 @@
 package com.example.townmarket.common.domain.user.entity;
 
 import com.example.townmarket.common.TimeStamped;
+import com.example.townmarket.common.domain.address.entity.Address;
 import com.example.townmarket.common.domain.board.entity.Board;
 import com.example.townmarket.common.domain.chat.entity.ChatRoom;
 import com.example.townmarket.common.domain.interest.entity.Interest;
@@ -149,6 +150,10 @@ public class User extends TimeStamped {
   @Builder.Default
   @OneToMany(mappedBy = "reportedUser")
   private Set<UserReport> reports = new LinkedHashSet<>();
+
+  @Builder.Default
+  @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Address> address = new LinkedHashSet<>();
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
    */

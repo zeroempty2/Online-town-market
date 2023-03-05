@@ -49,11 +49,10 @@ public class SecurityConfig {
       "/verify/**",
       "/users/oauth/password/**",
       "/refresh/**",
-      "/users/search/**",
+      "/users/address/**",
       "/chatrooms/**",
       "/chatroom/**",
       "/boards",
-      "/users/search/**",
       "/ws/**",
       "profile"};
   private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
