@@ -166,6 +166,7 @@ class ProductControllerTest {
             fieldWithPath("content[].productId").type(JsonFieldType.NUMBER).description("상품 아이디"),
             fieldWithPath("content[].productName").type(JsonFieldType.STRING).description("상품 이름"),
             fieldWithPath("content[].productPrice").type(JsonFieldType.NUMBER).description("가격"),
+            fieldWithPath("content[].productImg").type(JsonFieldType.STRING).description("상품 이미지"),
 
             fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description(""),
             fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description(""),

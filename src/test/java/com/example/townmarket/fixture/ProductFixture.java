@@ -52,7 +52,7 @@ public class ProductFixture {
 
   public static final PagingProductResponse PAGING_PRODUCT_RESPONSE = PagingProductResponse.builder()
       .productId(1L)
-      .productName("상품이름").productPrice(1000L).build();
+      .productName("상품이름").productPrice(1000L).productImg("productImg").build();
 
 
   public static final Long PRODUCT_ID = 1L;
