@@ -8,13 +8,11 @@ import lombok.Getter;
 public class PagingUserResponse {
 
   private final String username;
-  private final String region;
 
   private final Profile profile;
 
   public PagingUserResponse(User user) {
     this.username = user.getUsername();
-    this.region = user.getRegion();
     this.profile = user.getProfile();
   }
 }

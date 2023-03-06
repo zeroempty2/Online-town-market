@@ -20,7 +20,7 @@ public class ChatRoomResponse {
     this.buyerId = user.getId();
     this.profileImg = user.getProfile().getImg_url();
     this.nickname = user.getProfile().getNickName();
-    this.region = user.getRegion();
+    this.region = user.getAddress().get(0).getAddress3();
     this.productName = productName;
     this.roomId = roomId;
   }

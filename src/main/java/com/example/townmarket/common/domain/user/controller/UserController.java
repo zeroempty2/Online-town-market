@@ -11,7 +11,6 @@ import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
-import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.dto.UserInfoResponseDto;
 import com.example.townmarket.common.domain.user.service.UserService;
@@ -83,14 +82,14 @@ public class UserController {
     return RESPONSE_OK;
   }
 
-  @PutMapping("/update/region")
-  public ResponseEntity<StatusResponse> updateRegion(
-      @RequestBody RegionUpdateRequestDto updateRequestDto,
-      @AuthenticationPrincipal
-      UserDetailsImpl userDetails) {
-    userService.updateRegion(userDetails.getUsername(), updateRequestDto);
-    return RESPONSE_OK;
-  }
+//  @PutMapping("/update/region")
+//  public ResponseEntity<StatusResponse> updateRegion(
+//      @RequestBody RegionUpdateRequestDto updateRequestDto,
+//      @AuthenticationPrincipal
+//      UserDetailsImpl userDetails) {
+//    userService.updateRegion(userDetails.getUsername(), updateRequestDto);
+//    return RESPONSE_OK;
+//  }
 
   @DeleteMapping("/{userId}")
   public ResponseEntity<StatusResponse> deleteUser(@PathVariable Long userId,

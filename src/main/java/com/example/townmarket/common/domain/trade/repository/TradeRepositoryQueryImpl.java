@@ -1,12 +1,9 @@
 package com.example.townmarket.common.domain.trade.repository;
 
 import static com.example.townmarket.common.domain.product.entity.QProduct.product;
-import static com.example.townmarket.common.domain.review.entity.QReview.review;
 import static com.example.townmarket.common.domain.trade.entity.QTrade.trade;
 
-import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.trade.dto.PagingTrade;
-import com.example.townmarket.common.domain.trade.entity.QTrade;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Wildcard;
@@ -19,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 @RequiredArgsConstructor
-public class TradeRepositoryQueryImpl implements  TradeRepositoryQuery{
+public class TradeRepositoryQueryImpl implements TradeRepositoryQuery {
 
   private final JPAQueryFactory jpaQueryFactory;
 
@@ -45,10 +42,12 @@ public class TradeRepositoryQueryImpl implements  TradeRepositoryQuery{
         .leftJoin(product)
         .on(trade.productId.eq(product.id))
         .where(trade.buyer.eq(buyer))
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
         .fetch();
 
     Long totalSize = buyerCountQuery(buyer).fetch().get(0);
-    return PageableExecutionUtils.getPage(pagingTrades,pageable,()->totalSize);
+    return PageableExecutionUtils.getPage(pagingTrades, pageable, () -> totalSize);
   }
 
   @Override
@@ -61,9 +60,11 @@ public class TradeRepositoryQueryImpl implements  TradeRepositoryQuery{
         .leftJoin(product)
         .on(trade.productId.eq(product.id))
         .where(trade.seller.eq(seller))
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
         .fetch();
 
     Long totalSize = sellerCountQuery(seller).fetch().get(0);
-    return PageableExecutionUtils.getPage(pagingTrades,pageable,()->totalSize);
+    return PageableExecutionUtils.getPage(pagingTrades, pageable, () -> totalSize);
   }
 }

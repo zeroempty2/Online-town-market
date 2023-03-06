@@ -19,11 +19,15 @@ public class SignupRequestDto {
   @NotEmpty(message = "비밀번호를 입력해주세요.")
   private String password;
 
-//  @Pattern(regexp = "^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$", message = "숫자와 - 를 포함하여 휴대폰 번호를 적어주세요.")
+  //  @Pattern(regexp = "^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$", message = "숫자와 - 를 포함하여 휴대폰 번호를 적어주세요.")
 //  @NotEmpty(message = "휴대폰 번호를 입력해주세요.")
 //  private String phoneNumber;
-
-
+  @NotEmpty
+  private String address1;
+  @NotEmpty
+  private String address2;
+  @NotEmpty
+  private String address3;
   @Pattern(regexp = "^(?:\\w+\\.?)*\\w+@(?:\\w+\\.)+\\w+$", message = "이메일 형식이 올바르지 않습니다.")
   @NotEmpty(message = "본인 인증 가능한 이메일을 입력해주세요.")
   private String email;

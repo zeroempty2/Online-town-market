@@ -1,6 +1,5 @@
 package com.example.townmarket.common.domain.trade.controller;
 
-import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_CREATED;
 import static com.example.townmarket.common.util.HttpResponseEntity.RESPONSE_OK;
 
 import com.example.townmarket.common.domain.trade.dto.CreateTradeDto;
@@ -17,7 +16,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +35,7 @@ public class TradeController {
 
   @GetMapping("/purchase")
   public ResponseEntity<Page<PagingTrade>> getPurchaseList(
-      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+      @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     return ResponseEntity.ok().headers(setHttpHeaders.setHeaderTypeJson())
         .body(tradeService.getPurchaseList(userDetails.getUser(), pageable));
@@ -45,7 +43,7 @@ public class TradeController {
 
   @GetMapping("/sales")
   public ResponseEntity<Page<PagingTrade>> getSalesList(
-      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+      @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     return ResponseEntity.ok().headers(setHttpHeaders.setHeaderTypeJson())
         .body(tradeService.getSalesList(userDetails.getUser(), pageable));
@@ -63,7 +61,7 @@ public class TradeController {
   public ResponseEntity<StatusResponse> createTrade(@RequestBody CreateTradeDto createTrade,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     tradeService.createTrade(createTrade, userDetails.getUser());
-    return RESPONSE_CREATED;
+    return RESPONSE_OK;
   }
 
 

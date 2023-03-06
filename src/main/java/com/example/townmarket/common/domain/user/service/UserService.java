@@ -6,7 +6,6 @@ import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
-import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.dto.UserInfoResponseDto;
 import com.example.townmarket.common.domain.user.entity.User;
@@ -24,10 +23,9 @@ public interface UserService {
 
   void login(HttpServletResponse response, LoginRequestDto request);
 
-
   void updateUser(String username, PasswordUpdateRequestDto updateDto);
 
-  void updateRegion(String username, RegionUpdateRequestDto updateDto);
+//  void updateRegion(String username, RegionUpdateRequestDto updateDto);
 
   void deleteUser(Long userId, String username);
 
@@ -44,7 +42,6 @@ public interface UserService {
   User findUserById(Long userId);
 
   User findByUsername(String username);
-
 
   boolean existsByEmail(String email);
 

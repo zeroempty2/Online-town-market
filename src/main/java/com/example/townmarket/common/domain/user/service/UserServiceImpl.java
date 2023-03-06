@@ -1,5 +1,7 @@
 package com.example.townmarket.common.domain.user.service;
 
+import com.example.townmarket.common.domain.address.entity.Address;
+import com.example.townmarket.common.domain.address.service.AddressServiceImpl;
 import com.example.townmarket.common.domain.review.entity.UserGrade;
 import com.example.townmarket.common.domain.review.service.UserGradeServiceImpl;
 import com.example.townmarket.common.domain.user.dto.DuplicateCheckRequestDto;
@@ -8,7 +10,6 @@ import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
-import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.dto.UserInfoResponseDto;
 import com.example.townmarket.common.domain.user.entity.Profile;
@@ -30,7 +31,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
   private final PasswordEncoder passwordEncoder;
   private final RefreshService refreshService;
   private final UserGradeServiceImpl userGradeService;
+  private final AddressServiceImpl addressService;
 
   @Override
   @Transactional
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserService {
     String username = request.getUsername();
     String email = request.getEmail();
     String password = passwordEncoder.encode(request.getPassword());
+
     if (request.getImg_url() != null) {
       Profile profile = Profile.builder().nickName(request.getNickname()).img_url(
           request.getImg_url()).build();
@@ -56,26 +58,29 @@ public class UserServiceImpl implements UserService {
           .username(username)
           .password(password)
           .email(email)
-          .region(request.getRegion())
-          .email(request.getEmail())
           .role(RoleEnum.MEMBER)
           .profile(profile)
           .build();
 
       userRepository.save(user);
+      Address address = Address.builder().address(request.getAddress1())
+          .address2(request.getAddress2()).address3(request.getAddress3()).user(user).build();
+      addressService.addressSave(address);
     }
     Profile profile = new Profile(request.getNickname());
     User user = User.builder()
         .username(username)
         .password(password)
         .email(email)
-        .region(request.getRegion())
-        .email(request.getEmail())
         .role(RoleEnum.MEMBER)
         .profile(profile)
         .build();
 
+    Address address = Address.builder().address(request.getAddress1())
+        .address2(request.getAddress2()).address3(request.getAddress3()).user(user).build();
+
     userRepository.save(user);
+    addressService.addressSave(address);
   }
 
   @Override
@@ -139,17 +144,18 @@ public class UserServiceImpl implements UserService {
     this.userRepository.save(user);
   }
 
-  @Override
-  @Transactional
-  public void updateRegion(String username, RegionUpdateRequestDto updateRequestDto) {
-    User user = this.findByUsername(username);
-
-    if (!user.checkAuthorization(user)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
-    }
-    user.updateRegion(updateRequestDto);
-    this.userRepository.save(user);
-  }
+//  @Deprecated
+//  @Override
+//  @Transactional
+//  public void updateRegion(String username, RegionUpdateRequestDto updateRequestDto) {
+//    User user = this.findByUsername(username);
+//
+//    if (!user.checkAuthorization(user)) {
+//      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+//    }
+////    user.updateRegion(updateRequestDto);
+//    this.userRepository.save(user);
+//  }
 
   @Override
   @Transactional

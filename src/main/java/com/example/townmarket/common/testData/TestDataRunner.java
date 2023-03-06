@@ -1,11 +1,12 @@
 package com.example.townmarket.common.testData;
 
+import com.example.townmarket.common.domain.address.entity.Address;
+import com.example.townmarket.common.domain.address.repository.AddressRepository;
 import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.product.entity.Product.ProductCategory;
 import com.example.townmarket.common.domain.product.entity.Product.ProductEnum;
 import com.example.townmarket.common.domain.product.entity.Product.ProductStatus;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
-import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
@@ -26,6 +27,8 @@ public class TestDataRunner implements ApplicationRunner {
 
   private final UserServiceImpl userService;
 
+  private final AddressRepository addressRepository;
+
   @Override
   @Transactional
   public void run(ApplicationArguments args) throws Exception {
@@ -40,21 +43,40 @@ public class TestDataRunner implements ApplicationRunner {
         .build();
     userRepository.save(user);
 
-    SignupRequestDto user1 = SignupRequestDto.builder()
+    Address address = Address.builder().user(user).address("경기도").address2("고양시").address3("일산서구")
+        .build();
+
+    addressRepository.save(address);
+
+    Profile profile1 = new Profile("nickname1");
+    User user1 = User.builder()
         .username("user2")
         .password("Password!23")
         .email("asdaas@gmail.com")
-        .nickname("nick1")
+        .role(RoleEnum.MEMBER)
+        .profile(profile1)
         .build();
-    userService.signup(user1);
 
-    SignupRequestDto user2 = SignupRequestDto.builder()
+    userRepository.save(user1);
+
+    Address address2 = Address.builder().user(user1).address("전라남도").address2("순천시").address3("복성리")
+        .build();
+    addressRepository.save(address2);
+
+    Profile profile2 = new Profile("nickname2");
+
+    User user2 = User.builder()
         .username("user3")
         .password("Password!23")
         .email("asd1aas@gmail.com")
-        .nickname("nick12")
+        .role(RoleEnum.MEMBER)
+        .profile(profile2)
         .build();
-    userService.signup(user2);
+    userRepository.save(user2);
+
+    Address address3 = Address.builder().user(user).address("경기도").address2("고양시").address3("일산동구")
+        .build();
+    addressRepository.save(address3);
 
     Product product1 = Product.builder().productName("product").productPrice(11111L)
         .productStatus(ProductStatus.S)
