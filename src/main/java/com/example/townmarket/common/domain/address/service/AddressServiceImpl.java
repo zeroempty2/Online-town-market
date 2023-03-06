@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -37,6 +38,7 @@ public class AddressServiceImpl implements AddressService {
   Gson gson = new Gson();
 
   @Override
+  @Transactional
   public AddressResponseDto getAddress(double x, double y, User user) {
 
     String url = "https://dapi.kakao.com/v2/local/geo/coord2regioncode.json";
