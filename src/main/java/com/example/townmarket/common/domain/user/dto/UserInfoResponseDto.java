@@ -15,10 +15,6 @@ public class UserInfoResponseDto {
     this.username = user.getUsername();
     this.nickname = user.getProfile().getNickName();
     this.email = user.getEmail();
-    if (user.getRegion() != null) {
-      this.region = user.getRegion();
-    } else {
-      this.region = "";
-    }
+    this.region = user.getAddress().get(0).getAddress3();
   }
 }

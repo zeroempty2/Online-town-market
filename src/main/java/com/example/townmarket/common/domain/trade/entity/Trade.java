@@ -1,6 +1,6 @@
 package com.example.townmarket.common.domain.trade.entity;
 
-import com.example.townmarket.common.domain.product.entity.Product;
+import com.example.townmarket.common.TimeStamped;
 import com.example.townmarket.common.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Trade {
+public class Trade extends TimeStamped {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

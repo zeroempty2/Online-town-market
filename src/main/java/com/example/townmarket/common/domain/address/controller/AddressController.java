@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,10 +24,18 @@ public class AddressController {
   private final AddressServiceImpl addressService;
 
   // 위경도를 통해 주소 반환
-  @RequestMapping(value = "/address",method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
+  @RequestMapping(value = "/address", method = {RequestMethod.GET, RequestMethod.POST,
+      RequestMethod.PUT})
   public ResponseEntity<AddressResponseDto> getFullAddress(@RequestParam("x") double x,
       @RequestParam("y") double y, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    AddressResponseDto response = addressService.getAddress(x, y, userDetails.getUserId());
+    AddressResponseDto response = addressService.getAddress(x, y, userDetails.getUser());
+    return ResponseEntity.status(HttpStatus.OK).body(response);
+  }
+
+  @PostMapping("/address/signup")
+  public ResponseEntity<AddressResponseDto> getAddressSignUp(@RequestParam("x") double x,
+      @RequestParam("y") double y) {
+    AddressResponseDto response = addressService.getAddressSingUp(x, y);
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 }

@@ -29,12 +29,12 @@ public class ChatRoomListDto {
       // 판매자인 경우
       this.profileImg = room.getBuyer().getProfile().getImg_url();
       this.nickname = room.getBuyer().getProfile().getNickName();
-      this.region = room.getBuyer().getRegion();
+      this.region = room.getBuyer().getAddress().get(0).getAddress3();
     } else {
       // 구매자인 경우
       this.profileImg = room.getProduct().getUser().getProfile().getImg_url();
       this.nickname = room.getProduct().getUser().getProfile().getNickName();
-      this.region = room.getProduct().getUser().getRegion();
+      this.region = room.getProduct().getUser().getAddress().get(0).getAddress3();
     }
   }
 }

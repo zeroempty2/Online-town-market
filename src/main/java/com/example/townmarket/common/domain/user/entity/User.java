@@ -10,7 +10,6 @@ import com.example.townmarket.common.domain.report.entity.UserReport;
 import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.domain.review.entity.UserGrade;
 import com.example.townmarket.common.domain.trade.entity.Trade;
-import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.enums.RoleEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,12 +17,14 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import lombok.AccessLevel;
@@ -67,8 +68,6 @@ public class User extends TimeStamped {
   @Column(nullable = false, unique = true)
   private String email;
 
-  @Column
-  private String region;
 
   @Column
   @Enumerated(EnumType.STRING)
@@ -82,12 +81,11 @@ public class User extends TimeStamped {
    */
 
   @Builder
-  public User(String username, String password, String email, String region,
+  public User(String username, String password, String email,
       Profile profile) {
     this.username = username;
     this.password = password;
     this.email = email;
-    this.region = region;
     this.profile = profile;
   }
 
@@ -151,9 +149,8 @@ public class User extends TimeStamped {
   @OneToMany(mappedBy = "reportedUser")
   private Set<UserReport> reports = new LinkedHashSet<>();
 
-  @Builder.Default
-  @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Address> address = new LinkedHashSet<>();
+  @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  private List<Address> address;
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
    */
@@ -170,9 +167,6 @@ public class User extends TimeStamped {
     this.password = password;
   }
 
-  public void updateRegion(RegionUpdateRequestDto updateDto) {
-    this.region = updateDto.getRegion();
-  }
 
   public double getUserAverageGrade() {
     Set<UserGrade> grades = this.grades;

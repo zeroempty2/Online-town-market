@@ -26,11 +26,11 @@ public class Address {
   private Long id;
 
   @Column(nullable = false)
-  private String address;
+  private String address; // 시도
   @Column(nullable = false)
-  private String address2;
+  private String address2; // 시군구
   @Column(nullable = false)
-  private String address3;
+  private String address3; // 읍면동
 
   @ManyToOne
   @JoinColumn(name = "user_id")

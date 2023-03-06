@@ -57,7 +57,7 @@ public class ProductResponseDto {
         product.getProductContents(),
         product.getUser().getProfile().getNickName(),
         product.getUser().getProfile().getImg_url(),
-        product.getUser().getRegion(),
+        product.getUser().getAddress().get(0).getAddress3(),
         product.getUser().getUserAverageGrade(),
         (long) product.getInterest().size());
   }
@@ -77,7 +77,7 @@ public class ProductResponseDto {
     this.productContents = product.getProductContents();
     this.nickName = user.getProfile().getNickName();
     this.img = user.getProfile().getImg_url();
-    this.region = user.getRegion();
+    this.region = user.getAddress().get(0).getAddress3();
     this.userGrade = user.getUserAverageGrade();
     this.interest = (long) product.getInterest().size();
   }
