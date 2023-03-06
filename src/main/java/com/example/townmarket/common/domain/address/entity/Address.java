@@ -27,18 +27,26 @@ public class Address {
 
   @Column(nullable = false)
   private String address;
+  @Column(nullable = false)
+  private String address2;
+  @Column(nullable = false)
+  private String address3;
 
   @ManyToOne
-  @JoinColumn(referencedColumnName = "user_id")
+  @JoinColumn(name = "user_id")
   private User user;
 
-  public Address(String address, User user) {
-    this.address = address;
+  public Address(String regionName1, String regionName2, String regionName3, User user) {
+    this.address = regionName1;
+    this.address2 = regionName2;
+    this.address3 = regionName3;
     this.user = user;
   }
 
-  public void updateAddress(String address) {
-    this.address = address;
+  public void updateAddress(String regionName1, String regionName2, String regionName3) {
+    this.address = regionName1;
+    this.address2 = regionName2;
+    this.address3 = regionName3;
   }
 }
 

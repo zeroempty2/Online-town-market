@@ -62,15 +62,19 @@ public class AddressServiceImpl implements AddressService {
         String.class);
 
     KaKaoMapResponse mapped_data = gson.fromJson(response.getBody(), KaKaoMapResponse.class);
-    String target = mapped_data.documents.get(0).address_name;
+    String target = mapped_data.documents.get(0).region_1depth_name;
+    String target2 = mapped_data.documents.get(0).region_2depth_name;
+    String target3 = mapped_data.documents.get(0).region_3depth_name;
 
     Address address = addressRepository.findByUser(user);
 
     if (address != null) {
-      address.updateAddress(target);
+      address.updateAddress(target, target2, target3);
     } else {
       address = Address.builder()
           .address(target)
+          .address2(target2)
+          .address3(target3)
           .user(user)
           .build();
     }
