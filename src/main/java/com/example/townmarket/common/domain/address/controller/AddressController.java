@@ -24,8 +24,7 @@ public class AddressController {
   private final AddressServiceImpl addressService;
 
   // 위경도를 통해 주소 반환
-  @RequestMapping(value = "/address", method = {RequestMethod.GET, RequestMethod.POST,
-      RequestMethod.PUT})
+  @RequestMapping(value = "/address", method = {RequestMethod.GET, RequestMethod.PUT})
   public ResponseEntity<AddressResponseDto> getFullAddress(@RequestParam("x") double x,
       @RequestParam("y") double y, @AuthenticationPrincipal UserDetailsImpl userDetails) {
     AddressResponseDto response = addressService.getAddress(x, y, userDetails.getUser());
