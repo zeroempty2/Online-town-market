@@ -15,6 +15,7 @@ import com.example.townmarket.common.enums.RoleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,8 @@ public class TestDataRunner implements ApplicationRunner {
 
   private final AddressRepository addressRepository;
 
+  private final PasswordEncoder passwordEncoder;
+
   @Override
   @Transactional
   public void run(ApplicationArguments args) throws Exception {
@@ -36,22 +39,21 @@ public class TestDataRunner implements ApplicationRunner {
 
     User user = User.builder()
         .username("user1")
-        .password("Password!23")
+        .password(passwordEncoder.encode("Password!23"))
         .email("asda11as@gmail.com")
         .role(RoleEnum.MEMBER)
         .profile(profile)
         .build();
     userRepository.save(user);
 
-    Address address = Address.builder().user(user).address("경기도").address2("고양시").address3("일산서구")
-        .build();
+    Address address = new Address("경기도", "고양시", "일산동구", user);
 
     addressRepository.save(address);
 
     Profile profile1 = new Profile("nickname1");
     User user1 = User.builder()
         .username("user2")
-        .password("Password!23")
+        .password(passwordEncoder.encode("Password!23"))
         .email("asdaas@gmail.com")
         .role(RoleEnum.MEMBER)
         .profile(profile1)
@@ -59,23 +61,22 @@ public class TestDataRunner implements ApplicationRunner {
 
     userRepository.save(user1);
 
-    Address address2 = Address.builder().user(user1).address("전라남도").address2("순천시").address3("복성리")
-        .build();
+    Address address2 = new Address("경기도", "고양시", "일산동구", user1);
+
     addressRepository.save(address2);
 
     Profile profile2 = new Profile("nickname2");
 
     User user2 = User.builder()
         .username("user3")
-        .password("Password!23")
+        .password(passwordEncoder.encode("Password!23"))
         .email("asd1aas@gmail.com")
         .role(RoleEnum.MEMBER)
         .profile(profile2)
         .build();
     userRepository.save(user2);
 
-    Address address3 = Address.builder().user(user).address("경기도").address2("고양시").address3("일산동구")
-        .build();
+    Address address3 = new Address("경기도", "고양시", "일산동구", user2);
     addressRepository.save(address3);
 
     Product product1 = Product.builder().productName("product").productPrice(11111L)

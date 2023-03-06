@@ -63,8 +63,8 @@ public class UserServiceImpl implements UserService {
           .build();
 
       userRepository.save(user);
-      Address address = Address.builder().address(request.getAddress1())
-          .address2(request.getAddress2()).address3(request.getAddress3()).user(user).build();
+      Address address = new Address(request.getAddress1(), request.getAddress2(),
+          request.getAddress3(), user);
       addressService.addressSave(address);
     }
     Profile profile = new Profile(request.getNickname());
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
         .build();
 
     Address address = Address.builder().address(request.getAddress1())
-        .address2(request.getAddress2()).address3(request.getAddress3()).user(user).build();
+        .address2(request.getAddress2()).address3(request.getAddress3()).build();
 
     userRepository.save(user);
     addressService.addressSave(address);
