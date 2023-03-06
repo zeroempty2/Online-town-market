@@ -8,15 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class Address {
 
@@ -36,17 +33,19 @@ public class Address {
   @JoinColumn(name = "user_id")
   private User user;
 
-  public Address(String regionName1, String regionName2, String regionName3, User user) {
-    this.address = regionName1;
-    this.address2 = regionName2;
-    this.address3 = regionName3;
+  @Builder
+  public Address(String address, String address2, String address3, User user) {
+    this.address = address;
+    this.address2 = address2;
+    this.address3 = address3;
     this.user = user;
   }
 
-  public void updateAddress(String regionName1, String regionName2, String regionName3) {
-    this.address = regionName1;
-    this.address2 = regionName2;
-    this.address3 = regionName3;
+
+  public void updateAddress(String address, String address2, String address3) {
+    this.address = address;
+    this.address2 = address2;
+    this.address3 = address3;
   }
 }
 

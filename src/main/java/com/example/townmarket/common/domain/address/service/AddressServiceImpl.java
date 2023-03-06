@@ -64,17 +64,7 @@ public class AddressServiceImpl implements AddressService {
 
     Address address = addressRepository.findByUser(user);
 
-    if (address != null) {
-      address.updateAddress(target, target2, target3);
-    } else {
-      address = Address.builder()
-          .address(target)
-          .address2(target2)
-          .address3(target3)
-          .user(user)
-          .build();
-    }
-    addressRepository.save(address);
+    address.updateAddress(target, target2, target3);
     return new AddressResponseDto(address);
   }
 

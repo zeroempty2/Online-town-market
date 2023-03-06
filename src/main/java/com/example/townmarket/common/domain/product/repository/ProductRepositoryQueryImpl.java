@@ -73,6 +73,7 @@ public class ProductRepositoryQueryImpl implements ProductRepositoryQuery {
         .where(product.id.eq(productId))
         .leftJoin(product.user).fetchJoin()
         .leftJoin(product.interest).fetchJoin()
+        .leftJoin(product.user.address).fetchJoin()
         .fetchOne();
 
 //    return jpaQueryFactory.select(
