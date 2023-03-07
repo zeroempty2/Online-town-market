@@ -22,7 +22,7 @@ public class JasyptConfig {
 
   private final String encryptKey = getJasyptEncryptorPassword();
 
-  @Bean("jasyptStringEncryptor")
+  @Bean("Encryptor")
   public StringEncryptor stringEncryptor() {
     PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
     SimpleStringPBEConfig config = new SimpleStringPBEConfig();
