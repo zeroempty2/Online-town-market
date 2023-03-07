@@ -3,6 +3,7 @@ package com.example.townmarket.fixture;
 import static com.example.townmarket.fixture.UtilFixture.PAGE_DTO;
 
 import com.example.townmarket.admin.dto.PagingUserResponse;
+import com.example.townmarket.common.domain.address.entity.Address;
 import com.example.townmarket.common.domain.user.dto.DuplicateCheckRequestDto;
 import com.example.townmarket.common.domain.user.dto.DuplicateCheckResponseDto;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
@@ -22,13 +23,16 @@ public class UserFixture {
   public static final Profile PROFILE = Profile.builder().nickName("nickname").img_url("img_url")
       .build();
 
+  public static final Address ADDRESS = Address.builder().address("경기도").address2("고양시").address3("일산서구").build();
+
   public static final User USER1 = User.builder()
+      .id(1L)
       .username("username1")
       .password("Password!2")
-      .region("서울")
       .email("username1@google.com")
       .role(RoleEnum.MEMBER)
       .profile(PROFILE)
+      .address(Collections.singletonList(ADDRESS))
       .build();
 
   public static final SignupRequestDto SIGNUP_REQUEST_DTO =
@@ -38,7 +42,9 @@ public class UserFixture {
           .email("xxx0011@gmail.com")
           .nickname("nickname1")
           .img_url("asdassdas.com")
-          .region("서울")
+          .address1("고양시")
+          .address2("일산서구")
+          .address3("OO동")
           .build();
 
   public static final LoginRequestDto LOGIN_REQUEST_DTO =
