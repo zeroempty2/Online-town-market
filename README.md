@@ -34,7 +34,6 @@
   <img src="https://img.shields.io/badge/Jquery-0769AD?style=for-the-badge&logo=Jquery&logoColor=white">
   <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
  <img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white">
- <img src="https://img.shields.io/badge/Google API-4285F4?style=for-the-badge&logo=google&logoColor=white">
  <img src="https://img.shields.io/badge/KAKAO API-FFCD00?style=for-the-badge&logo=kakao&logoColor=white">
 <br>
  <img src="https://img.shields.io/badge/Java Email API-EA4335?style=for-the-badge&logo=Java&logoColor=white">

@@ -90,7 +90,6 @@ class AdminControllerTest {
         ),
         responseFields(
             fieldWithPath("content[].username").type(JsonFieldType.STRING).description("유저 아이디"),
-            fieldWithPath("content[].region").type(JsonFieldType.STRING).description("지역"),
             fieldWithPath("content[].profile.nickName").type(JsonFieldType.STRING).description("프로필 닉네임"),
             fieldWithPath("content[].profile.img_url").type(JsonFieldType.STRING).description("프로필 이미지 URL"),
             fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description(""),

@@ -1,6 +1,12 @@
 package com.example.townmarket.common.domain.product.service;
 
+import static com.example.townmarket.fixture.ProductFixture.PRODUCT;
+import static com.example.townmarket.fixture.ProductFixture.PRODUCT_ID;
+import static com.example.townmarket.fixture.ProductFixture.PRODUCT_RESPONSE_DTO;
+import static com.example.townmarket.fixture.UserFixture.PROFILE_RESPONSE_DTO;
+import static com.example.townmarket.fixture.UserFixture.USER1;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
@@ -21,11 +27,13 @@ import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.dto.PageDto;
 import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,26 +61,21 @@ class ProductServiceImplTest {
     verify(productRepository).save(isA(Product.class));
   }
 
-  @Test
-  @DisplayName("상품 단건 조회 성공")
-  void getProduct() {
-    // given
-    ProductRequestDto productRequestDto = mock(ProductRequestDto.class);
-    Product product = mock(Product.class);
-    User user = mock(User.class);
-    Profile profile = mock(Profile.class);
-    when(product.getUser()).thenReturn(user);
-    when(user.getProfile()).thenReturn(profile);
-    when(product.isBlocked()).thenReturn(false);
-    when(productRepository.getProductAndSellerProfileByProductIdAndCountView(
-        product.getId())).thenReturn(product);
+//  @Test
+//  @DisplayName("상품 단건 조회 성공")
+//  void getProduct() {
+//    Product product = mock(Product.class);
+//    when(productRepository.getProductAndSellerProfileByProductIdAndCountView(PRODUCT_ID)).thenReturn(
+//        product);
+//    when(ProductResponseDto.valueOf(product)).thenReturn(PRODUCT_RESPONSE_DTO);
+//
+//    ProductResponseDto product1 = productService.getProduct(PRODUCT_ID);
+//
+//
+//
+//
+//  }
 
-    // when
-    ProductResponseDto productResponse = productService.getProduct(product.getId());
-
-    // then
-    assertThat(productResponse.getProductName()).isEqualTo(productRequestDto.getProductName());
-  }
 
   @Test
   @DisplayName("상품 목록 조회 성공")

@@ -153,25 +153,25 @@ include::{snippets}/userController/update-pw/response-fields.adoc[]
 
 ---
 ---
-*updaetRegion*
-
-** REQUEST
-
-include::{snippets}/userController/update-region/http-request.adoc[]
-
-** RESPONSE
-
-include::{snippets}/userController/update-region/http-response.adoc[]
-
-** REQUEST - BODY
-
-include::{snippets}/userController/update-region/request-body.adoc[]
-include::{snippets}/userController/update-region/request-fields.adoc[]
-
-** RESPONSE - BODY
-
-include::{snippets}/userController/update-region/response-body.adoc[]
-include::{snippets}/userController/update-region/response-fields.adoc[]
-
----
----
+// *updaetRegion*
+//
+// ** REQUEST
+//
+// include::{snippets}/userController/update-region/http-request.adoc[]
+//
+// ** RESPONSE
+//
+// include::{snippets}/userController/update-region/http-response.adoc[]
+//
+// ** REQUEST - BODY
+//
+// include::{snippets}/userController/update-region/request-body.adoc[]
+// include::{snippets}/userController/update-region/request-fields.adoc[]
+//
+// ** RESPONSE - BODY
+//
+// include::{snippets}/userController/update-region/response-body.adoc[]
+// include::{snippets}/userController/update-region/response-fields.adoc[]
+//
+// ---
+// ---
