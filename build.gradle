@@ -30,10 +30,10 @@ ext {
     snippetsDir = file('build/generated-snippets')
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-    systemProperty "jasypt.encryptor.password", System.getProperties().get("jasypt.encryptor.password")
-}
+//tasks.named('test') {
+//    useJUnitPlatform()
+//    systemProperty "jasypt.encryptor.password", System.getProperties().get("jasypt.encryptor.password")
+//}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

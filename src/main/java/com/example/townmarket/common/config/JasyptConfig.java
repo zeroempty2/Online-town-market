@@ -19,12 +19,15 @@ public class JasyptConfig {
 //  @Value("${jasypt.encryptor.password}")
 //  private String encryptKey;
 
+
+  private final String encryptKey = getJasyptEncryptorPassword();
+
   @Bean("jasyptStringEncryptor")
   public StringEncryptor stringEncryptor() {
     PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
     SimpleStringPBEConfig config = new SimpleStringPBEConfig();
-//    config.setPassword(encryptKey); //암호화에 사용할 키 -> 중요
-    config.setPassword(getJasyptEncryptorPassword());
+    config.setPassword(encryptKey); //암호화에 사용할 키 -> 중요
+//    config.setPassword(getJasyptEncryptorPassword());
     config.setAlgorithm("PBEWithMD5AndDES");
     config.setKeyObtentionIterations("1000");
     config.setPoolSize("1");
