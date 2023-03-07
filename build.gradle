@@ -30,10 +30,10 @@ ext {
     snippetsDir = file('build/generated-snippets')
 }
 
-//tasks.named('test') {
-//    useJUnitPlatform()
-//    systemProperty "jasypt.encryptor.password", System.getProperties().get("jasypt.encryptor.password")
-//}
+tasks.named('test') {
+    useJUnitPlatform()
+    systemProperty "jasypt.encryptor.password", System.getProperties().get("jasypt.encryptor.password")
+}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -54,7 +54,7 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
-
+    implementation 'org.jasypt:jasypt:1.9.3'
     //querydsl 의존성
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
