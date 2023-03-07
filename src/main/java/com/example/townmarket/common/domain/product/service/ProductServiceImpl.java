@@ -41,7 +41,8 @@ public class ProductServiceImpl implements ProductService {
     Product product = productRepository.getProductAndSellerProfileByProductIdAndCountView(
         productId);
     isBlock(product);
-    return ProductResponseDto.valueOf(product);
+    ProductResponseDto productResponseDto = ProductResponseDto.valueOf(product);
+    return productResponseDto;
   }
 
   @Override

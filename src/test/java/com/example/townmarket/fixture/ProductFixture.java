@@ -13,6 +13,7 @@ import com.example.townmarket.common.domain.product.entity.Product.ProductStatus
 public class ProductFixture {
 
   public static final Product PRODUCT = Product.builder()
+      .id(1L)
       .productName("productName")
       .productPrice(1000L)
       .productStatus(ProductStatus.S)
@@ -34,6 +35,7 @@ public class ProductFixture {
 
   public static final ProductResponseDto PRODUCT_RESPONSE_DTO = ProductResponseDto.builder()
       .productId(1L)
+      .sellerId(1L)
       .productName("productName")
       .productPrice(1000)
       .productStatus(ProductStatus.S)
@@ -44,7 +46,7 @@ public class ProductFixture {
       .viewCount(1L)
       .nickName("nickname")
       .img("profileImg")
-      .region("지역")
+      .region("OO동")
       .userGrade(5.0)
       .interest(1L)
       .sellerId(2L)

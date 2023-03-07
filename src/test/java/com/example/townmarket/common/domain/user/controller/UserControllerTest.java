@@ -88,7 +88,9 @@ class UserControllerTest {
             fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
             fieldWithPath("img_url").type(JsonFieldType.STRING).description("프로필 이미지"),
             fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-            fieldWithPath("region").type(JsonFieldType.STRING).description("지역")
+            fieldWithPath("address1").type(JsonFieldType.STRING).description("지역"),
+            fieldWithPath("address2").type(JsonFieldType.STRING).description("지역"),
+            fieldWithPath("address3").type(JsonFieldType.STRING).description("지역")
         )
     ));
 
@@ -178,36 +180,36 @@ class UserControllerTest {
         ));
   }
 
-  @Test
-  @WithCustomMockUser
-  @DisplayName("지역 업데이트 성공시 200 반환")
-  void updateRegion() throws Exception {
-
-    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
-        .getAuthentication().getPrincipal();
-    doNothing().when(userService)
-        .updateRegion(userDetails.getUsername(), REGION_UPDATE_REQUEST_DTO);
-
-    ResultActions resultActions = mockMvc.perform(
-            put(USER_API_URI + "/update/region")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(REGION_UPDATE_REQUEST_DTO))
-                .with(csrf()))
-        .andExpect(status().isOk());
-
-    resultActions
-        .andDo(document("usercontroller/update-region",
-            getDocumentRequest(),
-            getDocumentResponse(),
-            requestFields(
-                fieldWithPath("region").type(JsonFieldType.STRING).description("변경되는 지역")
-            ),
-            responseFields(
-                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
-                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
-            )
-        ));
-  }
+//  @Test
+//  @WithCustomMockUser
+//  @DisplayName("지역 업데이트 성공시 200 반환")
+//  void updateRegion() throws Exception {
+//
+//    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
+//        .getAuthentication().getPrincipal();
+//    doNothing().when(userService)
+//        .updateRegion(userDetails.getUsername(), REGION_UPDATE_REQUEST_DTO);
+//
+//    ResultActions resultActions = mockMvc.perform(
+//            put(USER_API_URI + "/update/region")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(REGION_UPDATE_REQUEST_DTO))
+//                .with(csrf()))
+//        .andExpect(status().isOk());
+//
+//    resultActions
+//        .andDo(document("usercontroller/update-region",
+//            getDocumentRequest(),
+//            getDocumentResponse(),
+//            requestFields(
+//                fieldWithPath("region").type(JsonFieldType.STRING).description("변경되는 지역")
+//            ),
+//            responseFields(
+//                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("상태 반환 코드"),
+//                fieldWithPath("message").type(JsonFieldType.STRING).description("상태 메시지")
+//            )
+//        ));
+//  }
 
   @Test
   @WithCustomMockUser

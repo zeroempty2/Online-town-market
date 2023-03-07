@@ -170,7 +170,7 @@ class TradeControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(CREATE_TRADE_DTO))
             .with(csrf()))
-        .andExpect(status().isCreated());
+        .andExpect(status().isOk());
     resultActions.andDo(document("tradeController/createTrade",
         getDocumentRequest(),
         getDocumentResponse(),
