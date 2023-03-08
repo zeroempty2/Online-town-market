@@ -61,20 +61,22 @@ class ProductServiceImplTest {
     verify(productRepository).save(isA(Product.class));
   }
 
-//  @Test
-//  @DisplayName("상품 단건 조회 성공")
-//  void getProduct() {
-//    Product product = mock(Product.class);
-//    when(productRepository.getProductAndSellerProfileByProductIdAndCountView(PRODUCT_ID)).thenReturn(
-//        product);
-//    when(ProductResponseDto.valueOf(product)).thenReturn(PRODUCT_RESPONSE_DTO);
-//
-//    ProductResponseDto product1 = productService.getProduct(PRODUCT_ID);
-//
-//
-//
-//
-//  }
+  @Test
+  @DisplayName("상품 단건 조회 성공")
+  void getProduct() {
+
+    // given
+    when(productRepository.getProductAndSellerProfileByProductIdAndCountView(PRODUCT_ID)).thenReturn(
+        PRODUCT);
+
+    // when
+    ProductResponseDto actualProduct = productService.getProduct(PRODUCT_ID);
+
+    // then
+    assertThat(actualProduct.getProductName()).isEqualTo(PRODUCT_RESPONSE_DTO.getProductName());
+    assertThat(actualProduct.getProductId()).isEqualTo(PRODUCT_RESPONSE_DTO.getProductId());
+  }
+
 
 
   @Test
