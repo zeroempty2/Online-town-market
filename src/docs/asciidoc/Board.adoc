@@ -1,6 +1,6 @@
 // 예시
 ifndef::snippets[]
-:snippets: ../generated-snippets
+:snippets: ./build/generated-snippets
 endif::[]
 
 == BOARD API

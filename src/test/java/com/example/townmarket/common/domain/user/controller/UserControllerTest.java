@@ -79,7 +79,7 @@ class UserControllerTest {
 
     resultActions.andExpect(status().isCreated());
 
-    resultActions.andDo(document("usercontroller/signup",
+    resultActions.andDo(document("userController/signup",
         getDocumentRequest(),
         getDocumentResponse(),
         requestFields(
@@ -112,7 +112,7 @@ class UserControllerTest {
         .andExpect(status().isOk());
 
     resultActions
-        .andDo(document("usercontroller/login",
+        .andDo(document("userController/login",
             getDocumentRequest(),
             getDocumentResponse(),
             requestFields(
@@ -140,7 +140,7 @@ class UserControllerTest {
         .andExpect(status().isOk());
 
     resultActions
-        .andDo(document("usercontroller/logout",
+        .andDo(document("userController/logout",
             getDocumentRequest(),
             getDocumentResponse(),
             responseFields(
@@ -167,7 +167,7 @@ class UserControllerTest {
         .andExpect(status().isOk());
 
     resultActions
-        .andDo(document("usercontroller/update-pw",
+        .andDo(document("userController/update-pw",
             getDocumentRequest(),
             getDocumentResponse(),
             requestFields(
@@ -224,7 +224,7 @@ class UserControllerTest {
         .andExpect(status().isNoContent());
 
     resultActions
-        .andDo(document("usercontroller/delete",
+        .andDo(document("userController/delete",
             getDocumentRequest(),
             getDocumentResponse()
         ));
@@ -241,7 +241,7 @@ class UserControllerTest {
         .andExpect(status().isOk());
 
     resultActions
-        .andDo(document("usercontroller/show-profile",
+        .andDo(document("userController/show-profile",
             getDocumentRequest(),
             getDocumentResponse(),
             responseFields(
@@ -266,7 +266,7 @@ class UserControllerTest {
         .andExpect(status().isOk());
 
     resultActions
-        .andDo(document("usercontroller/get-my-profile",
+        .andDo(document("userController/get-my-profile",
             getDocumentRequest(),
             getDocumentResponse(),
             responseFields(
@@ -292,7 +292,7 @@ class UserControllerTest {
             .with(csrf()))
         .andExpect(status().isOk())
         // REST Docs를 사용하여 API 문서를 생성합니다.
-        .andDo(document("usercontroller/duplicate",
+        .andDo(document("userController/duplicate",
             getDocumentRequest(),
             getDocumentResponse(),
             requestFields(
