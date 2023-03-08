@@ -41,6 +41,7 @@ public class SecurityConfig {
       "/products",
       "/products/**",
       "/products/update/**",
+      "/products/check/**",
       "/products/search",
       "/login/oauth2/code/google",
       "/login/**",
