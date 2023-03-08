@@ -1,4 +1,3 @@
-// 예시
 ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]

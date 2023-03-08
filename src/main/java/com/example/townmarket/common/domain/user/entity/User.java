@@ -150,6 +150,8 @@ public class User extends TimeStamped {
   @OneToMany(mappedBy = "reportedUser")
   private Set<UserReport> reports = new LinkedHashSet<>();
 
+
+  @Builder.Default
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Address> address = new ArrayList<>();
   /**
