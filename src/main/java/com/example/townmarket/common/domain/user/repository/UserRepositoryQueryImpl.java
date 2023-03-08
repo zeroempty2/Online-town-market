@@ -3,10 +3,15 @@ package com.example.townmarket.common.domain.user.repository;
 
 import static com.example.townmarket.common.domain.user.entity.QUser.user;
 
+import com.example.townmarket.common.domain.address.entity.Address;
+import com.example.townmarket.common.domain.address.repository.AddressRepository;
 import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
+import com.example.townmarket.common.domain.user.dto.UserInfoResponseDto;
+import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.dto.UserInformation;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +42,21 @@ public class UserRepositoryQueryImpl implements UserRepositoryQuery {
         .from(user)
         .where(user.username.eq(username))
         .setHint("org.hibernate.readOnly", true)
-        .fetchFirst());
+        .fetchOne());
+  }
+
+
+  @Override
+  @Transactional(readOnly = true)
+  public User getMyInfoAndAddress(Long userId) {
+    return jpaQueryFactory.select(
+           user)
+        .from(user)
+        .where(user.id.eq(userId))
+        .leftJoin(user.address).fetchJoin()
+        .setHint("org.hibernate.readOnly", true)
+        .fetchOne();
+
   }
 
   @Override
@@ -48,6 +67,6 @@ public class UserRepositoryQueryImpl implements UserRepositoryQuery {
         .from(user)
         .where(user.username.eq(username))
         .setHint("org.hibernate.readOnly", true)
-        .fetchFirst();
+        .fetchOne();
   }
 }

@@ -17,6 +17,11 @@ configurations {
     }
 }
 
+jar {
+    enabled = false
+}
+
+
 repositories {
     mavenCentral()
 }
@@ -33,6 +38,7 @@ tasks.named('test') {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -48,7 +54,7 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
-
+    implementation 'org.jasypt:jasypt:1.9.3'
     //querydsl 의존성
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
@@ -85,7 +91,8 @@ dependencies {
 
     // S3 업로드
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-
+    //mysql
+    implementation 'mysql:mysql-connector-java'
 
 }
 
