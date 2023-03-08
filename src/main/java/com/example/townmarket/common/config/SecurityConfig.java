@@ -40,6 +40,7 @@ public class SecurityConfig {
       "/images/**",
       "/products",
       "/products/**",
+      "/products/update/**",
       "/products/search",
       "/login/oauth2/code/google",
       "/login/**",
