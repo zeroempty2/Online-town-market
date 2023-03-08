@@ -125,6 +125,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
   public double getUserAverageGrade(User reviewee) {
     Set<UserGrade> userGrades = userGradeService.findAllByReviewee(reviewee);
     return reviewee.getUserAverageGrade();
@@ -191,8 +192,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public UserInfoResponseDto getMyInfo(User user) {
-    return new UserInfoResponseDto(user);
+    return new UserInfoResponseDto(userRepository.getMyInfoAndAddress(user.getId()));
   }
 
   @Override

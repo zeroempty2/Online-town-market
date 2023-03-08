@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
 PROJECT_ROOT="/home/ubuntu/app"
+<<<<<<< HEAD
 JAR_FILE="$PROJECT_ROOT/blog-project-0.0.1-SNAPSHOT.jar"
+=======
+JAR_FILE="$PROJECT_ROOT/townMarket-0.0.1-SNAPSHOT.jar"
+>>>>>>> 8c1922957ae687ad3d75710b66fd0e9d0b56aa17
 
 APP_LOG="$PROJECT_ROOT/application.log"
 ERROR_LOG="$PROJECT_ROOT/error.log"
@@ -12,6 +16,12 @@ TIME_NOW=$(date +%c)
 # build 파일 복사echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
 cp $PROJECT_ROOT/build/libs/*.jar $JAR_FILE
 
+<<<<<<< HEAD
+=======
+# 환경변수 읽도록 추가
+source ~/.bashrc
+
+>>>>>>> 8c1922957ae687ad3d75710b66fd0e9d0b56aa17
 # jar 파일 실행echo "$TIME_NOW > $JAR_FILE 파일 실행" >> $DEPLOY_LOG
 nohup java -jar $JAR_FILE > $APP_LOG 2> $ERROR_LOG &
 
