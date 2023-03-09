@@ -3,69 +3,57 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
-== TRADE
+== INTEREST
 ---
 ---
 
-*getPurchaseList*
+*addInterest*
 
 ** REQUEST
 
-include::{snippets}/tradeController/getPurchaseList/http-request.adoc[]
+include::{snippets}/interestController/addInterest/http-request.adoc[]
 
 ** RESPONSE
 
-include::{snippets}/tradeController/getPurchaseList/http-response.adoc[]
+include::{snippets}/interestController/addInterest/http-response.adoc[]
+
+
+*showMyInterestProducts*
+
+** REQUEST
+
+include::{snippets}/interestController/showMyInterestProducts/http-request.adoc[]
+
+** RESPONSE
+
+include::{snippets}/interestController/showMyInterestProducts/http-response.adoc[]
 
 ** REQUEST - BODY
 
-include::{snippets}/tradeController/getPurchaseList/request-body.adoc[]
-include::{snippets}/tradeController/getPurchaseList/request-fields.adoc[]
+include::{snippets}/interestController/showMyInterestProducts/request-body.adoc[]
+include::{snippets}/interestController/showMyInterestProducts/request-fields.adoc[]
 
 ** RESPONSE - BODY
 
-include::{snippets}/tradeController/getPurchaseList/response-body.adoc[]
-include::{snippets}/tradeController/getPurchaseList/response-fields.adoc[]
-
+include::{snippets}/interestController/showMyInterestProducts/response-body.adoc[]
+include::{snippets}/interestController/showMyInterestProducts/response-fields.adoc[]
 
 ---
 ---
 
-*getSalesList*
+*checkInterest*
 
 ** REQUEST
 
-include::{snippets}/tradeController/getSalesList/http-request.adoc[]
+include::{snippets}/interestController/checkInterest/http-request.adoc[]
 
 ** RESPONSE
 
-include::{snippets}/tradeController/getSalesList/http-response.adoc[]
+include::{snippets}/interestController/checkInterest/http-response.adoc[]
 
 ** REQUEST - BODY
 
-include::{snippets}/tradeController/getSalesList/request-body.adoc[]
-include::{snippets}/tradeController/getSalesList/request-fields.adoc[]
-
+include::{snippets}/interestController/checkInterest/request-body.adoc[]
 ** RESPONSE - BODY
-
-include::{snippets}/tradeController/getSalesList/response-body.adoc[]
-include::{snippets}/tradeController/getSalesList/response-fields.adoc[]
-
----
----
-
-*createTrade*
-
-** REQUEST
-
-include::{snippets}/tradeController/createTrade/http-request.adoc[]
-
-** RESPONSE
-
-include::{snippets}/tradeController/createTrade/http-response.adoc[]
-
-** REQUEST - BODY
-
-include::{snippets}/tradeController/createTrade/request-body.adoc[]
-include::{snippets}/tradeController/createTrade/request-fields.adoc[]
+include::{snippets}/interestController/checkInterest/response-body.adoc[]
 
