@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.0.2'
     id 'io.spring.dependency-management' version '1.1.0'
     id "org.asciidoctor.jvm.convert" version "3.3.2"
+    id 'jacoco'
 }
 
 group = 'com.example'
@@ -97,6 +98,9 @@ dependencies {
 }
 
 test {
+    jacoco{
+        destinationFile = file("build/reports/jacoco/jacoco.exec")
+    }
     outputs.dir snippetsDir
     useJUnitPlatform()
 //    finalizedBy 'asciidoctor'
@@ -127,4 +131,41 @@ task copyDocument(type: Copy) {
 
 build {
     dependsOn copyDocument
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+    reports {
+        // 원하는 리포트를 켜고 끌 수 있습니다.
+        html.enabled true
+        xml.enabled false
+        csv.enabled false
+
+//  각 리포트 타입 마다 리포트 저장 경로를 설정할 수 있습니다.
+  html.destination file("build/reports/jacoco/jacocoHtml")
+//  xml.destination file("$buildDir/jacoco.xml")
+    }
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, excludes: [
+                            '**/*Application*',
+                            '**/enums/**',
+                            '**/dto/**',
+                            '**/config/**',
+                            '**/security/**',
+                            '**/redis/**',
+                            '**/jwt/**',
+                            '**/security/**',
+                            '**/repository/**',
+                            '**/entity/**',
+                            '**/oauth/**',
+                            '**/globalException/**'
+                    ])
+                })
+        )
+    }
 }
