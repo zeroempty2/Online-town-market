@@ -1,10 +1,8 @@
 package com.example.townmarket.common.domain.report.controller;
 
 import static com.example.townmarket.fixture.ReportFixture.PRODUCT_REPORT_REQUEST_DTO;
-import static com.example.townmarket.fixture.ReportFixture.USER_REPORT_REQUEST;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -14,9 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.townmarket.annotation.WithCustomMockUser;
 import com.example.townmarket.common.domain.report.sevice.ProductReportServiceImpl;
-import com.example.townmarket.common.domain.report.sevice.UserReportService;
 import com.example.townmarket.common.util.SetHttpHeaders;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

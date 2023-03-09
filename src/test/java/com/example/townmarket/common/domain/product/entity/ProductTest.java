@@ -42,6 +42,7 @@ class ProductTest {
 
 
   @Test
+  @DisplayName("채팅방 가져오기")
   void getChatRooms() {
 
     // given

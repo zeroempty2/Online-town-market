@@ -1,24 +1,17 @@
 package com.example.townmarket.common.domain.user.service;
 
-import static com.example.townmarket.fixture.UserFixture.ADDRESS;
 import static com.example.townmarket.fixture.UserFixture.SIGNUP_REQUEST_DTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static reactor.core.publisher.Mono.when;
 
-import com.example.townmarket.common.domain.address.entity.Address;
-import com.example.townmarket.common.domain.address.service.AddressService;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileResponseDto;
-import com.example.townmarket.common.domain.user.dto.RegionUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.entity.Profile;
 import com.example.townmarket.common.domain.user.entity.User;
@@ -31,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,8 +40,6 @@ class UserServiceImplTest {
   @Mock
   PasswordEncoder passwordEncoder;
 
-  @Mock
-  AddressService addressService;
 
   @InjectMocks
   UserServiceImpl userService;
@@ -101,7 +91,7 @@ class UserServiceImplTest {
 
 
   @Test
-  @DisplayName("비밀번호 수정")
+  @DisplayName("비밀번호 수정 성공")
   @Transactional
   void updateUser() {
     SignupRequestDto request = SignupRequestDto.builder()
@@ -127,39 +117,11 @@ class UserServiceImplTest {
     verify(userRepository, times(1)).save(any(User.class));
   }
 
-//  @Test
-//  @DisplayName("거래 지역 수정")
-//  void updateRegion() {
-//    SignupRequestDto request = SignupRequestDto.builder()
-//        .username("username1")
-//        .password("password")
-//        .email("asdas@naver.com")
-//        .region("양평동")
-//        .build();
-//
-//    RegionUpdateRequestDto requestDto = RegionUpdateRequestDto.builder()
-//        .region("방화동")
-//        .build();
-//    String region = requestDto.getRegion();
-//    User newUser = User.builder().username(request.getUsername()).password(request.getPassword())
-//        .email(request.getEmail()).build();
-//
-//    given(userRepository.findByUsername(newUser.getUsername()))
-//        .willReturn(Optional.of(newUser));
-//
-//    // when
-//    userService.updateRegion(newUser.getUsername(), requestDto);
-//
-//    // then
-//    verify(userRepository, times(1)).save(any(User.class));
-//  }
 
   @Test
-  @DisplayName("계정 삭제")
+  @DisplayName("계정 삭제 성공")
   void deleteUser() {
     // given
-
-
     User newUser = User.builder().username(SIGNUP_REQUEST_DTO.getUsername()).password(SIGNUP_REQUEST_DTO.getPassword())
         .email(SIGNUP_REQUEST_DTO.getEmail())
         .build();

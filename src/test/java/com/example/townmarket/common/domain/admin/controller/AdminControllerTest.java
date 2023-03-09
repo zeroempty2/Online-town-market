@@ -23,7 +23,6 @@ import com.example.townmarket.annotation.WithCustomMockAdmin;
 import com.example.townmarket.common.domain.report.sevice.UserReportService;
 import com.example.townmarket.common.globalException.ExceptionController;
 import com.example.townmarket.common.util.SetHttpHeaders;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
