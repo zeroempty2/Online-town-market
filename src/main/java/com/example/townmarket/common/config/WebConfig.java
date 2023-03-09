@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
 //        .allowedOrigins("http://localhost:8080", "http://127.0.0.1:5500") // 허용할 출처
-        .allowedOrigins("http://127.0.0.1:5500")
+        .allowedOrigins("https://www.knock-knock.shop")
         .allowedMethods("GET", "POST", "PATCH", "OPTIONS", "DELETE", "HEAD", "PUT") // 허용할 HTTP method
         .allowCredentials(true) // 쿠키 인증 요청 허용
         .exposedHeaders("Authorization", "Refresh")

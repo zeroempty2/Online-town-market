@@ -19,7 +19,7 @@ public class ChatMessageController {
   private final ChatMessageService messageService;
 
 
-  @CrossOrigin(value = "http://localhost:8080", methods = RequestMethod.GET)
+  @CrossOrigin(value = "https://api.knock-knock.shop", methods = RequestMethod.GET)
   @MessageMapping("/{roomId}")
   @SendTo("/sub/{roomId}")
   public ChatMessageDto chatMessage(@DestinationVariable Long roomId, ChatMessageDto message) {
