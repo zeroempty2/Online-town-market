@@ -1,6 +1,5 @@
 package com.example.townmarket.fixture;
 
-import static com.example.townmarket.common.domain.report.entity.UserReport.ReportEnum.기타;
 import static com.example.townmarket.fixture.UtilFixture.PAGE_DTO;
 
 import com.example.townmarket.common.domain.report.dto.PagingUserReportResponse;
@@ -9,7 +8,6 @@ import com.example.townmarket.common.domain.report.dto.UserReportRequest;
 import com.example.townmarket.common.domain.report.entity.ProductReport;
 import com.example.townmarket.common.domain.report.entity.UserReport.ReportEnum;
 import java.util.Collections;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 

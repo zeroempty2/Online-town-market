@@ -6,7 +6,6 @@ import static com.example.townmarket.fixture.ReviewFixture.REVIEW_ID;
 import static com.example.townmarket.fixture.ReviewFixture.REVIEW_RESPONSE_DTO;
 import static com.example.townmarket.fixture.ReviewFixture.REVIEW_RESPONSE_DTO_PAGE;
 import static com.example.townmarket.fixture.ReviewFixture.UPDATE_REVIEW_REQUEST_DTO;
-import static com.example.townmarket.fixture.UserFixture.USER1;
 import static com.example.townmarket.fixture.UtilFixture.PAGE_DTO;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;

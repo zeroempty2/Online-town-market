@@ -7,7 +7,6 @@ import static com.example.townmarket.fixture.UserFixture.LOGIN_REQUEST_DTO;
 import static com.example.townmarket.fixture.UserFixture.MEMBER_UNIQUE_ID;
 import static com.example.townmarket.fixture.UserFixture.PASSWORD_UPDATE_REQUEST_DTO;
 import static com.example.townmarket.fixture.UserFixture.PROFILE_RESPONSE_DTO;
-import static com.example.townmarket.fixture.UserFixture.REGION_UPDATE_REQUEST_DTO;
 import static com.example.townmarket.fixture.UserFixture.SIGNUP_REQUEST_DTO;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;

@@ -2,11 +2,9 @@ package com.example.townmarket.common.domain.trade.controller;
 
 import static com.example.townmarket.fixture.TradeFixture.CREATE_TRADE_DTO;
 import static com.example.townmarket.fixture.TradeFixture.PAGING_TRADE_PAGE;
-import static com.example.townmarket.fixture.UserFixture.PAGING_USER_RESPONSES;
 import static com.example.townmarket.fixture.UtilFixture.PAGE_DTO;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentRequest;
 import static com.example.townmarket.restdocs.ApiDocumentUtils.getDocumentResponse;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
