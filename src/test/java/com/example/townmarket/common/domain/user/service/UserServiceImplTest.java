@@ -5,9 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.example.townmarket.common.domain.address.entity.Address;
+import com.example.townmarket.common.domain.address.service.AddressServiceImpl;
 import com.example.townmarket.common.domain.user.dto.LoginRequestDto;
 import com.example.townmarket.common.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.townmarket.common.domain.user.dto.ProfileRequestDto;
@@ -40,26 +43,35 @@ class UserServiceImplTest {
   @Mock
   PasswordEncoder passwordEncoder;
 
+  @Mock
+  AddressServiceImpl addressService;
 
   @InjectMocks
   UserServiceImpl userService;
 
-//  @Test
-//  @DisplayName("회원가입 성공 테스트")
-//  void signup() {
-//// given
-//
-//    Mockito.when(passwordEncoder.encode(SIGNUP_REQUEST_DTO.getPassword()))
-//        .thenReturn("encodedpassword");
-//
-//    // when
-//    userService.signup(SIGNUP_REQUEST_DTO);
-//
-//    // then
-//    Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
-//    Mockito.verify(addressService, Mockito.times(1)).addressSave(Mockito.any(Address.class));
-//  }
 
+  @Test
+  @DisplayName("회원가입 성공 테스트")
+  void signup() {
+    //given
+    SignupRequestDto requestDto = SignupRequestDto.builder()
+        .username("username1")
+        .password("password")
+        .email("abcd@naver.com")
+        .nickname("김채원르세라핌원탑")
+        .address1("서울특별시")
+        .address2("강남구")
+        .address3("압구정동")
+        .build();
+
+    User user = mock(User.class);
+
+    //when
+    userService.signup(requestDto);
+
+    //then
+    verify(userRepository, times(1)).save(any());
+  }
 
   @Test
   @DisplayName("로그인 성공 테스트")
@@ -91,7 +103,7 @@ class UserServiceImplTest {
 
 
   @Test
-  @DisplayName("비밀번호 수정 성공")
+  @DisplayName("비밀번호 수정 성공 테스트")
   @Transactional
   void updateUser() {
     SignupRequestDto request = SignupRequestDto.builder()
@@ -117,9 +129,8 @@ class UserServiceImplTest {
     verify(userRepository, times(1)).save(any(User.class));
   }
 
-
   @Test
-  @DisplayName("계정 삭제 성공")
+  @DisplayName("계정 삭제 성공 테스트")
   void deleteUser() {
     // given
     User newUser = User.builder().username(SIGNUP_REQUEST_DTO.getUsername()).password(SIGNUP_REQUEST_DTO.getPassword())
@@ -216,5 +227,4 @@ class UserServiceImplTest {
       userService.updateProfile(userId, requestDto);
     }).isInstanceOf(IllegalArgumentException.class); // then
   }
-
 }
