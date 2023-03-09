@@ -7,6 +7,7 @@ import static com.example.townmarket.fixture.UserFixture.PROFILE_RESPONSE_DTO;
 import static com.example.townmarket.fixture.UserFixture.USER1;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
@@ -77,7 +78,17 @@ class ProductServiceImplTest {
     assertThat(actualProduct.getProductId()).isEqualTo(PRODUCT_RESPONSE_DTO.getProductId());
   }
 
+  @Test
+  @DisplayName("상품 단건 조회 실패 - 신고 누적된 상품")
+  void failsGetProduct() {
 
+    Product product = Product.builder().build(); // NPE 방지
+    when(productRepository.getProductAndSellerProfileByProductIdAndCountView(PRODUCT_ID)).thenReturn(
+        product);
+    product.setBlock();
+
+    assertThrows(IllegalArgumentException.class, () -> productService.getProduct(PRODUCT_ID));
+  }
 
   @Test
   @DisplayName("상품 목록 조회 성공")
