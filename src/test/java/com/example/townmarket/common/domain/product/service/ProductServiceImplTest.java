@@ -8,6 +8,7 @@ import static com.example.townmarket.fixture.UserFixture.USER1;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
@@ -57,7 +58,7 @@ class ProductServiceImplTest {
     productService.addProduct(user, productRequestDto);
 
     // then
-    verify(productRepository).save(isA(Product.class));
+    verify(productRepository, times(1)).save(isA(Product.class));
   }
 
   @Test
@@ -210,7 +211,6 @@ class ProductServiceImplTest {
         .user(user)
         .build();
 
-
     when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 
     // when
@@ -219,5 +219,21 @@ class ProductServiceImplTest {
     //then
     verify(productRepository, times(1)).findById(any());
   }
+
+  @Test
+  @DisplayName("내 상품 확인하기 테스트")
+  void checkMyProduct() {
+    //given
+    User user = User.builder().id(1L).build();
+
+    when(productRepository.existsByIdAndUser(2L, user)).thenReturn(true);
+
+    //when
+    boolean result = productService.checkMyProduct(2L, user);
+
+    // then
+    assertTrue(result);
+  }
+
 }
 
