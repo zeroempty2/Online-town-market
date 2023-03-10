@@ -64,6 +64,20 @@ class TradeServiceImplTest {
   }
 
   @Test
+  @DisplayName("판매 목록 조회 성공 테스트")
+  void getSalesList() {
+    // given
+    User seller = User.builder().id(1L).build();
+    Pageable pageable = PageRequest.of(0, 10);
+
+    // when
+    tradeService.getSalesList(seller, pageable);
+
+    // then
+    verify(tradeRepository, times(1)).findSaleList(pageable, seller);
+  }
+
+  @Test
   @DisplayName("거래 생성 성공 테스트")
   void createTrade() {
     // given
@@ -85,5 +99,4 @@ class TradeServiceImplTest {
     verify(tradeRepository,times(1)).save(any(Trade.class));
 
   }
-
 }
