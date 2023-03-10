@@ -44,7 +44,7 @@ public class ProductController {
       @RequestBody ProductRequestDto productRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     productService.addProduct(userDetails.getUser(), productRequestDto);
-    return RESPONSE_CREATED;
+    return RESPONSE_OK;
   }
 
   @GetMapping("/check/{productId}")

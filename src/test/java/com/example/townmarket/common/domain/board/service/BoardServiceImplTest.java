@@ -111,9 +111,11 @@ class BoardServiceImplTest {
   void getBoard() {
 
     // given
+    User user = mock(User.class);
     Board board = Board.builder()
         .title("test-title")
         .content("test-content")
+        .user(user)
         .build();
 
     when(boardRepository.findById(board.getId())).thenReturn(Optional.of(board));

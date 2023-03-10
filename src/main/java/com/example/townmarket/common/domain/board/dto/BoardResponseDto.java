@@ -11,6 +11,7 @@ import lombok.Getter;
 @Builder
 public class BoardResponseDto {
 
+  private Long boardId;
   private String title;
 
   private String content;
@@ -18,6 +19,8 @@ public class BoardResponseDto {
   private BoardSubject subject;
 
   private List<CommentResponseDto> comments;
+
+  private String username;
 
   private LocalDateTime createdAt;
 

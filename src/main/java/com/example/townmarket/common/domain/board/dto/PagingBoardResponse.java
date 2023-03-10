@@ -17,9 +17,15 @@ public class PagingBoardResponse {
   private String title;
   private BoardSubject subject;
 
+  private long boardId;
+
+  private String username;
+
   @Builder
   public PagingBoardResponse(Board board) {
     this.title = board.getTitle();
     this.subject = board.getSubject();
+    this.boardId = board.getId();
+    this.username = board.getUser().getUsername();
   }
 }
