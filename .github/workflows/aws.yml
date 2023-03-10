@@ -35,9 +35,9 @@ on:
 # 리전, 버킷 이름, CodeDeploy 앱 이름, CodeDeploy 배포 그룹 이름
 env:
   AWS_REGION: ap-northeast-2
-  S3_BUCKET_NAME: skyriv-github-action-s3-bucket
-  CODE_DEPLOY_APPLICATION_NAME: my-codedeploy-app
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: my-codedeploy-deployment-group
+  S3_BUCKET_NAME: knock-bucket-123
+  CODE_DEPLOY_APPLICATION_NAME: knock_knock_app
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: knock_knock_deployGroup
 
 permissions:
   contents: read
