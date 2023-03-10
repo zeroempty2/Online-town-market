@@ -39,5 +39,9 @@ out/
 ### Propertise ###
 secret.properties
 src/main/resources/mail.properties
-### Jasypt Password Key igonre ###
-/src/main/resources/jasypt-encryptor-password.txt
+
+### upload igonre ###
+/src/main/resources/application.properties
+/src/main/java/com/example/townmarket/common/config/JasyptConfig.java
+/src/main/java/com/example/townmarket/common/config/WebConfig.java
+/src/main/java/com/example/townmarket/common/domain/chat/controller/ChatMessageController.java

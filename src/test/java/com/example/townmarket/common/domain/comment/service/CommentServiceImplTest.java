@@ -47,7 +47,7 @@ class CommentServiceImplTest {
     commentService.createComment(board.getId(), commentRequestDto, user);
 
     // then
-    verify(commentRepository).save(isA(Comment.class));
+    verify(commentRepository, times(1)).save(isA(Comment.class));
   }
 
   @Test
@@ -65,7 +65,7 @@ class CommentServiceImplTest {
     commentService.updateComment(comment.getId(), commentRequestDto, user);
 
     // then
-    verify(comment).update(commentRequestDto);
+    verify(comment, times(1)).update(commentRequestDto);
 
   }
 
