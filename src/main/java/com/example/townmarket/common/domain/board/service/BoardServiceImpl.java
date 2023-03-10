@@ -62,11 +62,13 @@ public class BoardServiceImpl implements BoardService {
   public BoardResponseDto getBoard(Long boardId) {
     Board board = findBoardById(boardId);
     return BoardResponseDto.builder()
+        .boardId(board.getId())
         .title(board.getTitle())
         .content(board.getContent())
         .subject(board.getSubject())
         .comments(
             board.getComments().stream().map(CommentResponseDto::new).collect(Collectors.toList()))
+        .username(board.getUser().getUsername())
         .createdAt(board.getCreatedAt())
         .modifiedAt(board.getModifiedAt())
         .build();

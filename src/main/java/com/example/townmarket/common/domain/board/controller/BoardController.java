@@ -44,7 +44,7 @@ public class BoardController {
       @RequestBody BoardRequestDto boardRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     boardService.createBoard(boardRequestDto, userDetails.getUser());
-    return RESPONSE_CREATED;
+    return RESPONSE_OK;
   }
 
   // 게시글 수정
