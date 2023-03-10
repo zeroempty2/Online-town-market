@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableEncryptableProperties
 public class JasyptConfig {
 
-  @Value("${myvalue}")
+  @Value("221031")
   private String encryptKey;
 
   @Bean("jasyptStringEncryptor")
