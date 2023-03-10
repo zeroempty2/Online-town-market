@@ -1,14 +1,22 @@
 package com.example.townmarket.common.domain.trade.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.townmarket.common.domain.product.entity.Product;
 import com.example.townmarket.common.domain.product.repository.ProductRepository;
+import com.example.townmarket.common.domain.trade.dto.CreateTradeDto;
 import com.example.townmarket.common.domain.trade.dto.PagingTrade;
+import com.example.townmarket.common.domain.trade.entity.Trade;
 import com.example.townmarket.common.domain.trade.repository.TradeRepository;
 import com.example.townmarket.common.domain.user.entity.User;
 import com.example.townmarket.common.domain.user.repository.UserRepository;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +44,7 @@ class TradeServiceImplTest {
   private TradeServiceImpl tradeService;
 
   @Test
-  @DisplayName("구메 내역 조회 성공")
+  @DisplayName("구메 내역 조회 성공 테스트")
   void getPurchaseList() {
 
       // given
@@ -54,4 +62,28 @@ class TradeServiceImplTest {
       assertEquals(tradePage, result);
 
   }
+
+  @Test
+  @DisplayName("거래 생성 성공 테스트")
+  void createTrade() {
+    // given
+    Long productId = 1L;
+    Long buyerId = 2L;
+    User seller = mock(User.class);
+    Product product = mock(Product.class);
+    CreateTradeDto createTradeDto = CreateTradeDto.builder().productId(productId).buyerId(buyerId).build();
+
+    when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+    when(userRepository.findById(buyerId)).thenReturn(Optional.of(User.builder().id(buyerId).build()));
+
+    // when
+    tradeService.createTrade(createTradeDto, seller);
+
+    // then
+    verify(productRepository, times(1)).findById(productId);
+    verify(userRepository, times(1)).findById(buyerId);
+    verify(tradeRepository,times(1)).save(any(Trade.class));
+
+  }
+
 }
