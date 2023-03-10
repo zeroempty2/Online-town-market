@@ -62,7 +62,7 @@ public class BoardServiceImpl implements BoardService {
   public BoardResponseDto getBoard(Long boardId) {
     Board board = findBoardById(boardId);
     return BoardResponseDto.builder()
-        .boardId(board.getId())
+        .boardId(boardId)
         .title(board.getTitle())
         .content(board.getContent())
         .subject(board.getSubject())

@@ -77,7 +77,7 @@ class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(PRODUCT_REQUEST_DTO))
                 .with(csrf()))
-        .andExpect(status().isCreated());
+        .andExpect(status().isOk());
 
     resultActions.andDo(document("productController/addProduct",
         getDocumentRequest(),

@@ -11,7 +11,7 @@ import lombok.Getter;
 @Builder
 public class BoardResponseDto {
 
-  private long boardId;
+  private Long boardId;
   private String title;
 
   private String content;

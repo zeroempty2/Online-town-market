@@ -69,7 +69,7 @@ class BoardControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(boardRequestDto))
             .with(csrf()))
-        .andExpect(status().isCreated());
+        .andExpect(status().isOk());
 
     resultActions.andDo(document("boardController/createBoard",
         getDocumentRequest(),
@@ -145,6 +145,8 @@ class BoardControllerTest {
         responseFields(
             fieldWithPath("content[].title").type(JsonFieldType.STRING).description("유저 아이디"),
             fieldWithPath("content[].subject").type(JsonFieldType.STRING).description("지역"),
+            fieldWithPath("content[].boardId").type(JsonFieldType.NUMBER).description("1L"),
+            fieldWithPath("content[].username").type(JsonFieldType.STRING).description(""),
             fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description(""),
             fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description(""),
             fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description(""),
@@ -172,9 +174,11 @@ class BoardControllerTest {
   void getBoard() throws Exception {
     Long boardId = 1L;
     BoardResponseDto boardResponseDto = BoardResponseDto.builder()
+        .boardId(boardId)
         .title("글 제목")
         .content("글 내용")
         .comments(any())
+        .username("user3")
         .subject(BoardSubject.동네소식).build();
 
     given(boardService.getBoard(boardId)).willReturn(boardResponseDto);
@@ -187,9 +191,11 @@ class BoardControllerTest {
         getDocumentRequest(),
         getDocumentResponse(),
         responseFields(
+            fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("1L"),
             fieldWithPath("title").type(JsonFieldType.STRING).description("글 제목"),
             fieldWithPath("content").type(JsonFieldType.STRING).description("글 내용"),
             fieldWithPath("comments").type(JsonFieldType.NULL).description("댓글"),
+            fieldWithPath("username").type(JsonFieldType.STRING).description("user3"),
             fieldWithPath("createdAt").type(JsonFieldType.NULL).description("생성 일자"),
             fieldWithPath("modifiedAt").type(JsonFieldType.NULL).description("수정 일자"),
             fieldWithPath("subject").type(JsonFieldType.STRING).description("글 카테코리")

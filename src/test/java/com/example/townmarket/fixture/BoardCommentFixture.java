@@ -12,7 +12,7 @@ import org.springframework.data.domain.PageImpl;
 public class BoardCommentFixture {
 
   public static final PagingBoardResponse PAGING_BOARD_RESPONSE = PagingBoardResponse.builder().title("글제목")
-      .subject(BoardSubject.동네소식).build();
+      .subject(BoardSubject.동네소식).boardId(1L).username("user3").build();
 
   public static final Page<PagingBoardResponse> PAGING_BOARD_RESPONSE_PAGE = new PageImpl<>(
       Collections.singletonList(PAGING_BOARD_RESPONSE),
