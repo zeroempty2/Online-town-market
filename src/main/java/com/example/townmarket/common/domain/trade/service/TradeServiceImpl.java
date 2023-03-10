@@ -38,14 +38,6 @@ public class TradeServiceImpl implements TradeService {
     return tradePage;
   }
 
-//  @Override
-//  @Transactional
-//  public Page<PagingTrade> getSalesListOfOther(Long userId, Pageable pageable) {
-////    Page<Trade> tradePage = tradeRepository.findAllBySeller(pageable, userId);
-////    return tradePage.map(PagingTrade::getSellerList);
-//    return null;
-//  }
-
   @Override
   @Transactional
   public void createTrade(CreateTradeDto createTrade, User seller) {
