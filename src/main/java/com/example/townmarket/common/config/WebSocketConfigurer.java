@@ -19,7 +19,8 @@ public class WebSocketConfigurer implements WebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(StompEndpointRegistry registry) {
 
     registry.addEndpoint("/ws")
-        .setAllowedOrigins("http://localhost:8080", "http://127.0.0.1:5500")
+//        .setAllowedOrigins("http://localhost:8080", "http://127.0.0.1:5500")
+        .setAllowedOrigins("https://api.knock-knock.shop", "https://www.knock-knock.shop")
         .withSockJS()
     ;
   }

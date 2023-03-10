@@ -86,6 +86,12 @@ public class SecurityConfig {
     http.csrf().disable().cors();
 //    http.headers().frameOptions().sameOrigin(); // 웹소켓 관련
 
+    //xxs
+    http.headers()
+        .xssProtection()
+        .and()
+        .contentSecurityPolicy("script-src 'self'");
+
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     http.authorizeHttpRequests()
