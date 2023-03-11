@@ -45,3 +45,4 @@ src/main/resources/mail.properties
 /src/main/java/com/example/townmarket/common/config/JasyptConfig.java
 /src/main/java/com/example/townmarket/common/config/WebConfig.java
 /src/main/java/com/example/townmarket/common/domain/chat/controller/ChatMessageController.java
+/src/main/java/com/example/townmarket/common/config/WebSocketConfigurer.java

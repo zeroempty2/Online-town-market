@@ -1,6 +1,11 @@
 package com.example.townmarket.common.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -27,5 +32,6 @@ public class WebConfig implements WebMvcConfigurer {
         .exposedHeaders("Authorization", "Refresh")
         .maxAge(3000);// 원하는 시간만큼 pre-flight 리퀘스트를 캐싱
   }
+
 
 }
