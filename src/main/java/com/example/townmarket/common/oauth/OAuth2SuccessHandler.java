@@ -49,7 +49,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
       response.setContentType("application/json");
 //      ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(model);
 //      new ObjectMapper().writeValue(response.getOutputStream(), data);
-      String redirectUrl = "http://localhost:5500/index.html";
+      String redirectUrl = "https://www.knock-knock.shop/index.html";
       Cookie cookie1 = new Cookie("accessToken", accessToken.substring(7));
       Cookie cookie2 = new Cookie("refreshToken", refreshToken.substring(7));
       cookie1.setPath("/");
