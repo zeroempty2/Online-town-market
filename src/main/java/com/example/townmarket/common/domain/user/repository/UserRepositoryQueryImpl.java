@@ -69,4 +69,22 @@ public class UserRepositoryQueryImpl implements UserRepositoryQuery {
         .setHint("org.hibernate.readOnly", true)
         .fetchOne();
   }
+
+  @Override
+  public User findAllUserInfoByUsername(String username) {
+    return jpaQueryFactory.select(user)
+        .from(user)
+        .where(user.username.eq(username))
+        .leftJoin(user.address).fetchJoin()
+        .leftJoin(user.products).fetchJoin()
+        .leftJoin(user.grades).fetchJoin()
+        .leftJoin(user.boards).fetchJoin()
+        .leftJoin(user.chatRooms).fetchJoin()
+        .leftJoin(user.interests).fetchJoin()
+        .leftJoin(user.sendReviews).fetchJoin()
+        .leftJoin(user.buyer).fetchJoin()
+        .leftJoin(user.seller).fetchJoin()
+        .leftJoin(user.reports).fetchJoin()
+        .fetchOne();
+  }
 }

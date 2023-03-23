@@ -33,6 +33,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -132,7 +133,7 @@ public class User extends TimeStamped {
   @OneToMany(mappedBy = "user")
   private Set<Board> boards = new LinkedHashSet<>();
   @Builder.Default
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "interestUser")
   private Set<Interest> interests = new LinkedHashSet<>();
 
   @Builder.Default

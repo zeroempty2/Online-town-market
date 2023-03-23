@@ -1,11 +1,15 @@
 package com.example.townmarket.common.security;
 
+import com.example.townmarket.common.domain.user.entity.Profile;
+import com.example.townmarket.common.dto.LoadByUsernameResponse;
 import com.example.townmarket.common.enums.RoleEnum;
 import com.example.townmarket.common.domain.user.entity.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,10 +20,20 @@ public class UserDetailsImpl implements UserDetails, OAuth2User {
   private final User user;
   private Map<String, Object> attributes;
 
-
-  public UserDetailsImpl(User user) {
+  public UserDetailsImpl(User user){
     this.user = user;
   }
+//  public UserDetailsImpl(LoadByUsernameResponse user) {
+//    this.user = User.builder()
+//        .username(user.getUsername())
+//        .id(user.getId())
+//        .role(user.getRole())
+//        .email(user.getEmail())
+//        .profile(Profile.builder().img_url(user.getImg_url()).nickName(user.getNickname()).build())
+//        .password(user.getPassword())
+//        .build();
+//  }
+
 
   //OAuth2User : OAuth2 로그인 시 사용
   public UserDetailsImpl(User user, Map<String, Object> attributes) {

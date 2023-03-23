@@ -15,4 +15,5 @@ public interface UserRepositoryQuery {
   User getMyInfoAndAddress(Long userId);
   ProfileResponseDto getProfileByUsername(String username);
 
+  User findAllUserInfoByUsername(String username);
 }

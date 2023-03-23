@@ -28,11 +28,11 @@ public class Trade extends TimeStamped {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "buyer_Id")
+  @JoinColumn(name = "buyer_user_Id")
   private User buyer;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "seller_Id")
+  @JoinColumn(name = "seller_user_Id")
   private User seller;
 
   private Long productId;

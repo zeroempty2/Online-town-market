@@ -29,7 +29,7 @@ public class InterestServiceImpl implements InterestService {
     }
 
     Interest interest = Interest.builder()
-        .user(user)
+        .interestUser(user)
         .product(productService.findProductById(productId))
         .build();
     interestRepository.save(interest);
