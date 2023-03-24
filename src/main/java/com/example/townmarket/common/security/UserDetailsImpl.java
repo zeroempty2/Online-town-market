@@ -1,39 +1,27 @@
 package com.example.townmarket.common.security;
 
-import com.example.townmarket.common.domain.user.entity.Profile;
-import com.example.townmarket.common.dto.LoadByUsernameResponse;
 import com.example.townmarket.common.enums.RoleEnum;
 import com.example.townmarket.common.domain.user.entity.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+@NoArgsConstructor
+public class UserDetailsImpl implements UserDetails {
 
-public class UserDetailsImpl implements UserDetails, OAuth2User {
-
-  private final User user;
+  private  User user;
   private Map<String, Object> attributes;
 
   public UserDetailsImpl(User user){
     this.user = user;
   }
-//  public UserDetailsImpl(LoadByUsernameResponse user) {
-//    this.user = User.builder()
-//        .username(user.getUsername())
-//        .id(user.getId())
-//        .role(user.getRole())
-//        .email(user.getEmail())
-//        .profile(Profile.builder().img_url(user.getImg_url()).nickName(user.getNickname()).build())
-//        .password(user.getPassword())
-//        .build();
-//  }
-
 
   //OAuth2User : OAuth2 로그인 시 사용
   public UserDetailsImpl(User user, Map<String, Object> attributes) {
@@ -50,10 +38,10 @@ public class UserDetailsImpl implements UserDetails, OAuth2User {
     return user.getId();
   }
 
-  @Override
-  public Map<String, Object> getAttributes() {
-    return attributes;
-  }
+//  @Override
+//  public Map<String, Object> getAttributes() {
+//    return attributes;
+//  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -97,8 +85,8 @@ public class UserDetailsImpl implements UserDetails, OAuth2User {
     return false;
   }
 
-  @Override
-  public String getName() {
-    return user.getUsername();
-  }
+//  @Override
+//  public String getName() {
+//    return user.getUsername();
+//  }
 }

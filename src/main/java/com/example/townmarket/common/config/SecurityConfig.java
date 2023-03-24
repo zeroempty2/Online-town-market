@@ -2,7 +2,7 @@ package com.example.townmarket.common.config;
 
 import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.oauth.OAuth2SuccessHandler;
-import com.example.townmarket.common.oauth.OAuth2UserServiceImpl;
+
 import com.example.townmarket.common.security.AdminDetailsServiceImpl;
 import com.example.townmarket.common.security.CustomAccessDeniedHandler;
 import com.example.townmarket.common.security.CustomAuthenticationEntryPoint;
@@ -63,7 +63,7 @@ public class SecurityConfig {
   private final CustomAccessDeniedHandler customAccessDeniedHandler;
   private final AdminDetailsServiceImpl adminDetailsService;
 
-  private final OAuth2UserServiceImpl oAuth2UserService;
+//  private final OAuth2UserServiceImpl oAuth2UserService;
 
   private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
@@ -110,10 +110,10 @@ public class SecurityConfig {
 //    http.formLogin().loginPage("/users/login");
 
 //    http.formLogin().loginPage("/api/user/login-page").permitAll();
-    http.oauth2Login()//OAuth 로그인 기능에 대한 여러 설정의 진입
-        .userInfoEndpoint()// 로그인 성공 이후 사용자 정보를 가져올 때의 설정
-        .userService(oAuth2UserService); //소셜 로그인 성공 후 후속 조치를 진행할 서비스의 구현체 등록
-    http.oauth2Login().successHandler(oAuth2SuccessHandler);
+//    http.oauth2Login()//OAuth 로그인 기능에 대한 여러 설정의 진입
+//        .userInfoEndpoint()// 로그인 성공 이후 사용자 정보를 가져올 때의 설정
+//        .userService(oAuth2UserService); //소셜 로그인 성공 후 후속 조치를 진행할 서비스의 구현체 등록
+//    http.oauth2Login().successHandler(oAuth2SuccessHandler);
 
     //401 인증과정 실패시 에러처리
     http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);

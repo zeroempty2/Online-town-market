@@ -11,6 +11,8 @@ import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.domain.review.entity.UserGrade;
 import com.example.townmarket.common.domain.trade.entity.Trade;
 import com.example.townmarket.common.enums.RoleEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -48,6 +50,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "users")
 @DynamicInsert
 @DynamicUpdate
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User extends TimeStamped {
 
   /**
