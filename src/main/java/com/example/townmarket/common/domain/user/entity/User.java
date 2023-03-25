@@ -11,6 +11,8 @@ import com.example.townmarket.common.domain.review.entity.Review;
 import com.example.townmarket.common.domain.review.entity.UserGrade;
 import com.example.townmarket.common.domain.trade.entity.Trade;
 import com.example.townmarket.common.enums.RoleEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -33,6 +35,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -47,6 +50,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "users")
 @DynamicInsert
 @DynamicUpdate
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User extends TimeStamped {
 
   /**
@@ -132,7 +136,7 @@ public class User extends TimeStamped {
   @OneToMany(mappedBy = "user")
   private Set<Board> boards = new LinkedHashSet<>();
   @Builder.Default
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "interestUser")
   private Set<Interest> interests = new LinkedHashSet<>();
 
   @Builder.Default

@@ -30,7 +30,7 @@ public class Address {
   private String address3; // 읍면동
 
   @ManyToOne
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "address_user_id")
   private User user;
 
   @Builder

@@ -28,7 +28,7 @@ class InterestTest {
     Long userId = 1L;
 
     Interest interest = Interest.builder()
-        .user(user)
+        .interestUser(user)
         .product(product)
         .build();
 

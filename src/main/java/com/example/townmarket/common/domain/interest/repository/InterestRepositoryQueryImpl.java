@@ -25,10 +25,10 @@ public class InterestRepositoryQueryImpl implements InterestRepositoryQuery {
   @Transactional(readOnly = true)
   public boolean existsByUserAndProduct(User user, Product product) {
     return jpaQueryFactory.from(interest)
-        .where(interest.user.eq(user), interest.product.eq(product))
-        .select(interest.user, interest.product)
+        .where(interest.interestUser.eq(user), interest.product.eq(product))
+        .select(interest.interestUser, interest.product)
         .leftJoin(interest.product)
-        .leftJoin(interest.user)
+        .leftJoin(interest.interestUser)
         .setHint("org.hibernate.readOnly", true)
         .fetchFirst() != null;
   }
@@ -56,13 +56,13 @@ public class InterestRepositoryQueryImpl implements InterestRepositoryQuery {
             interest.product.id))
         .from(interest)
         .leftJoin(interest.product)
-        .where(interest.user.eq(user));
+        .where(interest.interestUser.eq(user));
   }
 
   private JPAQuery<Long> countQuery(User user) {
     return jpaQueryFactory.select(Wildcard.count)
         .from(interest)
-        .where(interest.user.eq(user));
+        .where(interest.interestUser.eq(user));
   }
 
 }

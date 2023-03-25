@@ -14,6 +14,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -67,6 +68,24 @@ public class UserRepositoryQueryImpl implements UserRepositoryQuery {
         .from(user)
         .where(user.username.eq(username))
         .setHint("org.hibernate.readOnly", true)
+        .fetchOne();
+  }
+
+  @Override
+  public User findAllUserInfoByUsername(String username) {
+    return jpaQueryFactory.select(user)
+        .from(user)
+        .where(user.username.eq(username))
+        .leftJoin(user.address).fetchJoin()
+        .leftJoin(user.products).fetchJoin()
+        .leftJoin(user.grades).fetchJoin()
+        .leftJoin(user.boards).fetchJoin()
+        .leftJoin(user.chatRooms).fetchJoin()
+        .leftJoin(user.interests).fetchJoin()
+        .leftJoin(user.sendReviews).fetchJoin()
+        .leftJoin(user.buyer).fetchJoin()
+        .leftJoin(user.seller).fetchJoin()
+        .leftJoin(user.reports).fetchJoin()
         .fetchOne();
   }
 }

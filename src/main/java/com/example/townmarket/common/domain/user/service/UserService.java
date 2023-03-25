@@ -45,11 +45,11 @@ public interface UserService {
 
   boolean existsByEmail(String email);
 
-  ProfileResponseDto getMyProfile(String username);
+//  ProfileResponseDto getMyProfile(String username);
 
   DuplicateCheckResponseDto duplicateCheck(DuplicateCheckRequestDto duplicateCheckRequestDto);
 
-  void logout(HttpServletRequest request, HttpServletResponse response);
+  void logout(String refreshToken, String username);
 
   void loginOAuth2(String username, RoleEnum role, HttpServletResponse response);
 

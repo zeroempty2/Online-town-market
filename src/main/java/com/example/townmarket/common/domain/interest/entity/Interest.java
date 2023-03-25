@@ -32,8 +32,8 @@ public class Interest extends TimeStamped {
    * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
    */
   @Builder
-  public Interest(User user, Product product) {
-    this.user = user;
+  public Interest(User interestUser, Product product) {
+    this.interestUser = interestUser;
     this.product = product;
   }
 
@@ -42,8 +42,8 @@ public class Interest extends TimeStamped {
    * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
    */
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
-  private User user;
+  @JoinColumn(name = "interest_user")
+  private User interestUser;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_id")
   private Product product;
@@ -55,7 +55,7 @@ public class Interest extends TimeStamped {
    * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
    */
   public boolean isInterestWriter(Long userId) {
-    return this.user.getId().equals(userId);
+    return this.interestUser.getId().equals(userId);
   }
 
 

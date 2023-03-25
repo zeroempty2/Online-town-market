@@ -25,6 +25,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -105,17 +107,11 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public void logout(HttpServletRequest request, HttpServletResponse response) {
-    String accessToken = jwtUtil.resolveAccessToken(request);
-    Claims userInfoFromToken = jwtUtil.getUserInfoFromToken(accessToken);
-    String refreshToken = jwtUtil.resolveRefreshToken(request);
-    String username = userInfoFromToken.getSubject();
+  @CacheEvict(value = "user", key = "#username")
+  public void logout(String refreshToken, String username) {
     Tokens tokens = Tokens.builder().token(refreshToken).id(username).build();
-
     // token blacklist 저장
     refreshService.saveBlackList(tokens);
-    response.setHeader(JwtUtil.AUTHORIZATION_HEADER, null);
-    response.setHeader(JwtUtil.REFRESH_HEADER, null);
   }
 
   @Override
@@ -134,6 +130,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
+  @CacheEvict(value = "user", key = "#username")
   public void updateUser(String username, PasswordUpdateRequestDto updateDto) {
     User user = this.findByUsername(username);
     if (!user.checkAuthorization(user)) {
@@ -159,6 +156,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
+  @CacheEvict(value = "user", key = "#username")
   public void deleteUser(Long userId, String username) {
     User user = this.findByUsername(username);
 
@@ -170,6 +168,7 @@ public class UserServiceImpl implements UserService {
 
   @Transactional
   @Override
+  @CacheEvict(value = "user", key = "#username")
   public ProfileResponseDto updateProfile(Long userId, ProfileRequestDto request) {
     Profile profileSaved = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("회원 없음")).getProfile();
@@ -222,10 +221,11 @@ public class UserServiceImpl implements UserService {
     return userRepository.existsByEmail(email);
   }
 
-  @Override
-  public ProfileResponseDto getMyProfile(String username) {
-    return userRepository.getProfileByUsername(username);
-  }
+//  @Override
+//  @Cacheable(value = "profile", key = "#username",  cacheManager = "cacheManager")
+//  public ProfileResponseDto getMyProfile(String username) {
+//    return userRepository.getProfileByUsername(username);
+//  }
 
   @Override
   @Transactional(readOnly = true)
