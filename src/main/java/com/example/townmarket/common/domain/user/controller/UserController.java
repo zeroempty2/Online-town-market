@@ -15,10 +15,10 @@ import com.example.townmarket.common.domain.user.dto.SignupRequestDto;
 import com.example.townmarket.common.domain.user.dto.UserInfoResponseDto;
 import com.example.townmarket.common.domain.user.service.UserService;
 import com.example.townmarket.common.dto.StatusResponse;
+import com.example.townmarket.common.jwtUtil.JwtInfoResponse;
 import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -72,11 +72,8 @@ public class UserController {
   @PostMapping("/logout")
   public ResponseEntity<StatusResponse> logout(HttpServletRequest request,
       HttpServletResponse response) {
-    String accessToken = jwtUtil.resolveAccessToken(request);
-    Claims userInfoFromToken = jwtUtil.getUserInfoFromToken(accessToken);
-    String refreshToken = jwtUtil.resolveRefreshToken(request);
-    String username = userInfoFromToken.getSubject();
-    userService.logout(refreshToken, username);
+    JwtInfoResponse jwtInfoResponse = jwtUtil.jwtInfoResponse(request);
+    userService.logout(jwtInfoResponse.getRefreshToken(), jwtInfoResponse.getUsername());
     response.setHeader(JwtUtil.AUTHORIZATION_HEADER, null);
     response.setHeader(JwtUtil.REFRESH_HEADER, null);
     return RESPONSE_OK;
@@ -127,7 +124,7 @@ public class UserController {
   public ResponseEntity<ProfileResponseDto> getMyProfile(@AuthenticationPrincipal
   UserDetailsImpl userDetails) {
     return ResponseEntity.ok().headers(httpHeaders.setHeaderTypeJson())
-        .body(new ProfileResponseDto(userDetails.getUser().getProfile()));
+        .body(userService.getMyProfile(userDetails.getUser()));
   }
 
   @GetMapping("/info")

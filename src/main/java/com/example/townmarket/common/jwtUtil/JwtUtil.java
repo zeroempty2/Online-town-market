@@ -140,4 +140,13 @@ public class JwtUtil {
     throw new SecurityException();
   }
 
+ public JwtInfoResponse jwtInfoResponse(HttpServletRequest request){
+   String accessToken = resolveAccessToken(request);
+   Claims userInfoFromToken = getUserInfoFromToken(accessToken);
+   String refreshToken = resolveRefreshToken(request);
+   String username = userInfoFromToken.getSubject();
+
+   return JwtInfoResponse.builder().username(username).refreshToken(refreshToken).build();
+ }
+
 }
