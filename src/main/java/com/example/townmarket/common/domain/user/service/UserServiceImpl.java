@@ -221,11 +221,10 @@ public class UserServiceImpl implements UserService {
     return userRepository.existsByEmail(email);
   }
 
-//  @Override
-//  @Cacheable(value = "profile", key = "#username",  cacheManager = "cacheManager")
-//  public ProfileResponseDto getMyProfile(String username) {
-//    return userRepository.getProfileByUsername(username);
-//  }
+  @Override
+  public ProfileResponseDto getMyProfile(User user) {
+    return new ProfileResponseDto(user.getProfile());
+  }
 
   @Override
   @Transactional(readOnly = true)

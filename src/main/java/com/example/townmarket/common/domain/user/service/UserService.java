@@ -45,7 +45,7 @@ public interface UserService {
 
   boolean existsByEmail(String email);
 
-//  ProfileResponseDto getMyProfile(String username);
+  ProfileResponseDto getMyProfile(User user);
 
   DuplicateCheckResponseDto duplicateCheck(DuplicateCheckRequestDto duplicateCheckRequestDto);
 

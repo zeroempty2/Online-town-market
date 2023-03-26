@@ -27,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.townmarket.annotation.WithCustomMockUser;
 import com.example.townmarket.common.domain.user.service.UserService;
+import com.example.townmarket.common.jwtUtil.JwtInfoResponse;
+import com.example.townmarket.common.jwtUtil.JwtUtil;
 import com.example.townmarket.common.security.UserDetailsImpl;
 import com.example.townmarket.common.util.SetHttpHeaders;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,6 +65,9 @@ class UserControllerTest {
 
   @MockBean
   SetHttpHeaders setHttpHeaders;
+
+  @MockBean
+  JwtUtil jwtUtil;
 
   @Test
   @WithMockUser
@@ -131,6 +136,8 @@ class UserControllerTest {
   @WithMockUser
   @DisplayName("로그아웃 성공시 200반환")
   void logout() throws Exception {
+    JwtInfoResponse jwtInfoResponse = JwtInfoResponse.builder().username("유저").refreshToken("리프레시토큰").build();
+    given(jwtUtil.jwtInfoResponse(any())).willReturn(jwtInfoResponse);
     doNothing().when(userService).logout(any(), any());
 
     ResultActions resultActions = mockMvc.perform(
@@ -257,7 +264,7 @@ class UserControllerTest {
     UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
         .getAuthentication().getPrincipal();
 
-    given(userService.getMyProfile(userDetails.getUsername())).willReturn(PROFILE_RESPONSE_DTO);
+    given(userService.getMyProfile(userDetails.getUser())).willReturn(PROFILE_RESPONSE_DTO);
 
     ResultActions resultActions = mockMvc.perform(
             get(USER_API_URI + "/profile")
