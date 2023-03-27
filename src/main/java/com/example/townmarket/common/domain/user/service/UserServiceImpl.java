@@ -141,19 +141,6 @@ public class UserServiceImpl implements UserService {
     this.userRepository.save(user);
   }
 
-//  @Deprecated
-//  @Override
-//  @Transactional
-//  public void updateRegion(String username, RegionUpdateRequestDto updateRequestDto) {
-//    User user = this.findByUsername(username);
-//
-//    if (!user.checkAuthorization(user)) {
-//      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
-//    }
-////    user.updateRegion(updateRequestDto);
-//    this.userRepository.save(user);
-//  }
-
   @Override
   @Transactional
   @CacheEvict(value = "user", key = "#username")
@@ -169,8 +156,8 @@ public class UserServiceImpl implements UserService {
   @Transactional
   @Override
   @CacheEvict(value = "user", key = "#username")
-  public ProfileResponseDto updateProfile(Long userId, ProfileRequestDto request) {
-    Profile profileSaved = userRepository.findById(userId)
+  public ProfileResponseDto updateProfile(String username, ProfileRequestDto request) {
+    Profile profileSaved = userRepository.findByUsername(username)
         .orElseThrow(() -> new IllegalArgumentException("회원 없음")).getProfile();
     profileSaved.update(request);
     return new ProfileResponseDto(profileSaved);
