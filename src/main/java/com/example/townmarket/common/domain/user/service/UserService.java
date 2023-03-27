@@ -29,7 +29,7 @@ public interface UserService {
 
   void deleteUser(Long userId, String username);
 
-  ProfileResponseDto updateProfile(Long profileId, ProfileRequestDto request);
+  ProfileResponseDto updateProfile(String username, ProfileRequestDto request);
 
   ProfileResponseDto showProfile(Long profileId);
 

@@ -110,7 +110,7 @@ public class UserController {
   public ResponseEntity<StatusResponse> updateProfile(
       @RequestBody ProfileRequestDto request, @AuthenticationPrincipal
   UserDetailsImpl userDetails) {
-    userService.updateProfile(userDetails.getUserId(), request);
+    userService.updateProfile(userDetails.getUsername(), request);
     return RESPONSE_OK;
   }
 
