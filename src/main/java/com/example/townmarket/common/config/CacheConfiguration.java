@@ -17,20 +17,22 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class CacheConfiguration {
-
-
-//    RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
-//        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
-
     @Bean
-    public CacheManager cacheManager(RedisConnectionFactory cf) {
+    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
       RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
           .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
           .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
           .entryTtl(Duration.ofHours(1L));
 
-      return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(cf).cacheDefaults(redisCacheConfiguration).build();
-    // 리소스 유형에 따라 만료 시간을 다르게 지정
+      return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(redisConnectionFactory).cacheDefaults(redisCacheConfiguration).build();
+
+  }
+}
+
+//    RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
+//        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
+
+// 리소스 유형에 따라 만료 시간을 다르게 지정
 //    Map<String, RedisCacheConfiguration> redisCacheConfigMap =new HashMap<>();
 //    redisCacheConfigMap.put("loadUserDetails", defaultConfig.entryTtl(Duration.ofHours(1)));
 //    redisCacheConfigMap.put(CacheNames.FEED, defaultConfig.entryTtl(Duration.ofSeconds(5L)));
@@ -40,5 +42,3 @@ public class CacheConfiguration {
 //        .build();
 
 //    return redisCacheManager;
-  }
-}

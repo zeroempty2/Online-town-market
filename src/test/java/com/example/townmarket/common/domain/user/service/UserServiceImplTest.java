@@ -185,7 +185,7 @@ class UserServiceImplTest {
   @DisplayName("회원정보 업데이트 성공 테스트")
   void updateProfile() {
     // 데이터베이스에 저장되어 있는 사용자의 primary key
-    Long userId = 1L;
+    String username = "이름";
 
     // 데이터베이스에 저장되어 있는 사용자 역할
     User user = new User("testUser",
@@ -198,10 +198,10 @@ class UserServiceImplTest {
         .img_url("after")
         .build();
 
-    given(userRepository.findById(userId)).willReturn(Optional.of(user));
+    given(userRepository.findByUsername(username)).willReturn(Optional.of(user));
 
     // when
-    ProfileResponseDto updatedProfile = userService.updateProfile(userId, requestDto);
+    ProfileResponseDto updatedProfile = userService.updateProfile(username, requestDto);
 
     // then
     assertThat(updatedProfile.getNickname()).isEqualTo(requestDto.getNickname());
@@ -212,7 +212,7 @@ class UserServiceImplTest {
   @DisplayName("회원정보 업데이트 실패 테스트: 회원 정보가 없는 경우")
   void failsUpdateProfile() {
     // 데이터베이스에 저장되어 있는 사용자의 primary key
-    Long userId = 1L;
+    String username = "이름";
 
     // 업데이트할 프로필 정보
     ProfileRequestDto requestDto = ProfileRequestDto.builder()
@@ -220,11 +220,11 @@ class UserServiceImplTest {
         .img_url("after")
         .build();
 
-    given(userRepository.findById(userId)).willReturn(Optional.empty());
+    given(userRepository.findByUsername(username)).willReturn(Optional.empty());
 
     assertThatThrownBy(() -> {
       // when
-      userService.updateProfile(userId, requestDto);
+      userService.updateProfile(username, requestDto);
     }).isInstanceOf(IllegalArgumentException.class); // then
   }
 }
