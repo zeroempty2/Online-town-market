@@ -49,13 +49,6 @@
 </div>
 <br>
 
----
-
-## 📋 전체 프로젝트의 구조
-
-<img src="https://velog.velcdn.com/images/5w31892p/post/2d83e8f6-1201-4989-8685-011288fc0414/image.jpg" width="600px">
-
-<br>
 
 ---
 
